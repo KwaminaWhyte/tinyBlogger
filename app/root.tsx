@@ -1,5 +1,6 @@
 import {
   Links,
+  LinksFunction,
   LiveReload,
   Meta,
   Outlet,
@@ -7,12 +8,47 @@ import {
   ScrollRestoration,
 } from "remix";
 import type { MetaFunction } from "remix";
+import { ReactNode } from "react";
+import NavigationBar from "./components/NavigationBar";
+import style from "./tailwind.css";
+
+export const links: LinksFunction = () => {
+  return [
+    // {
+    //   rel: "icon",
+    //   href: "/favicon.png",
+    //   type: "image/png",
+    // },
+    {
+      rel: "stylesheet",
+      href: style,
+    },
+    // {
+    //   rel: "preload",
+    //   href: "/images/banner.jpg",
+    //   as: "image",
+    // },
+  ];
+};
 
 export const meta: MetaFunction = () => {
-  return { title: "New Remix App" };
+  return {
+    title: "Sly GH",
+    description: "Sly GH Blog. The best :)",
+  };
 };
 
 export default function App() {
+  return (
+    <Document>
+      <Layout>
+        <Outlet />
+      </Layout>
+    </Document>
+  );
+}
+
+const Document = ({ children }: { children: ReactNode }) => {
   return (
     <html lang="en">
       <head>
@@ -22,11 +58,21 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        {children}
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
       </body>
     </html>
   );
-}
+};
+
+const Layout = ({ children }: { children: ReactNode }) => {
+  return (
+    <>
+      <NavigationBar />
+
+      <main>{children}</main>
+    </>
+  );
+};
