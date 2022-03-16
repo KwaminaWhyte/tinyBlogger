@@ -202,7 +202,7 @@ function Blog() {
         <div className="min-h-screen px-3 py-4 md:px-8">
           <p className="font-bold">Comments (30)</p>
 
-          <div>
+          <div className="mt-6">
             {comments.map((comment) => (
               <div key={comment.id} className="my-3">
                 <div className="flex">
