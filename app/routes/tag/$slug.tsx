@@ -1,5 +1,14 @@
 import { Link } from "remix";
+import type { MetaFunction, LoaderFunction } from "remix";
 
+export const meta: MetaFunction = ({ data }) => {
+  return {
+    title: "The most significant stories about [Topic]",
+    description: `Aspernatur earum itaque error mollitia dolorum quidem odit
+                    optio vel? Quasi error esse nobis quas dolor dolore pariatur
+                    obcaecati aut debitis quam?`,
+  };
+};
 const blogPosts = [
   {
     id: 1,

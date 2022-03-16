@@ -1,4 +1,13 @@
-import React from "react";
+import type { MetaFunction, LoaderFunction } from "remix";
+
+export const meta: MetaFunction = ({ data }) => {
+  return {
+    title: "Vladimir Putin Has Already Won, but Nobody Wants to Admit It",
+    description: ` Aspernatur earum itaque error mollitia dolorum quidem odit
+                    optio vel? Quasi error esse nobis quas dolor dolore pariatur
+                    obcaecati aut debitis quam?`,
+  };
+};
 
 function Blog() {
   return (
