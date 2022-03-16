@@ -53,12 +53,12 @@ const trending = [
 ];
 
 const categories = [
-  { id: 1, title: "Self" },
-  { id: 2, title: "Relationships" },
-  { id: 3, title: "Data Science" },
-  { id: 4, title: "Productivity" },
-  { id: 5, title: "Politics " },
-  { id: 6, title: "Health" },
+  { id: 1, title: "Self", slug: "self" },
+  { id: 2, title: "Relationships", slug: "realationships" },
+  { id: 3, title: "Data Science", slug: "data-science" },
+  { id: 4, title: "Productivity", slug: "productivity" },
+  { id: 5, title: "Politics ", slug: "politics" },
+  { id: 6, title: "Health", slug: "health" },
 ];
 
 export default function Index() {
@@ -112,12 +112,13 @@ export default function Index() {
 
           <div className="flex flex-wrap">
             {categories.map((category) => (
-              <div
+              <Link
+                to={`/tag/${category.slug}`}
                 key={category.id}
                 className="m-1 rounded-md border border-gray-400 py-1 px-5"
               >
                 <p>{category.title}</p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
