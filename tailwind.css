@@ -1,2 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind utilities;
+
+a,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button,
+input {
+  font-family: "Montserrat", sans-serif;
+}
+
+.logo {
+  font-family: "Dancing Script", cursive;
+}

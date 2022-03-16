@@ -59,6 +59,7 @@ const Document = ({ children }: { children: ReactNode }) => {
       </head>
       <body>
         {children}
+
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
@@ -72,7 +73,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
     <>
       <NavigationBar />
 
-      <main>{children}</main>
+      <main className="flex min-h-screen flex-col bg-slate-50 pt-20">
+        {children}
+      </main>
     </>
   );
 };
