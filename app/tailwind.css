@@ -628,6 +628,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   height: 2.75rem;
 }
 
+.h-9{
+  height: 2.25rem;
+}
+
 .min-h-screen{
   min-height: 100vh;
 }
@@ -668,6 +672,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   width: 2.75rem;
 }
 
+.w-9{
+  width: 2.25rem;
+}
+
 .flex-col{
   flex-direction: column;
 }
@@ -682,6 +690,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .justify-center{
   justify-content: center;
+}
+
+.justify-between{
+  justify-content: space-between;
 }
 
 .rounded-2xl{
@@ -869,8 +881,29 @@ Ensure the default browser behavior of the `hidden` attribute.
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
+.shadow-sm{
+  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
 .shadow-slate-300{
   --tw-shadow-color: #cbd5e1;
+  --tw-shadow: var(--tw-shadow-colored);
+}
+
+.shadow-black{
+  --tw-shadow-color: #000;
+  --tw-shadow: var(--tw-shadow-colored);
+}
+
+.shadow-gray-400{
+  --tw-shadow-color: #9ca3af;
+  --tw-shadow: var(--tw-shadow-colored);
+}
+
+.shadow-gray-300{
+  --tw-shadow-color: #d1d5db;
   --tw-shadow: var(--tw-shadow-colored);
 }
 

@@ -73,7 +73,7 @@ export default function Index() {
 
         <Link
           to="/blog"
-          className="mr-auto rounded-2xl bg-black py-3 px-6 text-white"
+          className="mr-auto rounded-2xl bg-black py-3 px-6 text-white shadow-md shadow-gray-400"
         >
           Start Reading
         </Link>
@@ -82,9 +82,9 @@ export default function Index() {
       <section className="flex flex-col border-b border-gray-400 px-3 py-4 md:px-12">
         <p className="mb-5 font-bold">TRENDING</p>
 
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap justify-between">
           {trending.map((trend) => (
-            <div key={trend.id} className="mx-4 my-3 md:w-[29%]">
+            <div key={trend.id} className="my-3 md:w-[29%]">
               <div className="flex items-center">
                 <img
                   src={trend.img}

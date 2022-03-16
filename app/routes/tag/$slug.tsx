@@ -1,9 +1,10 @@
 import { Link } from "remix";
 
-const trending = [
+const blogPosts = [
   {
     id: 1,
     title: "Vladimir Putin Has Already Won, but Nobody Wants to Admit It",
+    slug: "vladimir-putin-has-already-won-but-nobody-wants-to-admit-it",
     createdAt: "1 day",
     read: "5min read",
     writer: "Jon Doe",
@@ -12,6 +13,7 @@ const trending = [
   {
     id: 2,
     title: "Cornerstone of early 2000s LA rotations, Odalis Perez passes away",
+    slug: "cornerstone-of-early-2000s-LA-rotations-Odalis-Perez-passes-away",
     createdAt: "22 days",
     read: "5min read",
     writer: "Smithy Sam",
@@ -20,6 +22,7 @@ const trending = [
   {
     id: 3,
     title: "Apple: M1 Ultra Meanings and Consequences",
+    slug: "Apple-M1-Ultra-Meanings-and-Consequences",
     createdAt: "12 hrs",
     read: "5min read",
     writer: "Ellen Whyte",
@@ -29,6 +32,7 @@ const trending = [
     id: 4,
     title:
       "Keeping Developers Will Be the Priority in Great Developer Resignation Next Stage",
+    slug: "vladimir-putin-has-already-won-but-nobody-wants-to-admit-it",
     createdAt: "1 day",
     read: "5min read",
     writer: "Christina Bricks",
@@ -37,6 +41,7 @@ const trending = [
   {
     id: 5,
     title: "Why Russia’s Tank Army Has Suicidal Incompetence",
+    slug: "vladimir-putin-has-already-won-but-nobody-wants-to-admit-it",
     createdAt: "1 yer",
     read: "5min read",
     writer: "Sean Kernan",
@@ -45,6 +50,7 @@ const trending = [
   {
     id: 6,
     title: "Has NASA Cracked Fusion Energy?",
+    slug: "vladimir-putin-has-already-won-but-nobody-wants-to-admit-it",
     createdAt: "9 hrs",
     read: "5min read",
     writer: "Grace Carter",
@@ -62,8 +68,8 @@ function Tag() {
   return (
     <div className="flex w-full flex-col md:flex-row">
       <section className="my-5 border-gray-300 px-3 md:w-[60%] md:border-r md:px-8">
-        <section className="px-3">
-          <h1 className="text-5xl font-bold">Programming</h1>
+        <section>
+          <h1 className="text-4xl font-bold">Programming</h1>
 
           <div className="mt-8 flex border-b border-gray-300">
             {minLinks.map((minL) => (
@@ -79,10 +85,11 @@ function Tag() {
         </section>
 
         <section className="flex flex-col">
-          {trending.map((trend) => (
-            <div
+          {blogPosts.map((trend) => (
+            <Link
+              to={`/blog/${trend.slug}`}
               key={trend.id}
-              className="my-3 mx-4 border-b border-gray-300 py-3 md:py-8"
+              className="my-3 border-b border-gray-300 py-3 md:py-8"
             >
               <div className="flex items-center">
                 <img
@@ -115,7 +122,7 @@ function Tag() {
                   alt=""
                 />
               </div>
-            </div>
+            </Link>
           ))}
         </section>
       </section>
