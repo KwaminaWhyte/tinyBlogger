@@ -36,8 +36,8 @@ const posts = [
 function CaseStudy() {
   return (
     <>
-      <section className="py-11">
-        <h1>Case Study</h1>
+      <section className="py-8 px-3">
+        <h1 className="text-3xl font-bold">Case Study</h1>
       </section>
 
       <section className="flex flex-wrap justify-between">
