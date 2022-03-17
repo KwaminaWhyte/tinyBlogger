@@ -3,6 +3,7 @@ import { Link } from "remix";
 
 const links = [
   { name: "Home", href: "/" },
+  { name: "Browse", href: "/blog" },
   // { name: "Blog", href: "/blog" },
 ];
 

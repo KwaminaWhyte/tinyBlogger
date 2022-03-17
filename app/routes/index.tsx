@@ -84,7 +84,11 @@ export default function Index() {
 
         <div className="flex flex-wrap justify-between">
           {trending.map((trend) => (
-            <div key={trend.id} className="my-3 md:w-[29%]">
+            <Link
+              to={`/blog/${trend.id}`}
+              key={trend.id}
+              className="my-3 md:w-[29%]"
+            >
               <div className="flex items-center">
                 <img
                   src={trend.img}
@@ -97,7 +101,7 @@ export default function Index() {
               <p>
                 {trend.createdAt} - {trend.read}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
