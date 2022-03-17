@@ -214,9 +214,8 @@ function Blog() {
                 </div>
                 <p className="ml-4">
                   Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Exercitationem, totam hic animi omnis deserunt delectus sed
-                  enim laudantium natus, voluptas explicabo? Quasi excepturi
-                  ipsa distinctio natus quo qui tempore saepe.
+                  Exercitationem. Quasi excepturi ipsa distinctio natus quo qui
+                  tempore saepe.
                 </p>
               </div>
             ))}

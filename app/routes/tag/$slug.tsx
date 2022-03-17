@@ -1,4 +1,4 @@
-import { Link } from "remix";
+import { Link, Outlet } from "remix";
 import type { MetaFunction, LoaderFunction } from "remix";
 
 export const meta: MetaFunction = ({ data }) => {
@@ -81,7 +81,7 @@ function Tag() {
           <h1 className="text-4xl font-bold">Programming</h1>
 
           <div className="mt-8 flex border-b border-gray-300">
-            {minLinks.map((minL) => (
+            {/* {minLinks.map((minL) => (
               <Link
                 to={`/tag/asdas/${minL.slug}`}
                 key={minL.id}
@@ -89,9 +89,11 @@ function Tag() {
               >
                 <p>{minL.name}</p>
               </Link>
-            ))}
+            ))} */}
           </div>
         </section>
+
+        <Outlet />
 
         <section className="flex flex-col">
           {blogPosts.map((trend) => (

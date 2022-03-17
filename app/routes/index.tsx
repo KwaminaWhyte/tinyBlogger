@@ -73,7 +73,7 @@ export default function Index() {
 
         <Link
           to="/blog"
-          className="mr-auto rounded-2xl bg-black py-3 px-6 text-white shadow-md shadow-gray-400"
+          className="mr-auto rounded-2xl bg-black py-3 px-6 font-medium text-white shadow-md shadow-gray-400 ring-black transition-all duration-75 hover:bg-yellow-400 hover:text-black hover:ring-2"
         >
           Start Reading
         </Link>

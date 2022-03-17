@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "remix";
+import { NavLink, Link, Outlet } from "remix";
+
 const posts = [
   {
     id: 1,
@@ -33,14 +33,28 @@ const posts = [
   },
 ];
 
-function CaseStudy() {
+const categories = [
+  {
+    id: 3,
+    title: "Case Studies",
+    slug: "",
+  },
+  {
+    id: 1,
+    title: "Featured",
+    slug: "featured",
+  },
+  {
+    id: 2,
+    title: "Webinars",
+    slug: "webinars",
+  },
+];
+
+function Index() {
   return (
     <>
-      <section className="py-11">
-        <h1>Case Study</h1>
-      </section>
-
-      <section className="flex flex-wrap justify-between">
+      <section className="flex overflow-x-auto px-3">
         {posts.map((post) => (
           <div
             key={post.id}
@@ -63,8 +77,28 @@ function CaseStudy() {
           </div>
         ))}
       </section>
+
+      <section className="my-5 flex justify-center border-b border-gray-300 px-3 py-6">
+        {categories.map((category) => (
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "text-md m-1 mx-2 decoration-slice font-extrabold text-black underline underline-offset-8 md:m-5"
+                : "m-1 md:m-5"
+            }
+            to={`/blog/${category.slug}`}
+            key={category.id}
+          >
+            <p className="font-medium">{category.title}</p>
+          </NavLink>
+        ))}
+      </section>
+
+      <section className="flex flex-col md:px-3">
+        <Outlet />
+      </section>
     </>
   );
 }
 
-export default CaseStudy;
+export default Index;
