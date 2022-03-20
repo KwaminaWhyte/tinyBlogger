@@ -1,5 +1,9 @@
-import { Link, Outlet } from "remix";
+import { Link, Outlet, useLoaderData } from "remix";
 import type { MetaFunction, LoaderFunction } from "remix";
+import request, { gql } from "graphql-request";
+import moment from "moment";
+import PostCard from "~/components/PostCard";
+import { PostType } from "~/utils/types";
 
 const blogPosts = [
   {
@@ -59,12 +63,6 @@ const blogPosts = [
   },
 ];
 
-const minLinks = [
-  { id: 1, name: "Trending", slug: "trending" },
-  { id: 1, name: "Latest", slug: "latest" },
-  { id: 1, name: "Best", slug: "best" },
-];
-
 export const meta: MetaFunction = ({ data }) => {
   return {
     title: `tinyBlog | The most significant stories about ${data.title}`,
@@ -75,17 +73,53 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export const loader: LoaderFunction = async ({ params }) => {
-  console.log(params);
-  let data = { title: params.slug?.toUpperCase() };
-  return data;
+  const query = gql`
+    query MyQuery($slug: String!) {
+      category(where: { slug: $slug }) {
+        title
+        posts {
+          id
+          slug
+          title
+          description
+          createdAt
+          featuredImage {
+            url
+          }
+          categories {
+            title
+            slug
+            id
+          }
+          account {
+            username
+            photo {
+              url
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const result = await request(
+    "https://api-eu-central-1.graphcms.com/v2/cl0z3nic64r6q01xma8ss10wo/master",
+    query,
+    { slug: params.slug }
+  );
+
+  let post = result.category;
+  return post;
 };
 
 function Tag() {
+  let category = useLoaderData();
+
   return (
     <div className="flex w-full flex-col md:flex-row">
       <section className="my-5 border-gray-300 px-3 md:w-[60%] md:border-r md:px-8">
         <section>
-          <h1 className="text-4xl font-bold">Programming</h1>
+          <h1 className="text-4xl font-bold">{category.title}</h1>
 
           <div className="mt-8 flex border-b border-gray-300">
             {/* {minLinks.map((minL) => (
@@ -103,44 +137,8 @@ function Tag() {
         <Outlet />
 
         <section className="flex flex-col">
-          {blogPosts.map((trend) => (
-            <Link
-              to={`/blog/${trend.slug}`}
-              key={trend.id}
-              className="my-3 border-b border-gray-300 py-3 md:py-8"
-            >
-              <div className="flex items-center">
-                <img
-                  src={trend.img}
-                  className="mr-3 h-8 w-8 rounded-full"
-                  alt=""
-                />
-                <p>
-                  {trend.writer} . {trend.createdAt} ago
-                </p>
-              </div>
-
-              <div className="flex items-center">
-                <div className="mr-8">
-                  <p className="my-2 font-bold">{trend.title}</p>
-
-                  <p className="my-4 hidden md:flex">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Aspernatur earum itaque error mollitia dolorum quidem odit
-                    optio vel? Quasi error esse nobis quas dolor dolore pariatur
-                    obcaecati aut debitis quam?
-                  </p>
-
-                  <p>Category - {trend.read}</p>
-                </div>
-
-                <img
-                  src={trend.img}
-                  className="h-11 w-11 rounded-sm md:h-32 md:w-32"
-                  alt=""
-                />
-              </div>
-            </Link>
+          {category.posts.map((post: PostType) => (
+            <PostCard key={post.id} post={post} />
           ))}
         </section>
       </section>

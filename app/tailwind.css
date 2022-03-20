@@ -536,6 +536,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-bottom: 1rem;
 }
 
+.mx-1{
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+
 .ml-auto{
   margin-left: auto;
 }
@@ -656,6 +661,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   height: 2rem;
 }
 
+.h-12{
+  height: 3rem;
+}
+
 .min-h-screen{
   min-height: 100vh;
 }
@@ -682,6 +691,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .w-8{
   width: 2rem;
+}
+
+.w-12{
+  width: 3rem;
 }
 
 .flex-shrink-0{
@@ -1102,6 +1115,10 @@ input {
 
   .md\:flex-row{
     flex-direction: row;
+  }
+
+  .md\:items-center{
+    align-items: center;
   }
 
   .md\:border-r{

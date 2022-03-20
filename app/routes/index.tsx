@@ -4,6 +4,7 @@ import { gql, request } from "graphql-request";
 import moment from "moment";
 
 import { CategoryType, PostType } from "~/utils/types";
+import PostCard from "~/components/PostCard";
 
 const trending = [
   {
@@ -147,58 +148,9 @@ export default function Index() {
       </section>
 
       <section className="flex min-h-screen flex-col py-4 px-3 md:flex-row md:px-12">
-        <div className="md:w-[60%] md:pr-8">
-          {posts.map((trend: PostType) => (
-            <Link
-              to={`/blog/${trend.slug}`}
-              key={trend.id}
-              className="my-3 border-b border-gray-300 py-3 md:py-8"
-            >
-              <div className="flex items-center">
-                <img
-                  src={trend.featuredImage.url}
-                  className="mr-3 h-8 w-8 rounded-full"
-                  alt=""
-                />
-                <p className="text-md font-medium">{trend.account.username}</p>
-              </div>
-
-              <div className="flex items-center">
-                <div className="mr-8">
-                  <p className="my-2 font-bold">{trend.title}</p>
-
-                  <p className="my-4 hidden md:flex">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Aspernatur earum itaque error mollitia dolorum quidem odit
-                    optio vel? Quasi error esse nobis quas dolor dolore pariatur
-                    obcaecati aut debitis quam?
-                  </p>
-
-                  <div className="flex items-center">
-                    <p className="mr-3 text-sm">
-                      {moment(trend.createdAt).format("MMMM Do")} . 20min read
-                    </p>
-                    <div className="flex">
-                      {trend.categories.map((category) => (
-                        <Link
-                          className="rounded-lg bg-gray-200 py-1 px-2 text-sm transition-all duration-200 hover:bg-slate-300"
-                          to={`/tag/${category.slug}`}
-                          key={category.id}
-                        >
-                          {category.title}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <img
-                  src={trend.featuredImage.url}
-                  className="h-11 w-11 rounded-sm md:h-32 md:w-32"
-                  alt=""
-                />
-              </div>
-            </Link>
+        <div className="flex flex-col md:w-[60%] md:pr-8">
+          {posts.map((post: PostType) => (
+            <PostCard key={post.id} post={post} />
           ))}
         </div>
 
