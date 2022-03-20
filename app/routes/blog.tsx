@@ -1,4 +1,5 @@
 import { NavLink, Link, Outlet } from "remix";
+import type { LoaderFunction, MetaFunction } from "remix";
 
 const posts = [
   {
@@ -50,6 +51,17 @@ const categories = [
     slug: "webinars",
   },
 ];
+
+export const loader: LoaderFunction = async () => {
+  return "asfjbasuf ";
+};
+
+export const meta: MetaFunction = () => {
+  return {
+    title: "tinyBlog | Featured Blog",
+    description: "",
+  };
+};
 
 function Index() {
   return (

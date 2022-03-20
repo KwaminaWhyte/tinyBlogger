@@ -1,4 +1,9 @@
-import { Link } from "remix";
+import { Link, useLoaderData } from "remix";
+import type { LoaderFunction } from "remix";
+import { gql, request } from "graphql-request";
+import moment from "moment";
+
+import { CategoryType, PostType } from "~/utils/types";
 
 const trending = [
   {
@@ -52,16 +57,51 @@ const trending = [
   },
 ];
 
-const categories = [
-  { id: 1, title: "Self", slug: "self" },
-  { id: 2, title: "Relationships", slug: "realationships" },
-  { id: 3, title: "Data Science", slug: "data-science" },
-  { id: 4, title: "Productivity", slug: "productivity" },
-  { id: 5, title: "Politics ", slug: "politics" },
-  { id: 6, title: "Health", slug: "health" },
-];
+export const loader: LoaderFunction = async () => {
+  const query = gql`
+    query MyQuery {
+      posts {
+        id
+        slug
+        title
+        description
+        createdAt
+        featuredImage {
+          url
+        }
+        categories {
+          title
+          slug
+          id
+        }
+        account {
+          username
+          photo {
+            url
+          }
+        }
+      }
+      categories {
+        id
+        slug
+        title
+      }
+    }
+  `;
+
+  const result = await request(
+    "https://api-eu-central-1.graphcms.com/v2/cl0z3nic64r6q01xma8ss10wo/master",
+    query
+  );
+  let posts = result.posts;
+  let categories = result.categories;
+
+  return { posts, categories };
+};
 
 export default function Index() {
+  const { posts, categories } = useLoaderData();
+
   return (
     <>
       <section className="flex h-96 flex-col justify-center border-b border-black px-3 md:px-12">
@@ -83,23 +123,23 @@ export default function Index() {
         <p className="mb-5 font-bold">TRENDING</p>
 
         <div className="flex flex-wrap justify-between">
-          {trending.map((trend) => (
+          {posts.map((post: PostType) => (
             <Link
-              to={`/blog/${trend.id}`}
-              key={trend.id}
+              to={`/blog/${post.slug}`}
+              key={post.id}
               className="my-3 md:w-[29%]"
             >
               <div className="flex items-center">
                 <img
-                  src={trend.img}
+                  src={post.account.photo.url}
                   className="mr-3 h-8 w-8 rounded-full"
                   alt=""
                 />
-                <p>{trend.writer}</p>
+                <p className="text-sm font-medium">{post.account.username}</p>
               </div>
-              <p className="my-2 font-bold">{trend.title}</p>
-              <p>
-                {trend.createdAt} - {trend.read}
+              <p className="my-2 font-bold">{post.title}</p>
+              <p className="text-sm">
+                {moment(post.createdAt).format("MM DD, YYYY")} - 17mins read{" "}
               </p>
             </Link>
           ))}
@@ -107,15 +147,66 @@ export default function Index() {
       </section>
 
       <section className="flex min-h-screen flex-col py-4 px-3 md:flex-row md:px-12">
-        <div className="md:w-[60%]">
-          <p>left</p>
+        <div className="md:w-[60%] md:pr-8">
+          {posts.map((trend: PostType) => (
+            <Link
+              to={`/blog/${trend.slug}`}
+              key={trend.id}
+              className="my-3 border-b border-gray-300 py-3 md:py-8"
+            >
+              <div className="flex items-center">
+                <img
+                  src={trend.featuredImage.url}
+                  className="mr-3 h-8 w-8 rounded-full"
+                  alt=""
+                />
+                <p className="text-md font-medium">{trend.account.username}</p>
+              </div>
+
+              <div className="flex items-center">
+                <div className="mr-8">
+                  <p className="my-2 font-bold">{trend.title}</p>
+
+                  <p className="my-4 hidden md:flex">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Aspernatur earum itaque error mollitia dolorum quidem odit
+                    optio vel? Quasi error esse nobis quas dolor dolore pariatur
+                    obcaecati aut debitis quam?
+                  </p>
+
+                  <div className="flex items-center">
+                    <p className="mr-3 text-sm">
+                      {moment(trend.createdAt).format("MMMM Do")} . 20min read
+                    </p>
+                    <div className="flex">
+                      {trend.categories.map((category) => (
+                        <Link
+                          className="rounded-lg bg-gray-200 py-1 px-2 text-sm transition-all duration-200 hover:bg-slate-300"
+                          to={`/tag/${category.slug}`}
+                          key={category.id}
+                        >
+                          {category.title}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <img
+                  src={trend.featuredImage.url}
+                  className="h-11 w-11 rounded-sm md:h-32 md:w-32"
+                  alt=""
+                />
+              </div>
+            </Link>
+          ))}
         </div>
 
-        <div className="sticky top-28 mt-20 md:w-[40%]">
+        <div className="sticky top-28 mt-20 md:w-[40%] md:pl-5">
           <p className="mb-5 font-bold">DISCOVER MORE OF WHAT MATTERS TO YOU</p>
 
           <div className="flex flex-wrap">
-            {categories.map((category) => (
+            {categories.map((category: CategoryType) => (
               <Link
                 to={`/tag/${category.slug}`}
                 key={category.id}

@@ -1,14 +1,6 @@
 import { Link, Outlet } from "remix";
 import type { MetaFunction, LoaderFunction } from "remix";
 
-export const meta: MetaFunction = ({ data }) => {
-  return {
-    title: "The most significant stories about [Topic]",
-    description: `Aspernatur earum itaque error mollitia dolorum quidem odit
-                    optio vel? Quasi error esse nobis quas dolor dolore pariatur
-                    obcaecati aut debitis quam?`,
-  };
-};
 const blogPosts = [
   {
     id: 1,
@@ -72,6 +64,21 @@ const minLinks = [
   { id: 1, name: "Latest", slug: "latest" },
   { id: 1, name: "Best", slug: "best" },
 ];
+
+export const meta: MetaFunction = ({ data }) => {
+  return {
+    title: `tinyBlog | The most significant stories about ${data.title}`,
+    description: `Aspernatur earum itaque error mollitia dolorum quidem odit
+                    optio vel? Quasi error esse nobis quas dolor dolore pariatur
+                    obcaecati aut debitis quam?`,
+  };
+};
+
+export const loader: LoaderFunction = async ({ params }) => {
+  console.log(params);
+  let data = { title: params.slug?.toUpperCase() };
+  return data;
+};
 
 function Tag() {
   return (

@@ -33,8 +33,8 @@ export const links: LinksFunction = () => {
 
 export const meta: MetaFunction = () => {
   return {
-    title: "Sly GH",
-    description: "Sly GH Blog. The best :)",
+    title: "tinyBlog",
+    description: "tinyBlog. The best :)",
   };
 };
 

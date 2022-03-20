@@ -1,4 +1,16 @@
 import React from "react";
+import type { LoaderFunction, MetaFunction } from "remix";
+
+export const loader: LoaderFunction = async () => {
+  return "asfjbasuf ";
+};
+
+export const meta: MetaFunction = () => {
+  return {
+    title: "tinyBlog | New Blog",
+    description: "",
+  };
+};
 
 function NewBLog() {
   return (
