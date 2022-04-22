@@ -6,58 +6,6 @@ import moment from "moment";
 import { CategoryType, PostType } from "~/utils/types";
 import PostCard from "~/components/PostCard";
 
-const trending = [
-  {
-    id: 1,
-    title: "Vladimir Putin Has Already Won, but Nobody Wants to Admit It",
-    createdAt: "asfas",
-    read: "5min read",
-    writer: "Jon Doe",
-    img: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80",
-  },
-  {
-    id: 2,
-    title: "Cornerstone of early 2000s LA rotations, Odalis Perez passes away",
-    createdAt: "asfas",
-    read: "5min read",
-    writer: "Smithy Sam",
-    img: "https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80",
-  },
-  {
-    id: 3,
-    title: "Apple: M1 Ultra Meanings and Consequences",
-    createdAt: "asfas",
-    read: "5min read",
-    writer: "Ellen Whyte",
-    img: "https://images.unsplash.com/photo-1526382925646-27b5eb86796e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80",
-  },
-  {
-    id: 4,
-    title:
-      "Keeping Developers Will Be the Priority in Great Developer Resignation Next Stage",
-    createdAt: "asfas",
-    read: "5min read",
-    writer: "Christina Bricks",
-    img: "https://images.unsplash.com/photo-1520635360276-79f3dbd809f6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80",
-  },
-  {
-    id: 5,
-    title: "Why Russia’s Tank Army Has Suicidal Incompetence",
-    createdAt: "asfas",
-    read: "5min read",
-    writer: "Sean Kernan",
-    img: "https://images.unsplash.com/photo-1535931737580-a99567967ddc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80",
-  },
-  {
-    id: 6,
-    title: "Has NASA Cracked Fusion Energy?",
-    createdAt: "asfas",
-    read: "5min read",
-    writer: "Grace Carter",
-    img: "https://images.unsplash.com/photo-1502877828070-33b167ad6860?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=605&q=80",
-  },
-];
-
 export const loader: LoaderFunction = async () => {
   const query = gql`
     query MyQuery {

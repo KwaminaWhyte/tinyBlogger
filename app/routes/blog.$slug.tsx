@@ -142,7 +142,11 @@ function Blog() {
           <h1 className="my-3 text-3xl font-bold md:text-4xl">{post.title}</h1>
           <p className="text-xl md:text-2xl">{post.description}</p>
 
-          <img src={post.featuredImage.url} alt="" className="my-4 w-full" />
+          <img
+            src={post.featuredImage.url}
+            alt=""
+            className="my-4 w-full rounded-md"
+          />
 
           <section className="mt-11">
             {post?.content?.raw.children.map((typeObj, index) => {
