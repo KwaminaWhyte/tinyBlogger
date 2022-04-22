@@ -1,6 +1,6 @@
 import moment from "moment";
 import React from "react";
-import { Link } from "remix";
+import { Link } from "@remix-run/react";
 import { PostType } from "~/utils/types";
 
 function PostCard({ post }: { post: PostType }) {

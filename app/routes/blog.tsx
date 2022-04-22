@@ -1,25 +1,8 @@
 import { NavLink, Link, Outlet, useLoaderData } from "remix";
 import type { LoaderFunction, MetaFunction } from "remix";
-import { gql, request } from "graphql-request";
+import { gql } from "graphql-request";
 import { CategoryType, PostType } from "~/utils/types";
-
-const categories = [
-  {
-    id: 3,
-    title: "Case Studies",
-    slug: "",
-  },
-  {
-    id: 1,
-    title: "Featured",
-    slug: "featured",
-  },
-  {
-    id: 2,
-    title: "Webinars",
-    slug: "webinars",
-  },
-];
+import client from "~/utils/apolloClient";
 
 export const loader: LoaderFunction = async () => {
   const query = gql`
@@ -53,10 +36,7 @@ export const loader: LoaderFunction = async () => {
     }
   `;
 
-  const result = await request(
-    "https://api-eu-central-1.graphcms.com/v2/cl0z3nic64r6q01xma8ss10wo/master",
-    query
-  );
+  const result = await client.request(query);
   let posts = result.posts;
   let categories = result.categories;
 

@@ -1,5 +1,5 @@
-import { Outlet } from "remix";
-import type { LoaderFunction, MetaFunction } from "remix";
+import { Outlet } from "@remix-run/react";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 
 export const loader: LoaderFunction = async () => {
   return "asfjbasuf ";

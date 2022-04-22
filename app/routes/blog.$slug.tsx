@@ -1,19 +1,28 @@
 import { useLoaderData } from "remix";
 import type { MetaFunction, LoaderFunction } from "remix";
 import { IoIosChatbubbles, IoIosHeart, IoIosShare } from "react-icons/io";
-import request, { gql } from "graphql-request";
+import { gql } from "graphql-request";
 import { PostType } from "~/utils/types";
 import moment from "moment";
 import React from "react";
+import client from "~/utils/apolloClient";
 
-export const meta: MetaFunction = ({ data }) => {
+export const meta: MetaFunction = ({
+  data,
+}: {
+  data: { title: string; description: string };
+}) => {
   return {
     title: `tinyBlog | ${data.title}`,
     description: `${data.description}`,
   };
 };
 
-export const loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction = async ({
+  params,
+}: {
+  params: { slug: string };
+}) => {
   const query = gql`
     query getPost($slug: String!) {
       post(where: { slug: $slug }) {
@@ -51,11 +60,7 @@ export const loader: LoaderFunction = async ({ params }) => {
     }
   `;
 
-  const data = await request(
-    "https://api-eu-central-1.graphcms.com/v2/cl0z3nic64r6q01xma8ss10wo/master",
-    query,
-    { slug: params.slug }
-  );
+  const data = await client.request(query, { slug: params.slug });
 
   let post = data.post;
   return post;

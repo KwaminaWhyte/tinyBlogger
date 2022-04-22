@@ -1,4 +1,4 @@
-import { NavLink, Link } from "remix";
+import { NavLink, Link } from "@remix-run/react";
 
 const links = [
   { name: "Home", href: "/" },

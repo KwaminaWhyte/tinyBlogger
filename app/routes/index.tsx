@@ -1,14 +1,15 @@
 import { Link, useLoaderData } from "remix";
 import type { LoaderFunction } from "remix";
-import { gql, request } from "graphql-request";
+import { gql } from "graphql-request";
 import moment from "moment";
 
+import client from "~/utils/apolloClient";
 import { CategoryType, PostType } from "~/utils/types";
 import PostCard from "~/components/PostCard";
 
 export const loader: LoaderFunction = async () => {
   const query = gql`
-    query MyQuery {
+    {
       posts {
         id
         slug
@@ -38,10 +39,8 @@ export const loader: LoaderFunction = async () => {
     }
   `;
 
-  const result = await request(
-    "https://api-eu-central-1.graphcms.com/v2/cl0z3nic64r6q01xma8ss10wo/master",
-    query
-  );
+  const result = await client.request(query);
+
   let posts = result.posts;
   let categories = result.categories;
 

@@ -1,50 +1,9 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { GraphQLClient } from "graphql-request";
 
-export const client = new ApolloClient({
-  uri: process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT,
-  cache: new InMemoryCache(),
+const client = new GraphQLClient(process.env.GRAPHCMS_ENDPOINT, {
   headers: {
-    // authorization: `Bearer  ${process.env.NEXT_PUBLIC_APOLLO_TOKEN}`,
+    Authorization: `Bearer ${process.env.PERMANENT_AUTH_TOKEN}`,
   },
 });
 
-// query MyQuery {
-//       posts {
-//         createdAt
-//         featuredImage {
-//           url
-//         }
-//         title
-//         slug
-//         id
-//         account {
-//           id
-//           username
-//           photo {
-//             url
-//           }
-//         }
-//       }
-//     }
-
-// export const loader: LoaderFunction = async () => {
-//   const { data } = await client.query({
-//     query: gql`
-//       query {
-//         blogs {
-//           id
-//           title
-//           slug
-//           description
-//           coverImage {
-//             url
-//           }
-//           createdAt
-//         }
-//       }
-//     `,
-//   });
-
-//   const posts: BlogI[] = await data.blogs;
-//   return posts;
-// };
+export default client;

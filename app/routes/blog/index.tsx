@@ -1,5 +1,6 @@
 import React from "react";
-import { Link } from "remix";
+import { Link } from "@remix-run/react";
+
 const posts = [
   {
     id: 1,
@@ -33,7 +34,7 @@ const posts = [
   },
 ];
 
-function CaseStudy() {
+const CaseStudy = () => {
   return (
     <>
       <section className="py-8 px-3">
@@ -65,6 +66,6 @@ function CaseStudy() {
       </section>
     </>
   );
-}
+};
 
 export default CaseStudy;

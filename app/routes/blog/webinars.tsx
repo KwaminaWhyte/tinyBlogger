@@ -1,6 +1,4 @@
-import React from "react";
-
-function Webinar() {
+const Webinar = () => {
   return (
     <>
       <section className="py-8 px-3">
@@ -12,6 +10,6 @@ function Webinar() {
       </section>
     </>
   );
-}
+};
 
 export default Webinar;
