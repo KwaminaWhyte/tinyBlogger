@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+import { type LinksFunction, type MetaFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -5,9 +7,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "remix";
-import type { MetaFunction, LinksFunction } from "remix";
-import { ReactNode } from "react";
+} from "@remix-run/react";
 import NavigationBar from "./components/NavigationBar";
 import style from "./tailwind.css";
 
