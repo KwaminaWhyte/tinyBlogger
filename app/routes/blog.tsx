@@ -1,5 +1,5 @@
-import { NavLink, Link, Outlet, useLoaderData } from "remix";
-import type { LoaderFunction, MetaFunction } from "remix";
+import { type LoaderFunction, type MetaFunction } from "@remix-run/node";
+import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import { gql } from "graphql-request";
 import { CategoryType, PostType } from "~/utils/types";
 import client from "~/utils/apolloClient";

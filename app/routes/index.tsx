@@ -1,5 +1,5 @@
-import { Link, useLoaderData } from "remix";
-import type { LoaderFunction } from "remix";
+import { type LoaderFunction } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
 import { gql } from "graphql-request";
 import moment from "moment";
 

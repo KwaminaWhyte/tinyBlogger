@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 import { type LinksFunction, type MetaFunction } from "@remix-run/node";
 import {
   Links,

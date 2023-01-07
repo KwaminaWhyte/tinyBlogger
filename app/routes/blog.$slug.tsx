@@ -1,5 +1,5 @@
-import { useLoaderData } from "remix";
-import type { MetaFunction, LoaderFunction } from "remix";
+import { type LoaderFunction, type MetaFunction } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import { IoIosChatbubbles, IoIosHeart, IoIosShare } from "react-icons/io";
 import { gql } from "graphql-request";
 import { PostType } from "~/utils/types";

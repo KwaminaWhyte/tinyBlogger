@@ -15,6 +15,14 @@
     "start": "cross-env NODE_ENV=production remix-serve build"
   },
   "dependencies": {
+    "@editorjs/code": "^2.8.0",
+    "@editorjs/editorjs": "^2.26.4",
+    "@editorjs/header": "^2.7.0",
+    "@editorjs/image": "^2.8.1",
+    "@editorjs/link": "^2.5.0",
+    "@editorjs/list": "^1.8.0",
+    "@editorjs/simple-image": "^1.5.1",
+    "@editorjs/table": "^2.2.0",
     "@remix-run/node": "^1.4.1",
     "@remix-run/react": "^1.4.1",
     "@remix-run/vercel": "^1.4.1",
@@ -23,7 +31,9 @@
     "moment": "^2.29.3",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-icons": "^4.3.1"
+    "react-editor-js": "^2.1.0",
+    "react-icons": "^4.3.1",
+    "remix-utils": "^5.2.1"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.4.1",
