@@ -1,13 +1,12 @@
 import {
   Links,
-  LinksFunction,
   LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
 } from "remix";
-import type { MetaFunction } from "remix";
+import type { MetaFunction, LinksFunction } from "remix";
 import { ReactNode } from "react";
 import NavigationBar from "./components/NavigationBar";
 import style from "./tailwind.css";
