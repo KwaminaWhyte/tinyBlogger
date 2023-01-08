@@ -8,12 +8,13 @@ import type {
   ActionFunction,
 } from "@remix-run/node";
 import { gql } from "graphql-request";
-import { createReactEditorJS } from "react-editor-js";
+// import { createReactEditorJS } from "react-editor-js";
 
 import client from "~/utils/apolloClient";
-import { EDITOR_JS_TOOLS } from "~/utils/editorJsTools.client";
+// import { EDITOR_JS_TOOLS } from "~/utils/editorJsTools.client";
+import CKEditorCustom from "~/components/CKEditorCustom.client";
 
-const ReactEditorJS = createReactEditorJS();
+// const ReactEditorJS = createReactEditorJS();
 export const meta: MetaFunction = () => {
   return {
     title: "tinyBlog | New Blog",
@@ -77,9 +78,9 @@ const inputClassName = `w-full rounded border border-gray-500 px-2 py-1 text-lg`
 const NewBLog = () => {
   const editorCore = React.useRef(null);
 
-  const handleInitialize = React.useCallback((instance) => {
-    editorCore.current = instance;
-  }, []);
+  // const handleInitialize = React.useCallback((instance) => {
+  //   editorCore.current = instance;
+  // }, []);
 
   const handleSave = React.useCallback(async () => {
     const savedData = await editorCore.current.save();
@@ -114,14 +115,18 @@ const NewBLog = () => {
             <div className="">
               <label htmlFor="markdown">Content</label>
 
-              <ReactEditorJS
+              <CKEditorCustom
+                onChange={(data) => console.log(data, "from new blog page!")}
+              />
+
+              {/* <ReactEditorJS
                 holder="editorjs"
                 // defaultValue={blocks}
                 tools={EDITOR_JS_TOOLS}
                 onInitialize={handleInitialize}
                 placeholder={`Let's write an awesome blog!`}
                 inlineToolbar={true}
-              />
+              /> */}
             </div>
 
             <p onClick={() => handleSave()}>Submit</p>

@@ -15,6 +15,7 @@
     "start": "cross-env NODE_ENV=production remix-serve build"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-react": "^5.0.5",
     "@editorjs/code": "^2.8.0",
     "@editorjs/editorjs": "^2.26.4",
     "@editorjs/header": "^2.7.0",
@@ -26,6 +27,7 @@
     "@remix-run/node": "^1.4.1",
     "@remix-run/react": "^1.4.1",
     "@remix-run/vercel": "^1.4.1",
+    "ckeditor5-custom-build": "file:ckeditor5",
     "graphql": "^16.3.0",
     "graphql-request": "^4.2.0",
     "moment": "^2.29.3",
