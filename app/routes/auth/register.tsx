@@ -1,5 +1,6 @@
 import { ActionArgs, LoaderArgs, redirect } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
+import Button from "~/components/Button";
 import InputField from "~/components/InputField";
 import { getSession, register } from "~/utils/session.server";
 
@@ -27,11 +28,11 @@ function Register() {
   console.log(actionData);
   return (
     <div className="mx-auto w-[60%]">
-      <h1 className="text-2xl font-bold">Registration Page</h1>
+      <h1 className="text-3xl font-bold">Registration</h1>
 
       <Form
         method="post"
-        className="my-9 rounded bg-white px-8 pt-6 pb-8 shadow-md"
+        className="my-9 rounded-xl bg-white px-8 pt-6 pb-8 shadow-md"
       >
         <InputField
           name="email"
@@ -50,24 +51,19 @@ function Register() {
         />
 
         <div className="flex items-center justify-between">
-          <button
-            className="focus:shadow-outline rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700 focus:outline-none"
-            type="submit"
-          >
-            Sign Up
-          </button>
           <Link
             to="#"
-            className="inline-block align-baseline text-sm font-bold text-blue-500 hover:text-blue-800"
+            className="inline-block align-baseline text-sm font-bold text-gray-500 hover:text-gray-800 hover:underline"
           >
             Forgot Password?
           </Link>
+          <Button label="Sign Up" type="submit" />
         </div>
       </Form>
 
       <Link
         to="/auth"
-        className="inline-block align-baseline text-sm font-bold text-blue-500 hover:text-blue-800"
+        className="inline-block align-baseline text-sm font-bold text-gray-500 hover:text-gray-800 hover:underline"
       >
         Already have an Account?{" "}
       </Link>

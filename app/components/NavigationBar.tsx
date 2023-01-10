@@ -14,8 +14,6 @@ function NavigationBar({
   isAuthenticated: boolean;
   user: any;
 }) {
-  console.log(user);
-
   return (
     <nav className="fixed z-50 flex h-20 w-full items-center border-b border-black bg-slate-50 px-3">
       <Link to="/" className="logo text-2xl font-black">

@@ -2,13 +2,11 @@ import { useRef, useCallback } from "react";
 import { ClientOnly } from "remix-utils";
 import { Form } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
-import type {
-  LoaderFunction,
-  MetaFunction,
-  ActionFunction,
-} from "@remix-run/node";
+import type { MetaFunction, ActionFunction, LoaderArgs } from "@remix-run/node";
 import { getSession } from "~/utils/session.server";
 import CKEditorCustom from "~/components/CKEditorCustom.client";
+import InputField from "~/components/InputField";
+import Button from "~/components/Button";
 
 export const meta: MetaFunction = () => {
   return {
@@ -23,7 +21,7 @@ export async function loader({ request }: LoaderArgs) {
     // Redirect to the home page if they are already signed in.
     return redirect("/auth");
   }
-  return {};
+  return { user: session.get("auth_user") };
 }
 
 export const action: ActionFunction = async ({ request }) => {
@@ -56,44 +54,49 @@ const NewBLog = () => {
   return (
     <ClientOnly
       fallback={
-        <div>
-          <h1>New BLog</h1>
+        <div className="w-full p-6">
+          <h1 className="text-center text-3xl font-bold">New BLog</h1>
         </div>
       }
     >
       {() => (
-        <div className="px-5 py-10">
-          <h1>NewBLog</h1>
+        <div className="mx-auto w-[80%] py-10">
+          <h1 className="text-center text-3xl font-bold">New BLog</h1>
 
           <Form method="post">
-            <p>
-              <label>
-                Post Title:{" "}
-                <input type="text" name="title" className={inputClassName} />
-              </label>
-            </p>
-            <p>
-              <label>
-                Post Slug:{" "}
-                <input type="text" name="slug" className={inputClassName} />
-              </label>
-            </p>
+            <InputField
+              name="title"
+              label="Title"
+              required={true}
+              type="text"
+              // value={actionData?.email}
+            />
+
+            <InputField
+              name="slug"
+              label="Slug"
+              required={true}
+              type="text"
+              // dissable
+              // value={actionData?.email}
+            />
+
             <div className="">
-              <label htmlFor="markdown">Content</label>
+              <label
+                htmlFor="markdown"
+                className="mb-2 block text-lg font-semibold text-gray-700"
+              >
+                Content
+              </label>
 
               <CKEditorCustom
                 onChange={(data) => console.log(data, "from new blog page!")}
               />
             </div>
 
-            <p onClick={() => handleSave()}>Submit</p>
+            {/* <p onClick={() => handleSave()}>Submit</p> */}
             <p className="text-right">
-              <button
-                type="submit"
-                className="rounded bg-blue-500 py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400 disabled:bg-blue-300"
-              >
-                Create Post
-              </button>
+              <Button label="Create Post" type="submit" />
             </p>
           </Form>
         </div>

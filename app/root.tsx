@@ -100,7 +100,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     <>
       <NavigationBar isAuthenticated={isAuthenticated} user={user} />
 
-      <main className="flex min-h-screen flex-col bg-slate-50 pt-20">
+      <main className="flex min-h-screen w-screen flex-col bg-slate-50 pt-20">
         {children}
       </main>
     </>

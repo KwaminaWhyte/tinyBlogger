@@ -1,9 +1,10 @@
 function InputField({
   label,
   name,
-  value,
+  value = "",
   type,
   required,
+  error = "",
 }: {
   label: string;
   value: string;
@@ -14,18 +15,22 @@ function InputField({
   return (
     <div className="mb-6">
       <label
-        className="mb-2 block text-sm font-bold text-gray-700"
+        className="mb-2 block text-lg font-semibold text-gray-700"
         htmlFor={name}
       >
         {label}
       </label>
       <input
-        className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+        className={`w-full appearance-none rounded-2xl border p-3 font-medium leading-tight text-gray-700 focus:outline-none focus:ring-2 ${
+          error != ""
+            ? "border-red-500 ring-2 ring-red-400"
+            : "border-gray-700 ring-slate-400"
+        }`}
         id={name}
         name={name}
         type={type}
         required={required}
-        value={value}
+        // value={value}
       />
     </div>
   );
