@@ -1,15 +1,12 @@
-import { Link, Outlet, useLoaderData } from "@remix-run/react";
+// import moment from "moment";
+import { Outlet, useLoaderData } from "@remix-run/react";
 import type { MetaFunction, LoaderFunction } from "@remix-run/node";
-import request, { gql } from "graphql-request";
-import moment from "moment";
 import PostCard from "~/components/PostCard";
-import { PostType } from "~/utils/types";
-
-import client from "~/utils/apolloClient";
+import type { PostType } from "~/utils/types";
 
 export const meta: MetaFunction = ({ data }) => {
   return {
-    title: `tinyBlog | The most significant stories about ${data.title}`,
+    title: `tinyBlogger | The most significant stories about ${data.title}`,
     description: `Aspernatur earum itaque error mollitia dolorum quidem odit
                     optio vel? Quasi error esse nobis quas dolor dolore pariatur
                     obcaecati aut debitis quam?`,
@@ -17,39 +14,7 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export const loader: LoaderFunction = async ({ params }) => {
-  const query = gql`
-    query MyQuery($slug: String!) {
-      category(where: { slug: $slug }) {
-        title
-        posts {
-          id
-          slug
-          title
-          description
-          createdAt
-          featuredImage {
-            url
-          }
-          categories {
-            title
-            slug
-            id
-          }
-          account {
-            username
-            photo {
-              url
-            }
-          }
-        }
-      }
-    }
-  `;
-
-  const result = await client.request(query, { slug: params.slug });
-
-  let post = result.category;
-  return post;
+  return [];
 };
 
 function Tag() {

@@ -1,7 +1,6 @@
 import moment from "moment";
-import React from "react";
 import { Link } from "@remix-run/react";
-import { PostType } from "~/utils/types";
+import type { PostType } from "~/utils/types";
 
 function PostCard({ post }: { post: PostType }) {
   return (
@@ -11,7 +10,7 @@ function PostCard({ post }: { post: PostType }) {
     >
       <div className="flex items-center">
         <img
-          src={post.featuredImage.url}
+          src={post.cover_image}
           className="mr-3 h-8 w-8 rounded-full"
           alt=""
         />
@@ -26,7 +25,7 @@ function PostCard({ post }: { post: PostType }) {
 
           <div className="flex flex-col md:flex-row md:items-center">
             <p className="mr-3 text-sm">
-              {moment(post.createdAt).format("MMMM Do")} . 20min read
+              {moment(post.created_at).format("MMMM Do")} . 20min read
             </p>
 
             <div className="flex flex-wrap">
@@ -44,7 +43,7 @@ function PostCard({ post }: { post: PostType }) {
         </div>
 
         <img
-          src={post.featuredImage.url}
+          src={post.cover_image}
           className="ml-auto h-12 w-12 rounded-sm md:h-32 md:w-32"
           alt=""
         />

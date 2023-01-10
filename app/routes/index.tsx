@@ -1,48 +1,17 @@
-import { type LoaderFunction } from "@remix-run/node";
+import { redirect, type LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import { gql } from "graphql-request";
 import moment from "moment";
 
-import client from "~/utils/apolloClient";
-import { CategoryType, PostType } from "~/utils/types";
+import { getSession } from "~/utils/session.server";
+import type { CategoryType, PostType } from "~/utils/types";
 import PostCard from "~/components/PostCard";
 
-export const loader: LoaderFunction = async () => {
-  const query = gql`
-    {
-      posts {
-        id
-        slug
-        title
-        description
-        createdAt
-        featuredImage {
-          url
-        }
-        categories {
-          title
-          slug
-          id
-        }
-        account {
-          username
-          photo {
-            url
-          }
-        }
-      }
-      categories {
-        id
-        slug
-        title
-      }
-    }
-  `;
+export const loader: LoaderFunction = async ({ request }) => {
+  const session = await getSession(request.headers.get("Cookie"));
+  console.log(session.get("email"), "cookie");
 
-  const result = await client.request(query);
-
-  let posts = result.posts;
-  let categories = result.categories;
+  let posts = [];
+  let categories = [];
 
   return { posts, categories };
 };
@@ -87,7 +56,7 @@ export default function Index() {
               </div>
               <p className="my-2 font-bold">{post.title}</p>
               <p className="text-sm">
-                {moment(post.createdAt).format("MM DD, YYYY")} - 17mins read{" "}
+                {moment(post.created_at).format("MM DD, YYYY")} - 17mins read{" "}
               </p>
             </Link>
           ))}

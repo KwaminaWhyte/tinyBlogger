@@ -1,53 +1,24 @@
 import { type LoaderFunction, type MetaFunction } from "@remix-run/node";
 import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
-import { gql } from "graphql-request";
-import { CategoryType, PostType } from "~/utils/types";
-import client from "~/utils/apolloClient";
-
-export const loader: LoaderFunction = async () => {
-  const query = gql`
-    query MyQuery {
-      posts {
-        id
-        slug
-        title
-        description
-        createdAt
-        featuredImage {
-          url
-        }
-        categories {
-          title
-          slug
-          id
-        }
-        account {
-          username
-          photo {
-            url
-          }
-        }
-      }
-      categories {
-        id
-        slug
-        title
-      }
-    }
-  `;
-
-  const result = await client.request(query);
-  let posts = result.posts;
-  let categories = result.categories;
-
-  return { posts, categories };
-};
+import type { CategoryType, PostType } from "~/utils/types";
+import supabase from "~/utils/supabase";
 
 export const meta: MetaFunction = () => {
   return {
-    title: "tinyBlog | Featured Blog",
+    title: "tinyBlogger | Featured Blog",
     description: "",
   };
+};
+
+export const loader: LoaderFunction = async () => {
+  const { data } = await supabase
+    .from("blogs")
+    .select("id,title,description,cover_image");
+  console.log(data);
+
+  let categories = [{ id: 3, slug: "fassf_asfas", title: "asfasf" }];
+  let posts = data;
+  return { posts, categories };
 };
 
 function Index() {
@@ -56,11 +27,11 @@ function Index() {
   return (
     <>
       <section className="flex overflow-x-auto px-3">
-        {posts.map((post: PostType) => (
+        {posts?.map((post: PostType) => (
           <div
             key={post.id}
             style={{
-              background: `url('${post.featuredImage.url}')`,
+              background: `url('${post.cover_image}')`,
               backgroundSize: "cover",
             }}
             className="m-3 flex h-56 w-[95%] flex-shrink-0 flex-col rounded-lg p-5 hover:bg-top md:w-96"
@@ -68,9 +39,9 @@ function Index() {
             <h4 className="mt-5 w-[80%] text-lg font-bold text-white">
               {post.title}
             </h4>
-
+            <p> {post.description}</p>
             <Link
-              to={`/blog/${post.slug}`}
+              to={`/blog/${post.id}`}
               className="mr-auto mt-auto rounded-2xl  bg-white py-3 px-4 text-sm font-medium ring-yellow-400 transition-all duration-75 ease-in hover:bg-gray-900 hover:text-white hover:ring-2"
             >
               Read More
@@ -80,7 +51,7 @@ function Index() {
       </section>
 
       <section className="my-5 flex justify-center border-b border-gray-300 px-3 py-6">
-        {categories.map((category: CategoryType) => (
+        {categories?.map((category: CategoryType) => (
           <NavLink
             to={`/tag/${category.slug}`}
             key={category.id}
@@ -94,8 +65,8 @@ function Index() {
           </NavLink>
         ))}
       </section>
-      {/* 
-      <section className="flex flex-col md:px-3">
+
+      {/* <section className="flex flex-col md:px-3">
         <Outlet />
       </section> */}
     </>

@@ -7,7 +7,7 @@ export const loader: LoaderFunction = async () => {
 
 export const meta: MetaFunction = () => {
   return {
-    title: "tinyBlog | Sign in or Register a new Account",
+    title: "tinyBlogger | Sign in or Register a new Account",
     description: "Create a new account or signin to continue",
   };
 };

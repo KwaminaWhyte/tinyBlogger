@@ -1,4 +1,4 @@
-import React from "react";
+import { useRef, useCallback } from "react";
 import { ClientOnly } from "remix-utils";
 import { Form } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
@@ -7,23 +7,25 @@ import type {
   MetaFunction,
   ActionFunction,
 } from "@remix-run/node";
-import { gql } from "graphql-request";
-// import { createReactEditorJS } from "react-editor-js";
-
-import client from "~/utils/apolloClient";
-// import { EDITOR_JS_TOOLS } from "~/utils/editorJsTools.client";
+import { getSession } from "~/utils/session.server";
 import CKEditorCustom from "~/components/CKEditorCustom.client";
 
-// const ReactEditorJS = createReactEditorJS();
 export const meta: MetaFunction = () => {
   return {
-    title: "tinyBlog | New Blog",
+    title: "tinyBlogger | New Blog",
     description: "",
   };
 };
-export const loader: LoaderFunction = async () => {
-  return "asfjbasuf ";
-};
+
+export async function loader({ request }: LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  if (!session.has("auth_session")) {
+    // Redirect to the home page if they are already signed in.
+    return redirect("/auth");
+  }
+  return {};
+}
+
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
 
@@ -39,50 +41,14 @@ export const action: ActionFunction = async ({ request }) => {
     content,
   };
 
-  const query = gql`
-    query newPost($slug: String!) {
-      category(where: { slug: $slug }) {
-        title
-        posts {
-          id
-          slug
-          title
-          description
-          createdAt
-          featuredImage {
-            url
-          }
-          categories {
-            title
-            slug
-            id
-          }
-          account {
-            username
-            photo {
-              url
-            }
-          }
-        }
-      }
-    }
-  `;
-
-  const result = await client.request(query, data);
-
   return redirect("/posts/admin");
 };
 
 const inputClassName = `w-full rounded border border-gray-500 px-2 py-1 text-lg`;
 
 const NewBLog = () => {
-  const editorCore = React.useRef(null);
-
-  // const handleInitialize = React.useCallback((instance) => {
-  //   editorCore.current = instance;
-  // }, []);
-
-  const handleSave = React.useCallback(async () => {
+  const editorCore = useRef(null);
+  const handleSave = useCallback(async () => {
     const savedData = await editorCore.current.save();
     console.log(savedData);
   }, []);
@@ -91,7 +57,7 @@ const NewBLog = () => {
     <ClientOnly
       fallback={
         <div>
-          <h1>NewBLog</h1>
+          <h1>New BLog</h1>
         </div>
       }
     >
@@ -118,15 +84,6 @@ const NewBLog = () => {
               <CKEditorCustom
                 onChange={(data) => console.log(data, "from new blog page!")}
               />
-
-              {/* <ReactEditorJS
-                holder="editorjs"
-                // defaultValue={blocks}
-                tools={EDITOR_JS_TOOLS}
-                onInitialize={handleInitialize}
-                placeholder={`Let's write an awesome blog!`}
-                inlineToolbar={true}
-              /> */}
             </div>
 
             <p onClick={() => handleSave()}>Submit</p>

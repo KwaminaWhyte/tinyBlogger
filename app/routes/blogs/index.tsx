@@ -1,5 +1,6 @@
 import React from "react";
-import { Link } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
+import { LoaderFunction } from "@remix-run/node";
 
 const posts = [
   {
@@ -34,7 +35,18 @@ const posts = [
   },
 ];
 
+export const loader: LoaderFunction = () => {
+  // async function getCountries() {
+  //   const countries = await supabase.from("countries").select();
+  //   console.log(countries);
+  // }
+  // getCountries();
+  return [];
+};
+
 const CaseStudy = () => {
+  let data = useLoaderData();
+
   return (
     <>
       <section className="py-8 px-3">
@@ -46,7 +58,7 @@ const CaseStudy = () => {
           <div
             key={post.id}
             style={{
-              background: `url('${post.img}')`,
+              background: `url('${post?.cover_image}')`,
               backgroundSize: "cover",
             }}
             className="m-3 flex h-56 w-[95%] flex-shrink-0 flex-col rounded-lg p-5 hover:bg-top md:w-96"
@@ -56,7 +68,7 @@ const CaseStudy = () => {
             </h4>
 
             <Link
-              to={`/blog/${post.id}`}
+              to={`${post?.user?.username}/blogs/${post?.id}`}
               className="mr-auto mt-auto rounded-2xl  bg-white py-3 px-4 text-sm font-medium ring-yellow-400 transition-all duration-75 ease-in hover:bg-gray-900 hover:text-white hover:ring-2"
             >
               Read More

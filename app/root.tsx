@@ -1,5 +1,11 @@
-import { type ReactNode } from "react";
-import { type LinksFunction, type MetaFunction } from "@remix-run/node";
+import type { ReactNode } from "react";
+import {
+  type LinksFunction,
+  type MetaFunction,
+  type LoaderArgs,
+  type ActionArgs,
+  redirect,
+} from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -7,9 +13,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
-import NavigationBar from "./components/NavigationBar";
+import { destroySession, getSession } from "./utils/session.server";
 import style from "./tailwind.css";
+import NavigationBar from "./components/NavigationBar";
 
 export const links: LinksFunction = () => {
   return [
@@ -29,13 +37,33 @@ export const links: LinksFunction = () => {
     // },
   ];
 };
+export const meta: MetaFunction = () => ({
+  charset: "utf-8",
+  title: "tinyBlogger",
+  description: "tinyBlogger. The best :)",
+  "og:image": `https://www.logolynx.com/images/logolynx/d3/d346364714a1cb9a90e4841d8a7aede5.png`,
+  viewport: "width=device-width,initial-scale=1",
+});
 
-export const meta: MetaFunction = () => {
-  return {
-    title: "tinyBlog",
-    description: "tinyBlog. The best :)",
-  };
-};
+export async function loader({ request }: LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+
+  if (session.has("auth_session")) {
+    return { isAuthenticated: true, user: session.get("auth_user") };
+  }
+  return { isAuthenticated: false, user: null };
+}
+
+export async function action({ request }: ActionArgs) {
+  //   const { error } = await supabase.auth.signOut();
+
+  const session = await getSession(request.headers.get("Cookie"));
+  return redirect("?index", {
+    headers: {
+      "Set-Cookie": await destroySession(session),
+    },
+  });
+}
 
 export default function App() {
   return (
@@ -51,8 +79,6 @@ const Document = ({ children }: { children: ReactNode }) => {
   return (
     <html lang="en">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
       </head>
@@ -68,9 +94,11 @@ const Document = ({ children }: { children: ReactNode }) => {
 };
 
 const Layout = ({ children }: { children: ReactNode }) => {
+  let { isAuthenticated, user } = useLoaderData();
+
   return (
     <>
-      <NavigationBar />
+      <NavigationBar isAuthenticated={isAuthenticated} user={user} />
 
       <main className="flex min-h-screen flex-col bg-slate-50 pt-20">
         {children}
