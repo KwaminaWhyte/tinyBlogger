@@ -1,4 +1,6 @@
 import { NavLink, Link, Form } from "@remix-run/react";
+import Popper from "popper.js";
+import { useEffect, useRef, useState } from "react";
 
 const links = [
   { name: "Home", href: "/" },
@@ -14,6 +16,20 @@ function NavigationBar({
   isAuthenticated: boolean;
   user: any;
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const buttonRef = useRef(null);
+  const dropdownRef = useRef(null);
+
+  const toggleDropdown = () => {
+    setIsOpen((prevState) => !prevState);
+  };
+
+  useEffect(() => {
+    // new Popper(buttonRef?.current, dropdownRef.current, {
+    //   placement: "bottom-start",
+    // });
+  }, []);
+
   return (
     <nav className="fixed z-50 flex h-20 w-full items-center border-b border-black bg-slate-50 px-3">
       <Link to="/" className="logo text-2xl font-black">
@@ -36,18 +52,54 @@ function NavigationBar({
         ))}
 
         {isAuthenticated ? (
-          <div className="ml-24 flex items-center">
-            <Link to={"create/blog/new"}> New BLog</Link>
-
-            <Form method="post" className="mx-5">
-              <button>Logout</button>
-            </Form>
-
-            <img
-              className="h-16 w-16 rounded-full"
-              src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80"
-              alt="profile_image"
-            />
+          <div className="relative">
+            <button
+              ref={buttonRef}
+              className="ml-3 flex items-center rounded-full bg-gray-200 px-2 py-1 transition-all duration-300 hover:bg-gray-300"
+              onClick={toggleDropdown}
+            >
+              <p>{user?.email}</p>
+              <img
+                className="h-14 w-14 rounded-full"
+                src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80"
+                alt="profile_image"
+              />
+            </button>
+            {isOpen && (
+              <ul
+                ref={dropdownRef}
+                className="absolute right-0 z-10 mt-2 w-52 list-none rounded-lg bg-white py-2 text-base font-medium leading-6 text-gray-700 shadow-xl"
+              >
+                <li className="px-4 py-1 hover:bg-gray-100">
+                  <Link
+                    onClick={toggleDropdown}
+                    className="block w-full px-4 py-1 text-left"
+                    to={"create/blog/new"}
+                  >
+                    New Blog
+                  </Link>
+                </li>
+                <li className="px-4 py-1 hover:bg-gray-100">
+                  <Link
+                    onClick={toggleDropdown}
+                    className="block w-full px-4 py-1 text-left"
+                    to={"user/profile"}
+                  >
+                    Profile
+                  </Link>
+                </li>
+                <li className="px-4 py-1 hover:bg-gray-100">
+                  <Form className="block w-full px-4 py-1" method="post">
+                    <button
+                      className="w-full text-left text-red-600"
+                      // onClick={toggleDropdown}
+                    >
+                      Logout
+                    </button>
+                  </Form>
+                </li>
+              </ul>
+            )}
           </div>
         ) : (
           <Link

@@ -9,6 +9,7 @@ export async function action({ request }: ActionArgs) {
   let formData = await request.formData();
   let email = formData.get("email");
   let password = formData.get("password");
+
   let inputError = {};
   if (password == "") {
     inputError["password"] = "Password Field is required!";
@@ -17,21 +18,25 @@ export async function action({ request }: ActionArgs) {
     inputError["email"] = "Email Field is required!";
   }
 
-  let data = {
-    email,
-    password,
-    redirectTo: "/",
-  };
-
   if (Object.keys(inputError).length != 0) {
     console.log(inputError);
     return inputError;
   }
 
-  let session = await login(data);
+  let data = await login({
+    email,
+    password,
+  });
 
-  console.log(session);
-  return await createUserSession(session, "/user/profile");
+  if (data?.status == 400) {
+    return {
+      name: data.name,
+      message: data.message,
+      status: data.status,
+    };
+  }
+
+  return await createUserSession(data, "/user/profile");
 }
 
 export async function loader({ request }: LoaderArgs) {
@@ -45,7 +50,6 @@ export async function loader({ request }: LoaderArgs) {
 function Login() {
   const [inputError, setInputError] = useState({});
   let actionData = useActionData();
-  console.log(actionData);
 
   useEffect(() => {
     setInputError(actionData);
@@ -59,6 +63,13 @@ function Login() {
         method="post"
         className="my-9 rounded-xl bg-white px-8 pt-6 pb-8 shadow-md"
       >
+        <div className="mb-2">
+          {actionData?.message && (
+            <p className="text-lg font-semibold text-red-500">
+              {actionData?.message}
+            </p>
+          )}
+        </div>
         <InputField
           name="email"
           label="Email"

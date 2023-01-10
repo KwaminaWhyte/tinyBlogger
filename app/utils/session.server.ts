@@ -5,7 +5,6 @@ import type { Session } from "@supabase/supabase-js";
 export async function login({
   email,
   password,
-  redirectTo,
 }: {
   email: string;
   password: string;
@@ -40,7 +39,13 @@ export async function register({
     password: password,
   });
 
-  return { data, error };
+  if (error) {
+    console.log(error);
+    return error;
+  }
+
+  console.log({ ...data?.user });
+  return { ...data.user };
 }
 
 const { SESSION_SECRET } = process.env;
