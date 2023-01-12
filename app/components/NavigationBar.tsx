@@ -1,5 +1,4 @@
 import { NavLink, Link, Form } from "@remix-run/react";
-import Popper from "popper.js";
 import { useEffect, useRef, useState } from "react";
 import Dropdown from "./DropDown";
 
@@ -17,14 +16,6 @@ function NavigationBar({
   isAuthenticated: boolean;
   user: any;
 }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const buttonRef = useRef(null);
-  const dropdownRef = useRef(null);
-
-  const toggleDropdown = () => {
-    setIsOpen((prevState) => !prevState);
-  };
-
   useEffect(() => {
     // new Popper(buttonRef?.current, dropdownRef.current, {
     //   placement: "bottom-start",
@@ -32,7 +23,7 @@ function NavigationBar({
   }, []);
 
   return (
-    <nav className="fixed z-50 flex h-20 w-full items-center border-b border-black bg-slate-50 px-3">
+    <nav className="fixed z-50 flex h-20 w-full items-center border-b border-black bg-slate-50 px-4">
       <Link to="/" className="logo text-2xl font-black">
         tiny Blogger
       </Link>
@@ -81,35 +72,34 @@ function NavigationBar({
               <Dropdown.Content>
                 <Dropdown.Link href="create/blog/new" label="New Blog" />
                 <Dropdown.Link href="user/profile" label="Profile" />
+                <Form className="block w-full px-4 py-1" method="post">
+                  <button className="w-full text-left text-red-600">
+                    Logout
+                  </button>
+                </Form>
               </Dropdown.Content>
             </Dropdown>
 
             <button
-              ref={buttonRef}
-              className="ml-3 flex items-center rounded-full bg-gray-200 px-2 py-1 text-sm transition-all duration-300 hover:bg-gray-300"
-              onClick={toggleDropdown}
+              // ref={buttonRef}
+              className="ml-3 flex items-center rounded-full bg-gray-200 p-1 text-sm transition-all duration-300 hover:bg-gray-300"
+              // onClick={toggleDropdown}
             >
-              <p>{user?.email}</p>
+              {/* <p>{user?.email}</p> */}
               <img
                 className="h-12 w-12 rounded-full"
                 src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80"
                 alt="profile_image"
               />
             </button>
-            {isOpen && (
+            {/* {isOpen && (
               <ul
                 ref={dropdownRef}
                 className="absolute right-0 z-10 mt-2 w-52 list-none rounded-lg bg-white py-2 text-base font-medium leading-6 text-gray-700 shadow-xl"
               >
-                <li className="px-4 py-1 hover:bg-gray-100">
-                  <Form className="block w-full px-4 py-1" method="post">
-                    <button className="w-full text-left text-red-600">
-                      Logout
-                    </button>
-                  </Form>
-                </li>
+                <li className="px-4 py-1 hover:bg-gray-100"></li>
               </ul>
-            )}
+            )} */}
           </div>
         ) : (
           <Link
