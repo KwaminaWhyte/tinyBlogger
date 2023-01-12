@@ -1,4 +1,4 @@
-import { redirect, type LoaderFunction } from "@remix-run/node";
+import { type LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import moment from "moment";
 
@@ -8,7 +8,7 @@ import PostCard from "~/components/PostCard";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
-  console.log(session.get("email"), "cookie");
+  console.log(session.get("auth_user"), "cookie");
 
   let posts = [];
   let categories = [];

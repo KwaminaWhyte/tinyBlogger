@@ -1,6 +1,7 @@
 import { NavLink, Link, Form } from "@remix-run/react";
 import Popper from "popper.js";
 import { useEffect, useRef, useState } from "react";
+import Dropdown from "./DropDown";
 
 const links = [
   { name: "Home", href: "/" },
@@ -51,6 +52,36 @@ function NavigationBar({
           </NavLink>
         ))}
 
+        <Dropdown>
+          <Dropdown.Trigger>
+            <span className="inline-flex rounded-md">
+              <button
+                type="button"
+                className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+              >
+                something
+                <svg
+                  className="ml-2 -mr-0.5 h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </span>
+          </Dropdown.Trigger>
+
+          <Dropdown.Content>
+            <Dropdown.Link href="create/blog/new" label="New Blog" />
+            <Dropdown.Link href="user/profile" label="Profile" />
+          </Dropdown.Content>
+        </Dropdown>
+
         {isAuthenticated ? (
           <div className="relative">
             <button
@@ -70,24 +101,6 @@ function NavigationBar({
                 ref={dropdownRef}
                 className="absolute right-0 z-10 mt-2 w-52 list-none rounded-lg bg-white py-2 text-base font-medium leading-6 text-gray-700 shadow-xl"
               >
-                <li className="px-4 py-1 hover:bg-gray-100">
-                  <Link
-                    onClick={toggleDropdown}
-                    className="block w-full px-4 py-1 text-left"
-                    to={"create/blog/new"}
-                  >
-                    New Blog
-                  </Link>
-                </li>
-                <li className="px-4 py-1 hover:bg-gray-100">
-                  <Link
-                    onClick={toggleDropdown}
-                    className="block w-full px-4 py-1 text-left"
-                    to={"user/profile"}
-                  >
-                    Profile
-                  </Link>
-                </li>
                 <li className="px-4 py-1 hover:bg-gray-100">
                   <Form className="block w-full px-4 py-1" method="post">
                     <button
