@@ -6,14 +6,14 @@ function CKEditorCustom({ onChange }: { onChange: any }) {
   return (
     <CKEditor
       editor={Editor}
-      data="<p>Hello, Write some awesome blog :)</p>"
+      data="<p> <b> Hello, Write some awesome blog :)</b></p>"
       onReady={(editor: any) => {
         // You can store the "editor" and use when it is needed.
         console.log("Editor is ready to use!", editor);
       }}
       onChange={(event: any, editor: any) => {
         const data = editor.getData();
-        // console.log({ event, editor, data });
+        console.log(editor);
         onChange(data);
       }}
       onBlur={(event: any, editor: any) => {

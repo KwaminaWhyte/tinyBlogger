@@ -1,4 +1,4 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useEffect, useState } from "react";
 import { ClientOnly } from "remix-utils";
 import { Form } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
@@ -30,7 +30,7 @@ export const action: ActionFunction = async ({ request }) => {
   const title = formData.get("title");
   const slug = formData.get("slug");
   const description = formData.get("description");
-  const content = formData.get("markdown");
+  const content = formData.get("content");
 
   let data = {
     slug,
@@ -38,14 +38,16 @@ export const action: ActionFunction = async ({ request }) => {
     description,
     content,
   };
+  console.log(data);
 
-  return redirect("/posts/admin");
+  return data;
+  // return redirect("/posts/admin");
 };
-
-const inputClassName = `w-full rounded border border-gray-500 px-2 py-1 text-lg`;
 
 const NewBLog = () => {
   const editorCore = useRef(null);
+  const [content, setContent] = useState("");
+
   const handleSave = useCallback(async () => {
     const savedData = await editorCore.current.save();
     console.log(savedData);
@@ -54,16 +56,22 @@ const NewBLog = () => {
   return (
     <ClientOnly
       fallback={
-        <div className="w-full p-6">
-          <h1 className="text-center text-3xl font-bold">New BLog</h1>
+        <div className="mx-auto w-[80%] py-10">
+          <h1 className="text-center text-3xl font-bold">New Blog</h1>
         </div>
       }
     >
       {() => (
         <div className="mx-auto w-[80%] py-10">
-          <h1 className="text-center text-3xl font-bold">New BLog</h1>
+          <h1 className="mb-5 text-center text-3xl font-bold">New Blog</h1>
 
           <Form method="post">
+            <textarea
+              type="hidden"
+              readOnly={true}
+              name="content"
+              value={content}
+            />
             <InputField
               name="title"
               label="Title"
@@ -81,17 +89,22 @@ const NewBLog = () => {
               // value={actionData?.email}
             />
 
+            <InputField
+              name="description"
+              label="Description"
+              required={true}
+              type="text"
+            />
+
             <div className="">
               <label
-                htmlFor="markdown"
+                htmlFor="content"
                 className="mb-2 block text-lg font-semibold text-gray-700"
               >
                 Content
               </label>
 
-              <CKEditorCustom
-                onChange={(data) => console.log(data, "from new blog page!")}
-              />
+              <CKEditorCustom onChange={(data) => setContent(data)} />
             </div>
 
             {/* <p onClick={() => handleSave()}>Submit</p> */}

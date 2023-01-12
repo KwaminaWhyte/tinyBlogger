@@ -7,7 +7,7 @@ function Button({
 }: {
   label: string;
   type: string;
-  loading: boolean;
+  loading?: boolean;
 }) {
   return (
     <button

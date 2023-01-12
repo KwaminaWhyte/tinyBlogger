@@ -22,7 +22,6 @@
     "@vercel/node": "^2.6.2",
     "ckeditor5-custom-build": "file:ckeditor5",
     "moment": "^2.29.4",
-    "popper.js": "^1.16.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",

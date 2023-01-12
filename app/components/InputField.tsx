@@ -7,7 +7,7 @@ function InputField({
   error = "",
 }: {
   label: string;
-  value: string;
+  value?: string;
   name: string;
   type: string;
   required: boolean;
