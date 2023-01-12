@@ -13,19 +13,21 @@ export type PostType = {
   created_at: string;
   content: string;
   categories: [CategoryType];
-  user: UserType;
+  profile: Profile;
   comments?: [CommentType];
 };
 
-export type UserType = {
+export type Profile = {
+  id: string;
   username: string;
-  photo: string;
+  profile_img: string;
+  name: string;
 };
 
 export type CommentType = {
   id: string;
   name: string;
   email: string;
-  comment: string;
+  content: string;
   created_at: string;
 };

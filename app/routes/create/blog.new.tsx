@@ -79,10 +79,10 @@ const NewBLog = () => {
 
           <Form method="post">
             <textarea
-              type="hidden"
               readOnly={true}
               name="content"
               value={content}
+              className="hidden"
             />
             <InputField
               name="title"
