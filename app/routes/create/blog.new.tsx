@@ -31,7 +31,6 @@ export const action: ActionFunction = async ({ request }) => {
   let user = session.get("auth_user");
 
   const formData = await request.formData();
-
   const title = formData.get("title");
   const description = formData.get("description");
   const content = formData.get("content");
@@ -43,13 +42,12 @@ export const action: ActionFunction = async ({ request }) => {
       description: description,
       slug: createSlug(title),
       content: content,
-      user: "e726fa32-4ea8-4653-b7f2-7192eda8318f",
+      user: user?.id,
       cover_image: "https://picsum.photos/200/300",
     })
     .select("*")
     .single();
 
-  console.log(data);
   if (statusText === "Created") {
     return redirect(`/kwamina/blogs/${data?.slug}`);
   }
