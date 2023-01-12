@@ -48,8 +48,8 @@ export async function register({
   return { ...data.user };
 }
 
-const { SESSION_SECRET } = process.env;
-if (!SESSION_SECRET) throw new Error("SESSION_SECRET is not set!");
+// const { SESSION_SECRET } = process.env;
+// if (!SESSION_SECRET) throw new Error("SESSION_SECRET is not set!");
 
 const { getSession, commitSession, destroySession } =
   createCookieSessionStorage({
