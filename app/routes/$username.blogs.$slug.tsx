@@ -17,9 +17,11 @@ export const loader: LoaderFunction = async ({ params }) => {
   const { data, error } = await supabase
     .from("blogs")
     .select("*")
-    .eq("id", params.slug)
+    .eq("slug", params.slug)
     .limit(1)
     .single();
+
+  console.log(data, error);
 
   return data;
 };
@@ -55,7 +57,10 @@ function Blog() {
             className="my-4 w-full rounded-md"
           />
 
-          <section className="mt-11">{post?.content}</section>
+          <section
+            className="mt-11"
+            // dangerouslySetInnerHTML={{ __html: post?.content }}
+          />
         </div>
 
         <div className="sticky bottom-0 mt-11 flex h-14 items-center border-b border-t border-gray-300 bg-slate-50 px-6 text-gray-600 md:px-11">

@@ -7,6 +7,8 @@ import { getSession } from "~/utils/session.server";
 import CKEditorCustom from "~/components/CKEditorCustom.client";
 import InputField from "~/components/InputField";
 import Button from "~/components/Button";
+import supabase from "~/utils/supabase";
+import { createSlug } from "~/utils/createSlug";
 
 export const meta: MetaFunction = () => {
   return {
@@ -25,23 +27,33 @@ export async function loader({ request }: LoaderArgs) {
 }
 
 export const action: ActionFunction = async ({ request }) => {
+  const session = await getSession(request.headers.get("Cookie"));
+  let user = session.get("auth_user");
+
   const formData = await request.formData();
 
   const title = formData.get("title");
-  const slug = formData.get("slug");
   const description = formData.get("description");
   const content = formData.get("content");
 
-  let data = {
-    slug,
-    title,
-    description,
-    content,
-  };
-  console.log(data);
+  const { data, statusText, error, status } = await supabase
+    .from("blogs")
+    .insert({
+      title: title,
+      description: description,
+      slug: createSlug(title),
+      content: content,
+      user: "e726fa32-4ea8-4653-b7f2-7192eda8318f",
+      cover_image: "https://picsum.photos/200/300",
+    })
+    .select("*")
+    .single();
 
-  return data;
-  // return redirect("/posts/admin");
+  console.log(data);
+  if (statusText === "Created") {
+    return redirect(`/kwamina/blogs/${data?.slug}`);
+  }
+  return { error, status };
 };
 
 const NewBLog = () => {
@@ -77,15 +89,6 @@ const NewBLog = () => {
               label="Title"
               required={true}
               type="text"
-              // value={actionData?.email}
-            />
-
-            <InputField
-              name="slug"
-              label="Slug"
-              required={true}
-              type="text"
-              // dissable
               // value={actionData?.email}
             />
 
