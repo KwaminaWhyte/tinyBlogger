@@ -53,13 +53,13 @@ function NavigationBar({
         ))}
 
         {isAuthenticated ? (
-          <div className="relative flex">
+          <div className="relative flex items-center">
             <Dropdown>
               <Dropdown.Trigger>
                 <span className="inline-flex rounded-md">
                   <button
                     type="button"
-                    className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+                    className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-800 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
                   >
                     More
                     <svg
@@ -91,7 +91,7 @@ function NavigationBar({
             >
               <p>{user?.email}</p>
               <img
-                className="h-14 w-14 rounded-full"
+                className="h-12 w-12 rounded-full"
                 src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80"
                 alt="profile_image"
               />
@@ -114,7 +114,7 @@ function NavigationBar({
         ) : (
           <Link
             to="/auth"
-            className="mx-3 mr-auto rounded-2xl bg-black py-2 px-5 font-medium text-white shadow-md shadow-gray-400 ring-black transition-all duration-75 hover:bg-yellow-400 hover:text-black hover:ring-2"
+            className="mx-3 mr-auto rounded-2xl bg-black py-2 px-5 text-sm font-medium text-white shadow-md shadow-gray-400 ring-black transition-all duration-75 hover:bg-yellow-400 hover:text-black hover:ring-2"
           >
             Sign In
           </Link>
