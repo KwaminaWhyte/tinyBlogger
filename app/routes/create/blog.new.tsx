@@ -109,7 +109,7 @@ const NewBLog = () => {
             </div>
 
             {/* <p onClick={() => handleSave()}>Submit</p> */}
-            <p className="text-right">
+            <p className="mt-11">
               <Button label="Create Post" type="submit" />
             </p>
           </Form>

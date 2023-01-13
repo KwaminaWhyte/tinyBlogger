@@ -22,6 +22,11 @@ input {
   font-family: "Dancing Script", cursive;
 }
 
+body {
+  border: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 /* Works on Firefox */
 * {
   scrollbar-width: thin;

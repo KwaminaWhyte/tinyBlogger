@@ -14,7 +14,7 @@ export const meta: MetaFunction = () => {
 
 function Auth() {
   return (
-    <div className="flex w-[89%] flex-col p-20">
+    <div className="flex min-h-screen flex-col justify-center">
       {/* <h1 className="text-center">Auth Page</h1> */}
 
       <Outlet />

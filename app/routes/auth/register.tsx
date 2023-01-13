@@ -56,7 +56,7 @@ function Register() {
   }, [actionData]);
 
   return (
-    <div className="mx-auto w-[60%]">
+    <div className="mx-auto box-border w-[90%] md:w-[40%]">
       <h1 className="text-3xl font-bold">Registration</h1>
 
       <Form

@@ -5,12 +5,17 @@ import moment from "moment";
 import { getSession } from "~/utils/session.server";
 import type { CategoryType, PostType } from "~/utils/types";
 import PostCard from "~/components/PostCard";
+import supabase from "~/utils/supabase";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const session = await getSession(request.headers.get("Cookie"));
-  console.log(session.get("auth_user"), "cookie");
-
-  let posts = [];
+  // const session = await getSession(request.headers.get("Cookie"));
+  // console.log(session.get("auth_user"), "cookie");
+  const { data } = await supabase
+    .from("blogs")
+    .select(
+      "id,title,description,cover_image, slug, profile (id, username, profile_img), created_at)"
+    );
+  let posts = data;
   let categories = [];
 
   return { posts, categories };
@@ -36,7 +41,7 @@ export default function Index() {
         </Link>
       </section>
 
-      <section className="flex flex-col border-b border-gray-400 px-3 py-4 md:px-12">
+      <section className="mx-auto flex flex-col border-b border-gray-400 px-3 py-4 md:w-10/12 md:px-12">
         <p className="mb-5 font-bold">TRENDING</p>
 
         <div className="flex flex-wrap justify-between">
@@ -48,11 +53,11 @@ export default function Index() {
             >
               <div className="flex items-center">
                 <img
-                  src={post.account.photo.url}
+                  src={post.profile.profile_img}
                   className="mr-3 h-8 w-8 rounded-full"
                   alt=""
                 />
-                <p className="text-sm font-medium">{post.account.username}</p>
+                <p className="text-sm font-medium">{post.profile.username}</p>
               </div>
               <p className="my-2 font-bold">{post.title}</p>
               <p className="text-sm">
@@ -63,8 +68,8 @@ export default function Index() {
         </div>
       </section>
 
-      <section className="flex min-h-screen flex-col py-4 px-3 md:flex-row md:px-12">
-        <div className="flex flex-col md:w-[60%] md:pr-8">
+      <section className="mx-auto flex min-h-screen flex-col py-4 md:w-10/12 md:flex-row md:px-12">
+        <div className="flex-colmd:w-[60%] flex md:pr-8">
           {posts.map((post: PostType) => (
             <PostCard key={post.id} post={post} />
           ))}
