@@ -63,6 +63,7 @@ const { getSession, commitSession, destroySession } =
       secrets: ["s3cret1"],
     },
   });
+export { getSession, commitSession, destroySession };
 
 export async function createUserSession(
   auth_session: Session,
@@ -78,4 +79,19 @@ export async function createUserSession(
   });
 }
 
-export { getSession, commitSession, destroySession };
+export const checkUserProfile = async (request: any, returnData: any) => {
+  const session = await getSession(request.headers.get("Cookie"));
+  let user = session.get("auth_user");
+
+  const { data } = await supabase
+    .from("profile")
+    .select("*")
+    .eq("auth_id", user?.id)
+    .single();
+
+  if (data != null) {
+    return returnData;
+  }
+
+  return redirect("/user/profile/create");
+};

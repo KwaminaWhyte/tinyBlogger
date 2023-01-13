@@ -1,14 +1,16 @@
 import React from "react";
 import { type LoaderArgs, redirect } from "@remix-run/node";
-import { getSession } from "~/utils/session.server";
+import { checkUserProfile, getSession } from "~/utils/session.server";
+import { Link } from "@remix-run/react";
 
 export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   if (!session.has("auth_session")) {
-    // Redirect to the home page if they are already signed in.
     return redirect("/auth");
   }
-  return { user: session.get("auth_user") };
+  return await checkUserProfile(request, { user: session.get("auth_user") });
+
+  // return { user: session.get("auth_user") };
 }
 
 function profile() {
@@ -50,26 +52,14 @@ function profile() {
           dolores quae culpa quis. Maxime quam corporis ea adipisci a sequi quae
           doloremque quod fuga? Obcaecati ex repudiandae eum voluptatum corporis
           accusantium similique, voluptate ratione officia cum sed facilis ea
-          enim autem corrupti, libero ad perferendis saepe, aperiam sapiente
-          omnis accusamus! Soluta, similique! Adipisci, maiores. Perferendis
-          repellendus quasi quidem temporibus accusamus a mollitia odio optio
-          totam deleniti repellat quis magnam officiis itaque corporis id facere
-          assumenda autem repudiandae maiores veritatis, quae amet. Ratione, ad
-          aperiam. Eum rem amet veniam doloremque tenetur incidunt reprehenderit
-          aperiam nam, aliquid adipisci cum nihil, earum accusantium porro magni
-          enim sit repellat cupiditate corporis consequuntur vitae quod vel
-          dolores eligendi! Deleniti! Nesciunt nihil in repellat doloribus sit
-          ex ut, odit veritatis numquam, pariatur, ratione labore? Alias nihil
-          illo placeat minima quod ea consequuntur consectetur id, temporibus
-          ut, totam quam quasi? Nesciunt? Sed quos voluptate explicabo provident
-          rerum et quam reprehenderit laboriosam vel at esse, dignissimos
-          facilis nihil, nesciunt illum. Repudiandae odit ipsa tenetur expedita
-          obcaecati, numquam magnam eius quas similique debitis. Itaque
+          enim autem corrupti, libero ad perferendis saepe, aperiam sapiente \
           accusantium ullam provident corporis, autem amet mollitia saepe
           pariatur ducimus nisi culpa recusandae, facilis quo dolore ut
           consectetur ipsum error! Repudiandae eum mollitia fuga officia
           recusandae ut optio minima?
         </p>
+
+        <Link to="/user/profile/create">Update</Link>
       </section>
     </div>
   );

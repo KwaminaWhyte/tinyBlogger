@@ -3,7 +3,7 @@ import { ClientOnly } from "remix-utils";
 import { Form } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
 import type { MetaFunction, ActionFunction, LoaderArgs } from "@remix-run/node";
-import { getSession } from "~/utils/session.server";
+import { checkUserProfile, getSession } from "~/utils/session.server";
 import CKEditorCustom from "~/components/CKEditorCustom.client";
 import InputField from "~/components/InputField";
 import Button from "~/components/Button";
@@ -20,10 +20,10 @@ export const meta: MetaFunction = () => {
 export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   if (!session.has("auth_session")) {
-    // Redirect to the home page if they are already signed in.
     return redirect("/auth");
   }
-  return { user: session.get("auth_user") };
+
+  return await checkUserProfile(request, { user: session.get("auth_user") });
 }
 
 export const action: ActionFunction = async ({ request }) => {
