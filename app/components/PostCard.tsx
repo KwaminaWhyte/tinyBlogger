@@ -5,7 +5,7 @@ import type { PostType } from "~/utils/types";
 function PostCard({ post }: { post: PostType }) {
   return (
     <Link
-      to={`/blog/${post.slug}`}
+      to={`/${post.profile.username}/blogs/${post.slug}`}
       className="my-3 border-b border-gray-300 py-3 md:py-8"
     >
       <div className="flex items-center">
@@ -14,7 +14,7 @@ function PostCard({ post }: { post: PostType }) {
           className="mr-3 h-8 w-8 rounded-full"
           alt=""
         />
-        <p className="text-md font-medium">{post.account.username}</p>
+        <p className="text-md font-medium">{post.profile.username}</p>
       </div>
 
       <div className="flex items-center">
@@ -29,7 +29,7 @@ function PostCard({ post }: { post: PostType }) {
             </p>
 
             <div className="flex flex-wrap">
-              {post.categories.map((category) => (
+              {post?.categories?.map((category) => (
                 <Link
                   className="mx-1 rounded-lg bg-gray-200 py-1 px-2 text-sm transition-all duration-200 hover:bg-slate-300"
                   to={`/tag/${category.slug}`}

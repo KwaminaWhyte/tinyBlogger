@@ -1,16 +1,19 @@
 function InputField({
   label,
   name,
-  value = "",
+  value,
+  defaultValue,
   type,
   required,
-  error = "",
+  error,
 }: {
   label: string;
   value?: string;
   name: string;
   type: string;
-  required: boolean;
+  required?: boolean;
+  error?: string;
+  defaultValue?: string;
 }) {
   return (
     <div className="mb-6">
@@ -22,7 +25,7 @@ function InputField({
       </label>
       <input
         className={`w-full appearance-none rounded-2xl border p-3 text-base font-medium leading-tight text-gray-700 focus:outline-none focus:ring-2 ${
-          error != ""
+          error != "" && error != null
             ? "border-red-500 ring-2 ring-red-400"
             : "border-gray-700 ring-slate-400"
         }`}
@@ -30,6 +33,7 @@ function InputField({
         name={name}
         type={type}
         required={required}
+        defaultValue={defaultValue}
         // value={value}
       />
     </div>

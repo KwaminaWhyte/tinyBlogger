@@ -1,9 +1,17 @@
-import { type LoaderFunction, type MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import {
+  type ActionFunction,
+  type LoaderFunction,
+  type MetaFunction,
+} from "@remix-run/node";
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { IoIosChatbubbles, IoIosHeart, IoIosShare } from "react-icons/io";
 import moment from "moment";
 import type { CommentType, PostType } from "~/utils/types";
 import supabase from "~/utils/supabase";
+import InputField from "~/components/InputField";
+import TextArea from "~/components/TextArea";
+import Button from "~/components/Button";
+import { useEffect, useState } from "react";
 
 export const meta: MetaFunction = ({ data }) => {
   return {
@@ -13,26 +21,68 @@ export const meta: MetaFunction = ({ data }) => {
   };
 };
 
+export const action: ActionFunction = async ({ request }) => {
+  // const session = await getSession(request.headers.get("Cookie"));
+  // let user = session.get("auth_user");
+  const formData = await request.formData();
+  const name = formData.get("name");
+  const email = formData.get("email");
+  const content = formData.get("content");
+  const blog_id = formData.get("blog_id");
+
+  const { data, statusText, error, status } = await supabase
+    .from("comments")
+    .insert({
+      name: name,
+      email: email,
+      content: content,
+      blog_id: blog_id,
+    })
+    .select("*")
+    .single();
+
+  // console.log(data, statusText, error, status);
+
+  // if (statusText === "Created") {
+  //   return redirect(`/kwamina/blogs/${data?.slug}`);
+  // }
+  return { name: name, email: email };
+  // error, status };
+};
+
 export const loader: LoaderFunction = async ({ params }) => {
   const { data: blog, error: blogError } = await supabase
     .from("blogs")
     .select("*, profile ( id, username, profile_img ) ")
     .eq("slug", params.slug)
-    // .limit(1)
     .single();
 
   const { data: comments, error: commentError } = await supabase
     .from("comments")
     .select("*")
-    .eq("blog_id", blog?.id);
-
-  console.log(comments);
+    .eq("blog_id", blog?.id)
+    .order("created_at", { ascending: false });
 
   return { blog, comments };
 };
 
 function Blog() {
   const { blog, comments } = useLoaderData();
+  let actionData = useActionData();
+  const [isAlready, setIsAlready] = useState(false);
+  const [commentValue, setCommentValue] = useState("");
+
+  useEffect(() => {
+    setCommentValue("");
+    if (localStorage.getItem("name")) {
+      setIsAlready(true);
+    }
+
+    if (actionData) {
+      localStorage.setItem("name", actionData.name);
+      localStorage.setItem("email", actionData.email);
+    }
+  }, [actionData]);
 
   return (
     <div className="flex w-full flex-col md:flex-row">
@@ -84,8 +134,41 @@ function Blog() {
           <IoIosShare size={23} className="ml-auto" />
         </div>
 
-        <div className="min-h-screen px-3 py-4 md:px-8">
-          <p className="font-bold">Comments ({comments.length})</p>
+        <Form method="post" className="mx-auto mt-11 px-3 md:px-8">
+          <input type="hidden" name="blog_id" value={blog?.id} />
+          {isAlready ? (
+            <>
+              <input
+                type="hidden"
+                name="name"
+                value={localStorage.getItem("name") || ""}
+              />
+
+              <input
+                type="hidden"
+                name="email"
+                value={localStorage.getItem("email") || ""}
+              />
+            </>
+          ) : (
+            <>
+              <InputField name="name" label="Name" type="text" />
+
+              <InputField name="email" label="Email Address" type="email" />
+            </>
+          )}
+
+          <TextArea
+            label="Content"
+            name="content"
+            defaultValue={commentValue}
+            onChange={(e) => setCommentValue(e.target.value)}
+          />
+          <Button label="Comment" type="submit" />
+        </Form>
+
+        <div className="px-3 py-4 md:px-8">
+          <p className="font-bold">Comments ({comments?.length})</p>
 
           <div className="mt-6">
             {comments?.map((comment: CommentType) => (
