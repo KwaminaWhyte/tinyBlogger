@@ -57,15 +57,18 @@ export default function Index() {
               <div className="flex items-center">
                 <img
                   src={post.profile.profile_img}
-                  className="mr-3 h-8 w-8 rounded-full"
+                  className="mr-3 h-10 w-10 rounded-full"
                   alt=""
                 />
-                <p className="text-sm font-medium">{post.profile.username}</p>
+                <div>
+                  <p className="text-sm font-medium">{post.profile.username}</p>
+                  <p className="text-sm">
+                    {moment(post.created_at).format("MM DD, YYYY")} - 17mins
+                    read{" "}
+                  </p>
+                </div>
               </div>
               <p className="my-2 font-bold">{post.title}</p>
-              <p className="text-sm">
-                {moment(post.created_at).format("MM DD, YYYY")} - 17mins read{" "}
-              </p>
             </Link>
           ))}
         </div>

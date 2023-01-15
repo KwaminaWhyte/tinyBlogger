@@ -11,10 +11,15 @@ function PostCard({ post }: { post: PostType }) {
       <div className="flex items-center">
         <img
           src={post.cover_image}
-          className="mr-3 h-8 w-8 rounded-full"
+          className="mr-3 h-10 w-10 rounded-full"
           alt=""
         />
-        <p className="text-md font-medium">{post.profile.username}</p>
+        <div>
+          <p className="text-md font-medium">{post.profile.username}</p>
+          <p className="mr-3 text-sm">
+            {moment(post.created_at).format("MMMM Do")} . 20min read
+          </p>
+        </div>
       </div>
 
       <div className="flex items-center">
@@ -24,10 +29,6 @@ function PostCard({ post }: { post: PostType }) {
           <p className="my-4 hidden md:flex">{post.description}</p>
 
           <div className="flex flex-col md:flex-row md:items-center">
-            <p className="mr-3 text-sm">
-              {moment(post.created_at).format("MMMM Do")} . 20min read
-            </p>
-
             <div className="flex flex-wrap">
               {post?.categories?.map((category) => (
                 <Link

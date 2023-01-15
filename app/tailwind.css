@@ -789,6 +789,14 @@ video {
   height: 12rem;
 }
 
+.h-9{
+  height: 2.25rem;
+}
+
+.h-10{
+  height: 2.5rem;
+}
+
 .min-h-screen{
   min-height: 100vh;
 }
@@ -839,6 +847,14 @@ video {
 
 .w-\[60\%\]{
   width: 60%;
+}
+
+.w-9{
+  width: 2.25rem;
+}
+
+.w-10{
+  width: 2.5rem;
 }
 
 .flex-shrink-0{
