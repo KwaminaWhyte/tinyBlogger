@@ -60,7 +60,7 @@ const Index = () => {
 
   const handleSave = useCallback(async () => {
     const savedData = await editorCore.current.save();
-    console.log(savedData);
+    // console.log(savedData);
   }, []);
 
   return (

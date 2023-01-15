@@ -18,7 +18,6 @@ export async function action({ request }: ActionArgs) {
   }
 
   if (Object.keys(inputError).length != 0) {
-    console.log(inputError);
     return inputError;
   }
 

@@ -16,7 +16,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       "id,title,description,cover_image,slug, profile (id, username, profile_img), created_at)"
     );
 
-  console.log(data, error);
+  // console.log(data, error);
 
   let posts = data;
   let categories = [];
