@@ -1,6 +1,6 @@
 import { useRef, useCallback, useEffect, useState } from "react";
 import { ClientOnly } from "remix-utils";
-import { Form } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
 import type { MetaFunction, ActionFunction, LoaderArgs } from "@remix-run/node";
 import { checkUserProfile, getSession } from "~/utils/session.server";
@@ -74,6 +74,9 @@ const NewBLog = () => {
       {() => (
         <div className="mx-auto w-[80%] py-10">
           <h1 className="mb-5 text-center text-3xl font-bold">New Blog</h1>
+          <Link to="/blogs/auth/preview" target="_blank">
+            Preview
+          </Link>
 
           <Form method="post">
             <textarea
@@ -118,5 +121,6 @@ const NewBLog = () => {
     </ClientOnly>
   );
 };
-
+// option to save as draft
+// button to preview work
 export default NewBLog;

@@ -34,7 +34,7 @@ export async function action({ request }: ActionArgs) {
       status: data.status,
     };
   }
-  return redirect("/verify_email");
+  return redirect("/auth/verify_email");
   // return data;
 }
 

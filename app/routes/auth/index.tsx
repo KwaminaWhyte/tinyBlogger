@@ -35,8 +35,8 @@ export async function action({ request }: ActionArgs) {
       status: data.status,
     };
   }
-  console.log(data, "front");
-  return await createUserSession(data, "/user/profile");
+  // console.log(data, "front");
+  return await createUserSession(data, "/profile");
 }
 
 export async function loader({ request }: LoaderArgs) {

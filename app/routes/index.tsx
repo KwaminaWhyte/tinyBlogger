@@ -50,7 +50,7 @@ export default function Index() {
         <div className="flex flex-wrap justify-between">
           {posts?.map((post: PostType) => (
             <Link
-              to={`/${post.profile.username}/blogs/${post.slug}`}
+              to={`/blogs/@${post.profile.username}/${post.slug}`}
               key={post.id}
               className="my-3 md:w-[29%]"
             >

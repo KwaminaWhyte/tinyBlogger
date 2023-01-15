@@ -70,8 +70,9 @@ function NavigationBar({
               </Dropdown.Trigger>
 
               <Dropdown.Content>
-                <Dropdown.Link href="create/blog/new" label="New Blog" />
-                <Dropdown.Link href="user/profile" label="Profile" />
+                <Dropdown.Link href="/blogs/auth/create" label="New Blog" />
+                <Dropdown.Link href="/blogs/auth" label="My Posts" />
+                <Dropdown.Link href="/profile" label="Profile" />
                 <Form className="block w-full px-4 py-1" method="post">
                   <button className="w-full text-left text-sm text-red-600">
                     Logout

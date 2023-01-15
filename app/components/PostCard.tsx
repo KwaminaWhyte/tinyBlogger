@@ -5,7 +5,7 @@ import type { PostType } from "~/utils/types";
 function PostCard({ post }: { post: PostType }) {
   return (
     <Link
-      to={`/${post.profile.username}/blogs/${post.slug}`}
+      to={`/blogs/@${post.profile.username}/${post.slug}`}
       className="my-3 border-b border-gray-300 py-3 md:py-8"
     >
       <div className="flex items-center">

@@ -93,5 +93,5 @@ export const checkUserProfile = async (request: any, returnData: any) => {
     return returnData;
   }
 
-  return redirect("/user/profile/create");
+  return redirect("/profile/complete_profile");
 };

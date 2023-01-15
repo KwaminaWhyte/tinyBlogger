@@ -59,7 +59,7 @@ function profile() {
           recusandae ut optio minima?
         </p>
 
-        <Link to="/user/profile/create">Update</Link>
+        <Link to="/profile/update">Update</Link>
       </section>
     </div>
   );
