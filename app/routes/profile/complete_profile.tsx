@@ -26,7 +26,7 @@ export async function action({ request }: ActionArgs) {
     .single();
 
   if (statusText === "Created") {
-    return redirect(`/user/profile`);
+    return redirect(`/profile`);
   }
 }
 

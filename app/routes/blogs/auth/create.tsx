@@ -45,11 +45,11 @@ export const action: ActionFunction = async ({ request }) => {
       user: user?.id,
       cover_image: "https://picsum.photos/200/300",
     })
-    .select("*")
+    .select("*, profile (id, username, profile_img), created_at)")
     .single();
 
   if (statusText === "Created") {
-    return redirect(`/kwamina/blogs/${data?.slug}`);
+    return redirect(`/blogs/@${data?.profile?.username}/${data?.slug}`);
   }
   return { error, status };
 };
