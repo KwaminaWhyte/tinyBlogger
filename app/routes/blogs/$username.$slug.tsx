@@ -15,9 +15,9 @@ import { useEffect, useState } from "react";
 
 export const meta: MetaFunction = ({ data }) => {
   return {
-    title: `tinyBlogger | ${data?.title}`,
-    description: `${data?.description}`,
-    "og:image": `${data?.cover_image}`,
+    title: `tinyBlogger | ${data?.blog?.title}`,
+    description: `${data?.blog?.description}`,
+    "og:image": `${data?.blog?.cover_image}`,
   };
 };
 
