@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
+import { Link } from "@remix-run/react";
 import PublicLayout from "~/components/layouts/public";
 import { Button } from "~/components/ui/button";
 
@@ -86,7 +87,10 @@ export default function Index() {
 
         <div className="flex mt-11 gap-3 ">
           <div className="w-[65%] flex gap-3">
-            <div className="flex-1 gap-3 flex flex-col">
+            <Link
+              to="/blogs/some-blog-slug"
+              className="flex-1 gap-3 flex flex-col"
+            >
               <img
                 src={posts[0].image}
                 alt=""
@@ -105,7 +109,7 @@ export default function Index() {
                   <p className="text-gray-500">Mar 20, 2023 - 5 mins read</p>
                 </div>
               </div>
-            </div>
+            </Link>
 
             <div className="flex-1 flex flex-col  justify-between ">
               {posts.slice(1, 3).map((post, index) => (
