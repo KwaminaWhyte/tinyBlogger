@@ -21,7 +21,6 @@ if (!secret) {
 
 const { getSession, commitSession, destroySession } =
   createCookieSessionStorage<SessionData, SessionFlashData>({
-    // a Cookie from `createCookie` or the CookieOptions to create one
     cookie: {
       name: "__falsh_session",
       httpOnly: true,

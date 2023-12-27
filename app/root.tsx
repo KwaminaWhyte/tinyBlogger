@@ -16,6 +16,7 @@ export const links: LinksFunction = () => [
 ];
 
 export default function App() {
+  const name = "KwaminaWhyte";
   return (
     <html lang="en">
       <head>
@@ -24,8 +25,8 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="">
-        <Outlet />
+      <body className="text-sm">
+        <Outlet context={[name]} />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

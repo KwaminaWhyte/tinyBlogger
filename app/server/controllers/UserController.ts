@@ -5,8 +5,8 @@ import {
   redirect,
 } from "@remix-run/node";
 import bcrypt from "bcryptjs";
-// import User from "../models/User";
-// import Treasure from "../models/Treasure";
+import { commitSession, getSession } from "../session";
+import User from "../models/User";
 
 export default class UserController {
   private request: Request;

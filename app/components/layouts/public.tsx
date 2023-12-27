@@ -18,7 +18,7 @@ export default function PublicLayout({
             {[
               { path: "/", label: "Home" },
               { path: "/explore", label: "Explore" },
-              { path: "/about", label: "About" },
+              // { path: "/about", label: "About" },
             ].map((item, index) => (
               <NavLink
                 key={index}
