@@ -1,17 +1,17 @@
 import { type MetaFunction, type LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import PublicLayout from "~/components/layouts/public";
 import moment from "moment";
 import { ClientOnly } from "remix-utils/client-only";
 import { RichText } from "@graphcms/rich-text-react-renderer";
 import { GraphQLClient, gql } from "graphql-request";
 import PostController from "~/server/controllers/PostController";
+import ConsoleLayout from "~/components/layouts/console";
 
 export default function Blog() {
-  const { post, slug } = useLoaderData();
+  const { post } = useLoaderData();
 
   return (
-    <PublicLayout>
+    <ConsoleLayout>
       <section className="flex gap-5 flex-col my-11">
         <h1 className="md:text-6xl text-3xl text-center md:w-[70%] mx-auto">
           {post?.title}
@@ -20,13 +20,13 @@ export default function Blog() {
         <p className="text-center md:w-[70%] mx-auto">{post?.description}</p>
 
         <p className="ml-auto ">
-          {moment(post.createdAt).format("MMM DD, YYYY")}
+          {moment(post?.createdAt).format("MMM DD, YYYY")}
           {/* - 10 mins Read */}
         </p>
       </section>
 
       <img
-        src={post.coverImage?.url}
+        src={post?.coverImage?.url}
         alt=""
         className="my-5 w-full rounded-md"
       />
@@ -102,19 +102,21 @@ export default function Blog() {
           />
         )}
       </ClientOnly>
-    </PublicLayout>
+    </ConsoleLayout>
   );
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const { slug } = params as { slug: string };
+  const { postId } = params as { postId: string };
+
+  const postController = new PostController(request);
+  const post = await postController.getPostById(postId);
+  console.log(post, postId);
+
   // const url = new URL(request.url);
   // const slug = url.searchParams.get("slug") as string;
 
-  const postController = await new PostController(request);
-  const post = await postController.getPostBySlug(slug);
-
-  return { post, slug };
+  return { post };
 };
 
 export const meta: MetaFunction = ({ data }) => {

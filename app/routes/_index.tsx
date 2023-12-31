@@ -2,67 +2,14 @@ import type { MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import moment from "moment";
 import PublicLayout from "~/components/layouts/public";
-import { Button } from "~/components/ui/button";
 import PostController from "~/server/controllers/PostController";
 import type { BlogDocument } from "~/server/types";
-import { GraphQLClient, gql } from "graphql-request";
-
-// npm install @apollo/client graphql
-// const posts = [
-//   {
-//     title: "Google Just Showed Us the Future of Gaming",
-//     description:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate.",
-//     image: "https://picsum.photos/200",
-//   },
-//   {
-//     title: "How a limitless Internet Blinds Us to the Real World",
-//     description:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate.",
-//     image: "https://picsum.photos/200",
-//   },
-//   {
-//     title: "post 3",
-//     description:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate.",
-//     image: "https://picsum.photos/200",
-//   },
-//   {
-//     title: "Orgernize the Content Moderators",
-//     description:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate.",
-//     image: "https://picsum.photos/200",
-//   },
-//   {
-//     title: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-//     description:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate.",
-//     image: "https://picsum.photos/200",
-//   },
-//   {
-//     title: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-//     description:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate.",
-//     image: "https://picsum.photos/200",
-//   },
-//   {
-//     title: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-//     description:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate.",
-//     image: "https://picsum.photos/200",
-//   },
-//   {
-//     title: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-//     description:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate.",
-//     image: "https://picsum.photos/200",
-//   },
-// ];
 
 export default function Index() {
-  const { featured, posts } = useLoaderData<{
+  const { featured, posts, latest } = useLoaderData<{
     featured: BlogDocument[];
     posts: BlogDocument[];
+    latest: BlogDocument[];
   }>();
 
   return (
@@ -100,7 +47,7 @@ export default function Index() {
         </div>
 
         <div className="flex mt-11 gap-3 flex-col md:flex-row ">
-          <div className="md:w-[65%] w-full flex flex-col gap-3">
+          <div className="md:w-[65%] w-full flex md:flex-row flex-col gap-3">
             <Link
               to={`/blogs/${featured[0]?.slug}`}
               className="flex-1 gap-3 md:w-[65%] w-full flex flex-col"
@@ -129,11 +76,11 @@ export default function Index() {
               </div>
             </Link>
 
-            <div className="flex-1 flex flex-col justify-between ">
+            <div className="flex-1 flex gap-3 flex-col ">
               {featured.slice(1, 3).map((post, index) => (
-                <div key={index} className="flex gap-3">
+                <div key={index} className="flex gap-3  flex-1">
                   <img
-                    src={post.coverImage.url}
+                    src={post?.coverImage?.url}
                     alt=""
                     className="w-44 object-cover"
                   />
@@ -161,7 +108,7 @@ export default function Index() {
             {featured.slice(3, 6).map((post, index) => (
               <div key={index} className="flex gap-3">
                 <img
-                  src={post.coverImage.url}
+                  src={post?.coverImage?.url}
                   alt=""
                   className="w-32 object-cover"
                 />
@@ -190,7 +137,7 @@ export default function Index() {
           </div>
 
           <div className="md:w-[65%] gap-6 grid grid-rows-1 md:grid-cols-2">
-            {posts.map((post, index) => (
+            {latest.map((post, index) => (
               <Link
                 to={`/blogs/${post?.slug}`}
                 className="flex-1 gap-3 flex flex-col"
@@ -253,40 +200,13 @@ export default function Index() {
   );
 }
 
-const GetFeaturedPostsQuery = gql`
-  query ($featured: Boolean!) {
-    posts(where: { featured: $featured }, last: 10) {
-      title
-      slug
-      createdAt
-      description
-      featured
-      coverImage {
-        id
-        url
-      }
-      createdBy {
-        id
-        name
-      }
-    }
-  }
-`;
-
 export const loader = async ({ request }) => {
-  const hygraph = new GraphQLClient(
-    "https://api-eu-central-1.hygraph.com/v2/cl0z3nic64r6q01xma8ss10wo/master"
-  );
-
   const postController = new PostController(request);
   const posts = await postController.getPosts();
-  // const featured = await postController.getFeaturedBlogs();
+  const featured = await postController.getFeaturedPosts();
+  const latest = await postController.getLatestPosts();
 
-  const { posts: featured } = await hygraph.request(GetFeaturedPostsQuery, {
-    featured: true,
-  });
-
-  return { featured, posts };
+  return { featured, posts, latest };
 };
 
 export const meta: MetaFunction = () => {

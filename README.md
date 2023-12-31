@@ -36,3 +36,8 @@ Make sure to deploy the output of `remix build`
 
 - `build/`
 - `public/build/`
+
+# REF
+
+- [html-to-slate-ast](https://github.com/hygraph/rich-text/tree/main/packages/html-to-slate-ast)
+- [somethign](https://github.com/jasonkuhrt/graphql-request/blob/main/examples/request-handle-raw-response.ts)

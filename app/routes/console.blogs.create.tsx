@@ -1,7 +1,10 @@
+// import { htmlToSlateASTSync } from "@graphcms/html-to-slate-ast";
 import { type ActionFunction, type MetaFunction } from "@remix-run/node";
 import { useSubmit } from "@remix-run/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ClientOnly } from "remix-utils/client-only";
+import ConsoleLayout from "~/components/layouts/console";
+import SlateEditor from "~/components/state-editor.client";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -28,8 +31,18 @@ export default function CreateBlog() {
     );
   };
 
+  useEffect(() => {
+    // const htmlString =
+    //   '<ul><li>Hey <a href="thing">link text</a> here</li></ul>';
+    // // const ast = htmlToSlateASTSync(htmlString);
+    // const content = {
+    //   children: ast,
+    // };
+    // console.log(JSON.stringify(content, null, 2));
+  }, []);
+
   return (
-    <div className="flex md:w-[90%] flex-col mx-auto gap-4 my-11">
+    <ConsoleLayout className="gap-5">
       <Button onClick={() => handleSubmit()}>Save</Button>
 
       <div className="grid w-full items-center gap-1.5">
@@ -40,7 +53,6 @@ export default function CreateBlog() {
           onChange={(e) => setTitle(e.target.value)}
           value={title}
         />
-        B
       </div>
 
       <div className="grid w-full items-center gap-1.5">
@@ -58,21 +70,63 @@ export default function CreateBlog() {
         />
       </div>
 
-      {/* <ClientOnly fallback={<p>Loading Editor, please be patient...</p>}>
-        {() => <Editor setContent={setContent} />}
-      </ClientOnly> */}
-    </div>
+      {/* coverImage */}
+
+      <ClientOnly fallback={<p>Loading Editor, please be patient...</p>}>
+        {() => <SlateEditor />}
+      </ClientOnly>
+    </ConsoleLayout>
   );
 }
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
-  const data = Object.fromEntries(formData);
+  const title = formData.get("title") as string;
+  const description = formData.get("description") as string;
+  const slug = formData.get("slug") as string;
+  const content = formData.get("content") as string;
 
   const postController = await new PostController(request);
-  await postController.createBlog(data);
-
-  return true;
+  return await postController.createPost({
+    title,
+    description,
+    slug,
+    content: {
+      children: [
+        {
+          type: "bulleted-list",
+          children: [
+            {
+              type: "list-item",
+              children: [
+                {
+                  type: "list-item-child",
+                  children: [
+                    {
+                      text: "Hey ",
+                    },
+                    {
+                      type: "link",
+                      href: "thing",
+                      openInNewTab: false,
+                      children: [
+                        {
+                          text: "link text",
+                        },
+                      ],
+                    },
+                    {
+                      text: " here",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  });
 };
 
 export const meta: MetaFunction = () => {

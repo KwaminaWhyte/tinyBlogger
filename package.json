@@ -27,7 +27,7 @@
     "bcryptjs": "^2.4.3",
     "cheerio": "^1.0.0-rc.12",
     "class-variance-authority": "^0.7.0",
-    "clsx": "^2.0.0",
+    "clsx": "^2.1.0",
     "date-fns": "^2.30.0",
     "graphql": "^15.8.0",
     "graphql-request": "^6.1.0",
@@ -38,7 +38,10 @@
     "react-day-picker": "^8.9.1",
     "react-dom": "^18.2.0",
     "remix-utils": "^7.3.0",
-    "tailwind-merge": "^2.0.0",
+    "slate-hyperscript": "^0.67.0",
+    "slate-react": "^0.101.5",
+    "state": "^0.2.0",
+    "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
