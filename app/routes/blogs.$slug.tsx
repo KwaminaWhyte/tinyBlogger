@@ -26,7 +26,7 @@ export default function Blog() {
       </section>
 
       <img
-        src={post.coverImage?.url}
+        src={post?.coverImage?.url}
         alt=""
         className="my-5 w-full rounded-md"
       />
