@@ -8,12 +8,18 @@ export interface UserDocument extends Document {
   lastName: string;
 }
 
-export interface BlogDocument extends Document {
-  id: string;
+export type BlogDocument = {
+  _id: string;
   title: string;
+  description: string;
   content: string;
+  slug: string;
   categories: string[];
+  coverImage: {
+    url: string;
+    id: string;
+  };
   tags: string[];
   createdAt: Date;
   updatedAt: Date;
-}
+};

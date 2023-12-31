@@ -48,4 +48,15 @@ export default class PostController {
       console.log(error);
     }
   };
+
+  public getFeaturedBlogs = async () => {
+    try {
+      const posts = await Post.find({ featured: true })
+        .select("-content")
+        .limit(6);
+      return posts;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 }

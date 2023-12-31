@@ -10,7 +10,7 @@ export default function PublicLayout({
 }) {
   return (
     <div className="flex flex-col">
-      <div className="w-[90%] mx-auto h-20 backdrop-blur-md bg-white/50 z-50 flex gap-3 fixed top-0 left-0 right-0 items-center">
+      <div className="w-[85%] mx-auto h-20 backdrop-blur-md bg-white/50 z-50 flex gap-3 fixed top-0 left-0 right-0 items-center">
         <nav className="flex justify-between items-center w-full">
           <p className="font-bold montage-font text-xl">Blogger.</p>
 
@@ -38,11 +38,11 @@ export default function PublicLayout({
         </nav>
       </div>
 
-      <main className={`w-[90%] mt-20 mx-auto bg-red-500" ${className}`}>
+      <main className={`w-[85%] mt-20 mx-auto bg-red-500" ${className}`}>
         {children}
       </main>
 
-      <footer className="w-[90%] mx-auto">
+      <footer className="w-[85%] mx-auto mt-11">
         <p>Footer</p>
       </footer>
     </div>
