@@ -78,7 +78,11 @@ export default function Index() {
 
             <div className="flex-1 flex gap-3 flex-col ">
               {featured.slice(1, 3).map((post, index) => (
-                <div key={index} className="flex gap-3  flex-1">
+                <Link
+                  to={`/blogs/${post?.slug}`}
+                  key={index}
+                  className="flex gap-3  flex-1"
+                >
                   <img
                     src={post?.coverImage?.url}
                     alt=""
@@ -99,14 +103,18 @@ export default function Index() {
                       </p>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
 
           <div className="w-[35%] flex justify-between flex-col gap-3">
             {featured.slice(3, 6).map((post, index) => (
-              <div key={index} className="flex gap-3">
+              <Link
+                to={`/blogs/${post?.slug}`}
+                key={index}
+                className="flex gap-3"
+              >
                 <img
                   src={post?.coverImage?.url}
                   alt=""
@@ -124,7 +132,7 @@ export default function Index() {
                     </p>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
