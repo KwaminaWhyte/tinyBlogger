@@ -66,7 +66,7 @@ export default function Index() {
   }>();
 
   return (
-    <PublicLayout className=" min-h-screen">
+    <PublicLayout className=" min-h-screen gap-11">
       <section className="flex">
         <div className="md:w-[50%] flex flex-col justify-center gap-6">
           <h1 className="md:text-7xl text-3xl">Welcome to Blogger.</h1>
@@ -77,10 +77,15 @@ export default function Index() {
             earum doloremque, vitae maiores?
           </p>
 
-          <Button>Explore</Button>
+          <Link
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-10 rounded-md px-8"
+            to="/explore"
+          >
+            Explore
+          </Link>
         </div>
 
-        <div className="w-[50%] hidden md:blocks">
+        <div className="w-[50%] hidden md:block">
           <img
             src="https://static.vecteezy.com/system/resources/previews/007/783/955/original/online-education-illustration-concept-flat-illustration-isolated-on-white-background-vector.jpg"
             alt=""
@@ -89,7 +94,7 @@ export default function Index() {
         </div>
       </section>
 
-      <section className=" mt-24">
+      <section className="">
         <div className="flex border-b-4 border-gray-300">
           <h2 className="underline underline-offset-8 ">Featured </h2>
         </div>
@@ -178,7 +183,7 @@ export default function Index() {
         </div>
       </section>
 
-      <section className="min-h-screen mt-24 flex gap-3 md:flex-row flex-col">
+      <section className="min-h-screen flex gap-5 md:flex-row flex-col">
         <div className="flex md:w-[65%]  flex-col gap-3 ">
           <div className="w-full border-b-4 border-gray-300">
             <h2 className="underline underline-offset-8 ">Latest Posts </h2>
@@ -194,7 +199,7 @@ export default function Index() {
                 <img
                   src={post?.coverImage?.url}
                   alt=""
-                  className="w-full h-60 object-cover"
+                  className="w-full h-40 object-cover"
                 />
 
                 <div className="flex-1">
@@ -219,7 +224,9 @@ export default function Index() {
         <div className="md:w-[35%] flex flex-col gap-3">
           <div className="flex border-b-4 border-gray-300">
             <div className="w-full">
-              <h2 className="underline underline-offset-8 ">Popular Posts </h2>
+              <h2 className="underline underline-offset-8 text">
+                Popular Posts{" "}
+              </h2>
             </div>
           </div>
 

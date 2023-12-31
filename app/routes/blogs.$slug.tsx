@@ -36,22 +36,34 @@ export default function Blog() {
             content={post?.content?.raw.children}
             renderers={{
               h1: ({ children }) => (
-                <h1 className="text-6xl my-4 font-bold">{children}</h1>
+                <h1 className="md:text-6xl my-4 text-3xl font-bold montserrat-font">
+                  {children}
+                </h1>
               ),
               h2: ({ children }) => (
-                <h2 className="text-5xl my-3 font-bold">{children}</h2>
+                <h2 className="md:text-5xl my-3 text-2xl font-bold montserrat-font">
+                  {children}
+                </h2>
               ),
               h3: ({ children }) => (
-                <h3 className="text-4xl my-2 font-bold">{children}</h3>
+                <h3 className="md:text-4xl my-2 text-2xl font-bold montserrat-font">
+                  {children}
+                </h3>
               ),
               h4: ({ children }) => (
-                <h4 className="my-1.5 text-3xl font-bold">{children}</h4>
+                <h4 className="my-1.5 md:text-3xl text-xl font-bold montserrat-font">
+                  {children}
+                </h4>
               ),
               h5: ({ children }) => (
-                <h4 className="my-1 text-2xl font-bold">{children}</h4>
+                <h4 className="my-1 md:text-2xl text-lg font-bold montserrat-font">
+                  {children}
+                </h4>
               ),
               h6: ({ children }) => (
-                <h4 className="my-0.5 text-xl font-bold">{children}</h4>
+                <h4 className="my-0.5 md:text-xl text-base font-bold montserrat-font">
+                  {children}
+                </h4>
               ),
               bold: ({ children }) => <strong>{children}</strong>,
               p: ({ children }) => <p className="my-3">{children}</p>,

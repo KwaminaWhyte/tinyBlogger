@@ -22,7 +22,7 @@ export default function PublicLayout({
           <div className="gap-3 flex">
             {[
               { path: "/", label: "Home" },
-              { path: "/explore", label: "Explore" },
+              // { path: "/explore", label: "Explore" },
               // { path: "/about", label: "About" },
             ].map((item, index) => (
               <NavLink
@@ -44,7 +44,7 @@ export default function PublicLayout({
       </div>
 
       <main
-        className={`md:w-[85%] w-[96%] mt-20 mb-8 mx-auto bg-red-500" ${className}`}
+        className={`md:w-[85%] w-[96%] flex flex-col mt-20 mb-8 mx-auto bg-red-500" ${className}`}
       >
         {children}
       </main>
