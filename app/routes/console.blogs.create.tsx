@@ -90,7 +90,7 @@ export const meta: MetaFunction = () => {
     {
       name: "og:image",
       content:
-        "https://res.cloudinary.com/app-deity/image/upload/v1700324984/lnjfa1hco96qrbwu11oe.jpg",
+        "https://media.istockphoto.com/vectors/letter-b-icon-vector-id521527924?k=6&m=521527924&s=612x612&w=0&h=CuLX6X3KP0BxCSI2qMkHu_hS664SH-jUuS3BtCKMCmg=",
     },
     { name: "og:url", content: "" },
   ];
