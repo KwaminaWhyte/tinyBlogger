@@ -24,16 +24,34 @@ export default function Blog() {
         </p>
       </section>
 
-      <img src={post.coverImage?.url} alt="" className="my-5 w-full" />
+      <img
+        src={post.coverImage?.url}
+        alt=""
+        className="my-5 w-full rounded-md"
+      />
 
       <ClientOnly fallback={<p>Loading Editor, please be patient...</p>}>
         {() => (
           <RichText
             content={post?.content?.raw.children}
             renderers={{
-              h1: ({ children }) => <h1 className="">{children}</h1>,
+              h1: ({ children }) => (
+                <h1 className="text-6xl my-4 font-bold">{children}</h1>
+              ),
+              h2: ({ children }) => (
+                <h2 className="text-5xl my-3 font-bold">{children}</h2>
+              ),
+              h3: ({ children }) => (
+                <h3 className="text-4xl my-2 font-bold">{children}</h3>
+              ),
               h4: ({ children }) => (
-                <h4 className="mt-6 text-xl font-bold">{children}</h4>
+                <h4 className="my-1.5 text-3xl font-bold">{children}</h4>
+              ),
+              h5: ({ children }) => (
+                <h4 className="my-1 text-2xl font-bold">{children}</h4>
+              ),
+              h6: ({ children }) => (
+                <h4 className="my-0.5 text-xl font-bold">{children}</h4>
               ),
               bold: ({ children }) => <strong>{children}</strong>,
               p: ({ children }) => <p className="my-3">{children}</p>,
@@ -42,7 +60,7 @@ export default function Blog() {
               li: ({ children }) => <li className="my-4"> - {children}</li>,
               a: ({ children, href }) => (
                 <a
-                  className="text-purple-800 underline decoration-double underline-offset-4 transition-all duration-150"
+                  className="text-purple-600 hover:text-purple-800 underline underline-offset-2 transition-all duration-150"
                   href={href}
                   target="_black"
                 >
@@ -113,22 +131,22 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export const meta: MetaFunction = ({ data }) => {
+  const post = data?.post;
   return [
-    { title: `${data?.post?.title} | Blogger.` },
+    { title: `${post?.title} | Blogger.` },
     {
       name: "description",
-      content: data?.post?.description,
+      content: post?.description,
     },
-    { name: "og:title", content: `  ${data?.post?.title} Blogger.` },
+    { name: "og:title", content: `${post?.title} | Blogger.` },
     {
       name: "og:description",
-      content: data?.post?.description,
+      content: post?.description,
     },
     {
       name: "og:image",
-      content:
-        "https://res.cloudinary.com/app-deity/image/upload/v1700324984/lnjfa1hco96qrbwu11oe.jpg",
+      content: post?.coverImage?.url,
     },
-    { name: "og:url", content: "https://www.printmoney.money" },
+    { name: "og:url", content: "https://tinyblogger.vercel.app" },
   ];
 };

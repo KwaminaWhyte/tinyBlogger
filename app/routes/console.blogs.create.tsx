@@ -92,7 +92,7 @@ export const meta: MetaFunction = () => {
       content:
         "https://res.cloudinary.com/app-deity/image/upload/v1700324984/lnjfa1hco96qrbwu11oe.jpg",
     },
-    { name: "og:url", content: "https://www.printmoney.money" },
+    { name: "og:url", content: "" },
   ];
 };
 

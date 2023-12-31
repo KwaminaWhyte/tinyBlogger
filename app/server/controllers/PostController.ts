@@ -1,20 +1,52 @@
 import { redirect } from "@remix-run/node";
 import Post from "../models/Post";
+import { GraphQLClient, gql } from "graphql-request";
 
 export default class PostController {
   private request: Request;
+  private hygraph: any;
 
   constructor(request: Request) {
     this.request = request;
+    this.hygraph = new GraphQLClient(
+      "https://api-eu-central-1.hygraph.com/v2/cl0z3nic64r6q01xma8ss10wo/master"
+    );
   }
 
-  public getBlogs = async (req: Request, res: Response) => {
-    try {
-      const posts = await Post.find();
-      return posts;
-    } catch (error) {
-      console.log(error);
-    }
+  public getPosts = async () => {
+    const { posts } = await this.hygraph.request(
+      gql`
+        query {
+          posts(last: 8) {
+            title
+            slug
+            createdAt
+            description
+            featured
+            coverImage {
+              id
+              url
+            }
+            createdBy {
+              id
+              name
+            }
+          }
+        }
+      `,
+      {
+        featured: true,
+      }
+    );
+
+    return posts;
+
+    // try {
+    //   const posts = await Post.find();
+    //   return posts;
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   public getBlog = async (slug: string) => {

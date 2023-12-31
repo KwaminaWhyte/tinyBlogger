@@ -65,8 +65,6 @@ export default function Index() {
     posts: BlogDocument[];
   }>();
 
-  // console.log(featured);
-
   return (
     <PublicLayout className=" min-h-screen">
       <section className="flex">
@@ -109,9 +107,9 @@ export default function Index() {
                 className="w-full h-60 object-cover"
               />
 
-              <div className="flex-1">
+              <div className="flex-1 flex flex-col gap-2">
                 <p className="font-semibold text-xl">{featured[0]?.title}</p>
-                <p className="text-gray-500 line-clamp-2">
+                <p className="text-gray-800 line-clamp-2">
                   {featured[0]?.description}
                 </p>
 
@@ -130,17 +128,23 @@ export default function Index() {
             <div className="flex-1 flex flex-col  justify-between ">
               {featured.slice(1, 3).map((post, index) => (
                 <div key={index} className="flex gap-3">
-                  <img src={post.image} alt="" className="w-44 object-cover" />
+                  <img
+                    src={post.coverImage.url}
+                    alt=""
+                    className="w-44 object-cover"
+                  />
 
-                  <div className="flex flex-col gap-3 flex-1">
+                  <div className="flex flex-col gap-2 flex-1">
                     <p className="font-semibold">{post.title}</p>
-                    <p>sak fashgoas gadsogh agiaiogh</p>
+                    <p className="text-gray-800 line-clamp-2">
+                      {post.description}
+                    </p>
 
                     <div className="mt-auto ">
-                      {/* <p className="font-semibold mt-auto">Erick Brentford</p> */}
+                      {/* <p className="font-semibold mt-auto">{post?.createdBy?.name}</p> */}
                       <p className="text-gray-500">
-                        {moment(featured[0]?.createdAt).format("MMM DD, YYYY")}{" "}
-                        - 5 mins read
+                        {moment(post?.createdAt).format("MMM DD, YYYY")} - 5
+                        mins read
                       </p>
                     </div>
                   </div>
@@ -152,16 +156,20 @@ export default function Index() {
           <div className="w-[35%] flex justify-between flex-col gap-3">
             {featured.slice(3, 6).map((post, index) => (
               <div key={index} className="flex gap-3">
-                <img src={post.image} alt="" className="w-32 object-cover" />
+                <img
+                  src={post.coverImage.url}
+                  alt=""
+                  className="w-32 object-cover"
+                />
 
                 <div className="flex flex-col gap-3 flex-1">
                   <p className="font-semibold">{post.title}</p>
 
                   <div className="mt-auto">
-                    {/* <p className="font-semibold ">Erick Brentford</p> */}
+                    {/* <p className="font-semibold ">{post?.createdBy?.name}</p> */}
                     <p className="text-gray-500 ">
-                      {moment(featured[0]?.createdAt).format("MMM DD, YYYY")} -
-                      5 mins read
+                      {moment(post?.createdAt).format("MMM DD, YYYY")} - 5 mins
+                      read
                     </p>
                   </div>
                 </div>
@@ -184,7 +192,11 @@ export default function Index() {
         <div className="flex mt-11 gap-5">
           <div className="w-[65%] gap-6 grid grid-cols-2">
             {posts.map((post, index) => (
-              <div className="flex-1 gap-3 flex flex-col" key={index}>
+              <Link
+                to={`/blogs/${post?.slug}`}
+                className="flex-1 gap-3 flex flex-col"
+                key={index}
+              >
                 <img
                   src={post?.coverImage?.url}
                   alt=""
@@ -198,14 +210,14 @@ export default function Index() {
                   </p>
 
                   <div className="mt-auto">
-                    <p className="font-semibold">Erick Brentford</p>
+                    <p className="font-semibold">{post?.createdBy?.name}</p>
                     <p className="text-gray-500">
-                      {moment(featured[0]?.createdAt).format("MMM DD, YYYY")} -
-                      5 mins read
+                      {moment(post?.createdAt).format("MMM DD, YYYY")} - 5 mins
+                      read
                     </p>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
@@ -218,10 +230,10 @@ export default function Index() {
                 <div>
                   <p>{post.title}</p>
                   <div className="mt-auto">
-                    <p className="font-semibold">Erick Brentford</p>
+                    <p className="font-semibold"> {post?.createdBy?.name}</p>
                     <p className="text-gray-500">
-                      {moment(featured[0]?.createdAt).format("MMM DD, YYYY")} -
-                      5 mins read
+                      {moment(post?.createdAt).format("MMM DD, YYYY")} - 5 mins
+                      read
                     </p>
                   </div>
                 </div>
@@ -254,44 +266,18 @@ const GetFeaturedPostsQuery = gql`
   }
 `;
 
-const GetPostsQuery = gql`
-  query {
-    posts(last: 8) {
-      title
-      slug
-      createdAt
-      description
-      featured
-      coverImage {
-        id
-        url
-      }
-      createdBy {
-        id
-        name
-      }
-    }
-  }
-`;
-
 export const loader = async ({ request }) => {
-  console.log("something...");
   const hygraph = new GraphQLClient(
     "https://api-eu-central-1.hygraph.com/v2/cl0z3nic64r6q01xma8ss10wo/master"
   );
 
+  const postController = new PostController(request);
+  const posts = await postController.getPosts();
+  // const featured = await postController.getFeaturedBlogs();
+
   const { posts: featured } = await hygraph.request(GetFeaturedPostsQuery, {
     featured: true,
   });
-
-  const { posts } = await hygraph.request(GetPostsQuery, {
-    featured: true,
-  });
-
-  console.log(featured);
-
-  // const postController = await new PostController(request);
-  // const featured = await postController.getFeaturedBlogs();
 
   return { featured, posts };
 };
@@ -313,6 +299,6 @@ export const meta: MetaFunction = () => {
       content:
         "https://res.cloudinary.com/app-deity/image/upload/v1700324984/lnjfa1hco96qrbwu11oe.jpg",
     },
-    { name: "og:url", content: "https://www.printmoney.money" },
+    { name: "og:url", content: "https://tinyblogger.vercel.app" },
   ];
 };
