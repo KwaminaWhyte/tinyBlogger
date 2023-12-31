@@ -1,4 +1,4 @@
-import { NavLink } from "@remix-run/react";
+import { Link, NavLink } from "@remix-run/react";
 import React, { type ReactNode } from "react";
 
 export default function PublicLayout({
@@ -10,9 +10,14 @@ export default function PublicLayout({
 }) {
   return (
     <div className="flex flex-col">
-      <div className="w-[85%] mx-auto h-20 backdrop-blur-md bg-white/50 z-50 flex gap-3 fixed top-0 left-0 right-0 items-center">
+      <div className="md:w-[85%] w-[96%] mx-auto h-20 backdrop-blur-md bg-white/50 z-50 flex gap-3 fixed top-0 left-0 right-0 items-center">
         <nav className="flex justify-between items-center w-full">
-          <p className="font-bold montage-font text-xl">Blogger.</p>
+          <Link
+            to="/"
+            className="font-bold text-purple-700 hover:text-black montage-font text-xl"
+          >
+            Blogger.
+          </Link>
 
           <div className="gap-3 flex">
             {[
@@ -38,13 +43,15 @@ export default function PublicLayout({
         </nav>
       </div>
 
-      <main className={`w-[85%] mt-20 mx-auto bg-red-500" ${className}`}>
+      <main
+        className={`md:w-[85%] w-[96%] mt-20 mb-8 mx-auto bg-red-500" ${className}`}
+      >
         {children}
       </main>
 
-      <footer className="w-[85%] mx-auto mt-11">
+      {/* <footer className="md:w-[85%] w-[96%] mx-auto mt-11">
         <p>Footer</p>
-      </footer>
+      </footer> */}
     </div>
   );
 }

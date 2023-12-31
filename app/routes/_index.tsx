@@ -68,24 +68,23 @@ export default function Index() {
   return (
     <PublicLayout className=" min-h-screen">
       <section className="flex">
-        <div className="w-[50%] flex flex-col justify-center gap-6">
-          <h1 className="text-7xl">Welcome to Blogger.</h1>
+        <div className="md:w-[50%] flex flex-col justify-center gap-6">
+          <h1 className="md:text-7xl text-3xl">Welcome to Blogger.</h1>
 
           <p>
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias
-            maxime reiciendis quae porro recusandae dolorum unde aut, illo
-            error, voluptatibus obcaecati explicabo iste adipisci culpa quos
+            maxime reiciendis quae porro explicabo iste adipisci culpa quos
             earum doloremque, vitae maiores?
           </p>
 
           <Button>Explore</Button>
         </div>
 
-        <div className="w-[50%]">
+        <div className="w-[50%] hidden md:blocks">
           <img
             src="https://static.vecteezy.com/system/resources/previews/007/783/955/original/online-education-illustration-concept-flat-illustration-isolated-on-white-background-vector.jpg"
             alt=""
-            className="w-full"
+            className="w-full "
           />
         </div>
       </section>
@@ -95,11 +94,11 @@ export default function Index() {
           <h2 className="underline underline-offset-8 ">Featured </h2>
         </div>
 
-        <div className="flex mt-11 gap-3 ">
-          <div className="w-[65%] flex gap-3">
+        <div className="flex mt-11 gap-3 flex-col md:flex-row ">
+          <div className="md:w-[65%] w-full flex flex-col gap-3">
             <Link
               to={`/blogs/${featured[0]?.slug}`}
-              className="flex-1 gap-3 flex flex-col"
+              className="flex-1 gap-3 md:w-[65%] w-full flex flex-col"
             >
               <img
                 src={featured[0]?.coverImage?.url}
@@ -125,7 +124,7 @@ export default function Index() {
               </div>
             </Link>
 
-            <div className="flex-1 flex flex-col  justify-between ">
+            <div className="flex-1 flex flex-col justify-between ">
               {featured.slice(1, 3).map((post, index) => (
                 <div key={index} className="flex gap-3">
                   <img
@@ -179,18 +178,13 @@ export default function Index() {
         </div>
       </section>
 
-      <section className="min-h-screen mt-24">
-        <div className="flex border-b-4 border-gray-300">
-          <div className="w-[65%] ">
+      <section className="min-h-screen mt-24 flex gap-3 md:flex-row flex-col">
+        <div className="flex md:w-[65%]  flex-col gap-3 ">
+          <div className="w-full border-b-4 border-gray-300">
             <h2 className="underline underline-offset-8 ">Latest Posts </h2>
           </div>
-          <div className="w-[35%] ">
-            <h2 className="underline underline-offset-8 ">Popular Posts </h2>
-          </div>
-        </div>
 
-        <div className="flex mt-11 gap-5">
-          <div className="w-[65%] gap-6 grid grid-cols-2">
+          <div className="md:w-[65%] gap-6 grid grid-rows-1 md:grid-cols-2">
             {posts.map((post, index) => (
               <Link
                 to={`/blogs/${post?.slug}`}
@@ -220,26 +214,32 @@ export default function Index() {
               </Link>
             ))}
           </div>
+        </div>
 
-          <div className="w-[35%] flex flex-col gap-3">
-            {posts.slice(0, 5).map((post, index) => (
-              <div key={index} className="flex gap-6 ">
-                <p className="font-semibold text-3xl text-gray-400 w-11">{`0${
-                  index + 1
-                }`}</p>
-                <div>
-                  <p>{post.title}</p>
-                  <div className="mt-auto">
-                    <p className="font-semibold"> {post?.createdBy?.name}</p>
-                    <p className="text-gray-500">
-                      {moment(post?.createdAt).format("MMM DD, YYYY")} - 5 mins
-                      read
-                    </p>
-                  </div>
+        <div className="md:w-[35%] flex flex-col gap-3">
+          <div className="flex border-b-4 border-gray-300">
+            <div className="w-full">
+              <h2 className="underline underline-offset-8 ">Popular Posts </h2>
+            </div>
+          </div>
+
+          {posts.slice(0, 5).map((post, index) => (
+            <div key={index} className="flex gap-6 ">
+              <p className="font-semibold text-3xl text-gray-400 w-11">{`0${
+                index + 1
+              }`}</p>
+              <div>
+                <p>{post.title}</p>
+                <div className="mt-auto">
+                  <p className="font-semibold"> {post?.createdBy?.name}</p>
+                  <p className="text-gray-500">
+                    {moment(post?.createdAt).format("MMM DD, YYYY")} - 5 mins
+                    read
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </section>
     </PublicLayout>
