@@ -32,7 +32,7 @@ export default function CategoryDetails() {
         className="my-5 w-full rounded-md"
       /> */}
 
-      <section className="grid grid-cols-3 gap-4 ">
+      <section className="grid md:grid-cols-3 grid-cols-1 gap-4 ">
         {posts.map((post, index) => (
           <Link
             to={`/blogs/${post?.slug}`}
@@ -42,16 +42,16 @@ export default function CategoryDetails() {
             <img
               src={post?.coverImage?.url}
               alt=""
-              className="w-full h-40 object-cover"
+              className="w-full h-40 object-cover rounded-sm"
             />
 
             <div className="flex-1">
               <p className="font-semibold text-xl">{post.title}</p>
               <p className="text-gray-500 line-clamp-2">{post.description}</p>
 
-              <div className="mt-auto">
+              <div className="mt-auto flex flex-col">
                 <p className="font-semibold">{post?.createdBy?.name}</p>
-                <p className="text-gray-500">
+                <p className="text-gray-500 ml-auto">
                   {moment(post?.createdAt).format("MMM DD, YYYY")}
                 </p>
               </div>

@@ -37,7 +37,7 @@ export default function Index() {
           <img
             src="https://static.vecteezy.com/system/resources/previews/007/783/955/original/online-education-illustration-concept-flat-illustration-isolated-on-white-background-vector.jpg"
             alt=""
-            className="w-full "
+            className="w-full rounded-sm"
           />
         </div>
       </section>
@@ -47,7 +47,7 @@ export default function Index() {
           <Link
             to={`/categories/${category.slug}`}
             key={index}
-            className="flex gap-3 bg-gray-200 rounded-xl capitalize px-2 py-1 border-gray-400 border whitespace-no-wrap"
+            className="bg-gray-200 rounded-xl capitalize px-2 py-1 border-gray-400 border text-nowrap"
           >
             {category.title}
           </Link>
@@ -68,7 +68,7 @@ export default function Index() {
               <img
                 src={featured[0]?.coverImage?.url}
                 alt=""
-                className="w-full h-60 object-cover"
+                className="w-full h-60 object-cover rounded-sm"
               />
 
               <div className="flex-1 flex flex-col gap-2">
@@ -77,11 +77,11 @@ export default function Index() {
                   {featured[0]?.description}
                 </p>
 
-                <div className="mt-auto">
+                <div className="mt-auto flex flex-col">
                   <p className="font-semibold">
                     {featured[0]?.createdBy?.name}
                   </p>
-                  <p className="text-gray-500">
+                  <p className="text-gray-500 ml-auto">
                     {moment(featured[0]?.createdAt).format("MMM DD, YYYY")}
                   </p>
                 </div>
@@ -98,7 +98,7 @@ export default function Index() {
                   <img
                     src={post?.coverImage?.url}
                     alt=""
-                    className="w-44 object-cover"
+                    className="w-44 object-cover rounded-sm"
                   />
 
                   <div className="flex flex-col gap-2 flex-1">
@@ -107,9 +107,9 @@ export default function Index() {
                       {post.description}
                     </p>
 
-                    <div className="mt-auto ">
+                    <div className="mt-auto flex flex-col">
                       {/* <p className="font-semibold mt-auto">{post?.createdBy?.name}</p> */}
-                      <p className="text-gray-500">
+                      <p className="text-gray-500 ml-auto">
                         {moment(post?.createdAt).format("MMM DD, YYYY")} - 5
                         mins read
                       </p>
@@ -130,15 +130,15 @@ export default function Index() {
                 <img
                   src={post?.coverImage?.url}
                   alt=""
-                  className="w-32 object-cover"
+                  className="w-32 object-cover rounded-sm"
                 />
 
                 <div className="flex flex-col gap-3 flex-1">
                   <p className="font-semibold">{post.title}</p>
 
-                  <div className="mt-auto">
+                  <div className="mt-auto flex flex-col">
                     {/* <p className="font-semibold ">{post?.createdBy?.name}</p> */}
-                    <p className="text-gray-500 ">
+                    <p className="text-gray-500 ml-auto">
                       {moment(post?.createdAt).format("MMM DD, YYYY")}
                     </p>
                   </div>
@@ -165,7 +165,7 @@ export default function Index() {
                 <img
                   src={post?.coverImage?.url}
                   alt=""
-                  className="w-full h-40 object-cover"
+                  className="w-full h-40 object-cover rounded-sm"
                 />
 
                 <div className="flex-1">
@@ -174,9 +174,9 @@ export default function Index() {
                     {post.description}
                   </p>
 
-                  <div className="mt-auto">
+                  <div className="mt-auto flex flex-col">
                     <p className="font-semibold">{post?.createdBy?.name}</p>
-                    <p className="text-gray-500">
+                    <p className="text-gray-500 ml-auto">
                       {moment(post?.createdAt).format("MMM DD, YYYY")}
                     </p>
                   </div>
