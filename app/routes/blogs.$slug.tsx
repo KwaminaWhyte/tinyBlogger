@@ -21,43 +21,49 @@ import {
   SheetTrigger,
 } from "~/components/ui/sheet";
 import { Textarea } from "~/components/ui/textarea";
+import CommentController from "~/server/controllers/CommentController";
+import PublicDetailLayout from "~/layouts/public-detail";
 
-const comments = [
-  {
-    id: 1,
-    name: "John Doe",
-    comment:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptatibus.",
-    createdAt: "2021-10-10",
-  },
-  {
-    id: 2,
-    name: "John Doe",
-    comment:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptatibus.",
-    createdAt: "2021-10-10",
-  },
-  {
-    id: 3,
-    name: "John Doe",
-    comment:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptatibus.",
-    createdAt: "2021-10-10",
-  },
-  {
-    id: 4,
-    name: "John Doe",
-    comment:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptatibus.",
-    createdAt: "2021-10-10",
-  },
-];
+// const comments = [
+//   {
+//     id: 1,
+//     name: "John Doe",
+//     comment:
+//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptatibus.",
+//     createdAt: "2021-10-10",
+//   },
+//   {
+//     id: 2,
+//     name: "John Doe",
+//     comment:
+//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptatibus.",
+//     createdAt: "2021-10-10",
+//   },
+//   {
+//     id: 3,
+//     name: "John Doe",
+//     comment:
+//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptatibus.",
+//     createdAt: "2021-10-10",
+//   },
+//   {
+//     id: 4,
+//     name: "John Doe",
+//     comment:
+//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptatibus.",
+//     createdAt: "2021-10-10",
+//   },
+// ];
 
 export default function Blog() {
-  const { post, slug } = useLoaderData<{ slug: string; post: PostDocument }>();
+  const { post, slug, comments } = useLoaderData<{
+    slug: string;
+    post: PostDocument;
+    comments: any[];
+  }>();
 
   return (
-    <PublicLayout>
+    <PublicDetailLayout>
       <section className="flex gap-5 flex-col my-11">
         <h1 className="md:text-6xl text-3xl text-center md:w-[70%] mx-auto">
           {post?.title}
@@ -88,7 +94,7 @@ export default function Blog() {
                 <SheetDescription>
                   <Form className="border-b pb-5 border-gray-400">
                     <div className="flex flex-col gap-4 py-4">
-                      <div className="flex gap-5 w-full">
+                      <div className="flex flex-col md:flex-row gap-5 w-full">
                         <div className="flex flex-1 flex-col gap-1">
                           <Label htmlFor="name">Name</Label>
                           <Input
@@ -117,13 +123,16 @@ export default function Blog() {
                 </SheetDescription>
               </SheetHeader>
               <div className="grid gap-4 py-4">
+                {comments.length === 0 && (
+                  <p className="text-center">No comments yet</p>
+                )}
                 {comments.map((comment) => (
-                  <div key={comment.id} className="flex gap-5">
-                    <div className="flex flex-col gap-1">
-                      <p className="text-sm font-bold">{comment.name}</p>
-                      <p className="text-sm">{comment.comment}</p>
+                  <div key={comment.id} className="flex flex-col">
+                    <div className="flex flex-col">
+                      <p className="font-bold">{comment.name}</p>
+                      <p className="ml-3 text-sm">{comment.comment}</p>
                     </div>
-                    <p className="ml-auto text-sm">
+                    <p className="ml-auto text-sm text-gray-500">
                       {moment(comment.createdAt).format("MMM DD, YYYY")}
                     </p>
                   </div>
@@ -144,7 +153,7 @@ export default function Blog() {
         className="my-5 w-full rounded-md"
       />
 
-      <ClientOnly fallback={<p>Loading Editor, please be patient...</p>}>
+      <ClientOnly fallback={<p className="text-center">Loading content</p>}>
         {() => (
           <RichText
             content={post?.content?.raw.children}
@@ -215,7 +224,7 @@ export default function Blog() {
           />
         )}
       </ClientOnly>
-    </PublicLayout>
+    </PublicDetailLayout>
   );
 }
 
@@ -224,10 +233,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   // const url = new URL(request.url);
   // const slug = url.searchParams.get("slug") as string;
 
-  const postController = await new PostController(request);
+  const postController = new PostController(request);
   const post = await postController.getPostBySlug(slug);
+  console.log({ post });
 
-  return { post, slug };
+  const commentController = new CommentController(request);
+  const comments = await commentController.getCommentsByPost(post.id);
+
+  return { post, slug, comments };
 };
 
 export const meta: MetaFunction = ({ data }) => {

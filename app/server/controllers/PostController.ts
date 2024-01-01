@@ -61,6 +61,7 @@ export default class PostController {
       gql`
         query ($slug: String!) {
           post(where: { slug: $slug }) {
+            id
             title
             description
             slug
@@ -92,6 +93,7 @@ export default class PostController {
       gql`
         query ($categoryId: ID!) {
           posts(where: { categories_some: { id: $categoryId } }) {
+            id
             title
             description
             slug
