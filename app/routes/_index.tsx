@@ -47,9 +47,9 @@ export default function Index() {
           <Link
             to={`/categories/${category.slug}`}
             key={index}
-            className="flex gap-3 bg-gray-200 rounded-xl px-2 py-1 border-gray-400 border whitespace-no-wrap"
+            className="flex gap-3 bg-gray-200 rounded-xl capitalize px-2 py-1 border-gray-400 border whitespace-no-wrap"
           >
-            <p>{category.title}</p>
+            {category.title}
           </Link>
         ))}
       </section>
