@@ -68,7 +68,7 @@ export default function Blog() {
         </p>
       </section>
 
-      <section className="border-y flex items-center justify-between md:w-[50%] gap-7 border-gray-200 py-3 mx-auto px-5">
+      <section className="border-y flex items-center justify-between w-full md:w-[50%] gap-7 border-gray-200 py-3 mx-auto px-5">
         <div className="flex items-center gap-5">
           <div className="flex gap-1 items-center cursor-pointer">
             <ThumbUpIcon className="text-gray-500" />
@@ -82,7 +82,7 @@ export default function Blog() {
                 <p>123</p>
               </div>
             </SheetTrigger>
-            <SheetContent className="md:min-w-[600px]">
+            <SheetContent className="md:min-w-[600px] w-[100vw]">
               <SheetHeader>
                 <SheetTitle>Responses (165)</SheetTitle>
                 <SheetDescription>
