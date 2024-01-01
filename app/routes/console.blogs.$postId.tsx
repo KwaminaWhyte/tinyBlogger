@@ -5,7 +5,7 @@ import { ClientOnly } from "remix-utils/client-only";
 import { RichText } from "@graphcms/rich-text-react-renderer";
 import { GraphQLClient, gql } from "graphql-request";
 import PostController from "~/server/controllers/PostController";
-import ConsoleLayout from "~/components/layouts/console";
+import ConsoleLayout from "~/layouts/console";
 
 export default function Blog() {
   const { post } = useLoaderData();

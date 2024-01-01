@@ -1,7 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import moment from "moment";
-import PublicLayout from "~/components/layouts/public";
+import PublicLayout from "~/layouts/public";
 import PostController from "~/server/controllers/PostController";
 import type { BlogDocument } from "~/server/types";
 
@@ -47,7 +47,7 @@ export default function Index() {
           <Link
             to={`/categories/${category.slug}`}
             key={index}
-            className="bg-gray-200 rounded-xl capitalize px-2 py-1 border-gray-400 border text-nowrap"
+            className="bg-slate-900 rounded-xl capitalize px-2 py-1 text-white border text-nowrap"
           >
             {category.title}
           </Link>

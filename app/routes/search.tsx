@@ -5,29 +5,32 @@ import moment from "moment";
 import PostController from "~/server/controllers/PostController";
 
 export default function CategoryDetails() {
-  const { category, slug, posts } = useLoaderData<{
-    category: any;
+  const { categories, posts, query } = useLoaderData<{
+    categories: any[];
     posts: any[];
+    query: string;
   }>();
-  console.log({ category, posts });
+  console.log({ categories, posts });
 
   return (
-    <PublicLayout>
-      <section className="flex gap-5 flex-col my-11">
-        <h1 className="md:text-6xl text-3xl text-center md:w-[70%] mx-auto">
-          {category?.title}
-        </h1>
-
-        <p className="text-center md:w-[70%] mx-auto">
-          {category?.description}
-        </p>
+    <PublicLayout query={query}>
+      <section className="my-7">
+        <h2 className="text-3xl font-semibold">
+          Results for <span className="font-bold">{query}</span>{" "}
+        </h2>
       </section>
 
-      {/* <img
-        src={post?.coverImage?.url}
-        alt=""
-        className="my-5 w-full rounded-md"
-      /> */}
+      <section className="flex gap-3 my-5 overflow-x-auto">
+        {categories?.map((category, index) => (
+          <Link
+            to={`/categories/${category.slug}`}
+            key={index}
+            className="bg-slate-900 rounded-xl capitalize px-2 py-1 text-white border text-nowrap"
+          >
+            {category.title}
+          </Link>
+        ))}
+      </section>
 
       <section className="grid md:grid-cols-3 grid-cols-1 gap-4 ">
         {posts.map((post, index) => (
@@ -61,34 +64,33 @@ export default function CategoryDetails() {
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const { slug } = params as { slug: string };
-  // const url = new URL(request.url);
-  // const slug = url.searchParams.get("slug") as string;
+  const url = new URL(request.url);
+  const query = url.searchParams.get("query") as string;
 
   const postController = await new PostController(request);
-  const category = await postController.getCategoryBySlug(slug);
-  const posts = await postController.getPostByCategory(category.id);
+  const categories = await postController.searchCategories(query);
+  const posts = await postController.searchPosts(query);
 
-  return { category, slug, posts };
+  return { categories, posts, query };
 };
 
 export const meta: MetaFunction = ({ data }) => {
-  const category = data?.category;
+  const { query } = data;
   return [
-    { title: `${category?.title} | Blogger.` },
+    { title: `${query} - Search | Blogger.` },
     {
       name: "description",
-      content: category?.description,
+      content: `Search results for ${query}`,
     },
-    { name: "og:title", content: `${category?.title} | Blogger.` },
+    { name: "og:title", content: `${query} - Search | Blogger.` },
     {
       name: "og:description",
-      content: category?.description,
+      content: `Search results for ${query}`,
     },
-    {
-      name: "og:image",
-      content: category?.coverImage?.url,
-    },
+    // {
+    // name: "og:image",
+    // content: category?.coverImage?.url,
+    // },
     { name: "og:url", content: "https://tinyblogger.vercel.app" },
   ];
 };

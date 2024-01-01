@@ -1,5 +1,5 @@
 import React from "react";
-import ConsoleLayout from "~/components/layouts/console";
+import ConsoleLayout from "~/layouts/console";
 
 export default function ConsoleIndex() {
   return (

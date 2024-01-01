@@ -3,7 +3,7 @@ import { type ActionFunction, type MetaFunction } from "@remix-run/node";
 import { useSubmit } from "@remix-run/react";
 import React, { useEffect, useState } from "react";
 import { ClientOnly } from "remix-utils/client-only";
-import ConsoleLayout from "~/components/layouts/console";
+import ConsoleLayout from "~/layouts/console";
 import SlateEditor from "~/components/state-editor.client";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";

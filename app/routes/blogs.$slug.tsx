@@ -1,6 +1,6 @@
 import { type MetaFunction, type LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import PublicLayout from "~/components/layouts/public";
+import PublicLayout from "~/layouts/public";
 import moment from "moment";
 import { ClientOnly } from "remix-utils/client-only";
 import { RichText } from "@graphcms/rich-text-react-renderer";

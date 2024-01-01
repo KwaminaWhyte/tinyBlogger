@@ -414,4 +414,61 @@ export default class PostController {
 
     return category;
   };
+
+  public searchCategories = async (query: string) => {
+    const { categories } = await this.hygraph.request(
+      gql`
+        query ($query: String!) {
+          categories(
+            where: {
+              OR: [{ title_contains: $query }, { description_contains: $query }]
+            }
+          ) {
+            id
+            title
+            description
+            slug
+          }
+        }
+      `,
+      {
+        query,
+      }
+    );
+
+    return categories;
+  };
+
+  public searchPosts = async (query: string) => {
+    const { posts } = await this.hygraph.request(
+      gql`
+        query ($query: String!) {
+          posts(
+            where: {
+              OR: [{ title_contains: $query }, { description_contains: $query }]
+            }
+          ) {
+            id
+            title
+            description
+            featured
+            categories {
+              id
+              title
+              slug
+            }
+            content {
+              raw
+            }
+            createdAt
+          }
+        }
+      `,
+      {
+        query,
+      }
+    );
+
+    return posts;
+  };
 }
