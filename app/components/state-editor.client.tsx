@@ -1,15 +1,21 @@
-import { is } from "node_modules/cheerio/lib/esm/api/traversing";
 import React from "react";
 import {
-  BaseEditor,
+  type BaseEditor,
   Editor,
   Element,
   createEditor,
   Descendant,
   Transforms,
 } from "slate";
-import { Slate, Editable, withReact, ReactEditor } from "slate-react";
+import {
+  Slate,
+  Editable,
+  withReact,
+  ReactEditor,
+  useSlateStatic,
+} from "slate-react";
 import { Button } from "./ui/button";
+import withEmbeds from "~/lib/withEmbeds";
 
 type CustomText = {
   bold?: boolean;
@@ -18,9 +24,10 @@ type CustomText = {
 };
 
 type CustomElement = {
-  type: "paragraph" | "link";
+  type: "paragraph" | "link" | "code" | "h1" | "underline" | "image" | "video";
   children: CustomText[] | CustomElement[];
   href?: string;
+  url?: string;
   openInNewTab?: boolean;
 };
 
@@ -33,9 +40,37 @@ declare module "slate" {
 }
 
 const CustomEditor = {
+  handleEmbeds(editor: Editor, url: string) {
+    const [match] = Editor.nodes(editor, {
+      match: (n) => n.type === "video",
+    });
+
+    if (match) {
+      const [node, path] = match;
+      const newProperties: Partial<CustomElement> = {
+        url,
+      };
+      Transforms.setNodes(editor, newProperties, { at: path });
+    }
+  },
+  handlePaste(editor: Editor, event: ClipboardEvent) {
+    const text = event.clipboardData.getData("text/plain");
+    const html = event.clipboardData.getData("text/html");
+    console.log("embed", event.clipboardData.getData("text/html"));
+  },
+
   isBoldMarkActive(editor: Editor) {
     const [match] = Editor.nodes(editor, {
       match: (n) => n.bold === true,
+      universal: true,
+    });
+
+    return !!match;
+  },
+
+  isUnderlineMarkActive(editor: Editor) {
+    const [match] = Editor.nodes(editor, {
+      match: (n) => n.underline === true,
       universal: true,
     });
 
@@ -110,11 +145,6 @@ const CustomEditor = {
 
   toggleItalicMark(editor: Editor) {
     const isActive = CustomEditor.isItalicMarkActive(editor);
-    // Transforms.setNodes(
-    //   editor,
-    //   { type: isActive ? null : "italic" },
-    //   { match: (n) => Element.isElement(n) && Editor.isBlock(editor, n) }
-    // );
     if (isActive) {
       Editor.removeMark(editor, "italic");
     } else {
@@ -129,6 +159,20 @@ const CustomEditor = {
       { type: isActive ? null : "code" },
       { match: (n) => Element.isElement(n) && Editor.isBlock(editor, n) }
     );
+  },
+
+  toggleUnderline(editor: Editor) {
+    const isActive = CustomEditor.isUnderlineMarkActive(editor);
+    // Transforms.setNodes(
+    //   editor,
+    //   { type: isActive ? null : "underline" },
+    //   { match: (n) => Element.isElement(n) && Editor.isBlock(editor, n) }
+    // );
+    if (isActive) {
+      Editor.removeMark(editor, "underline");
+    } else {
+      Editor.addMark(editor, "underline", true);
+    }
   },
 
   toggleLink(editor: Editor) {
@@ -211,6 +255,16 @@ const initialValue: CustomElement[] = [
       },
     ],
   },
+  {
+    type: "video",
+    url: "https://youtu.be/yXd0z1shhoU",
+    children: [{ text: "" }],
+  },
+  {
+    type: "image",
+    children: [{ text: "" }],
+    url: "https://plus.unsplash.com/premium_photo-1665423291654-f937fd6e649e?q=80&w=3269&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
 ];
 
 export default function SlateEditor() {
@@ -225,8 +279,14 @@ export default function SlateEditor() {
         return <CodeBlock {...props} />;
       case "h1":
         return <H1 {...props} />;
+      case "underline":
+        return <Underline {...props} />;
       case "italic":
         return <Italic {...props} />;
+      case "image":
+        return <CustomImage {...props} />;
+      case "video":
+        return <VideoElement {...props} />;
       default:
         return <DefaultElement {...props} />;
     }
@@ -275,7 +335,7 @@ export default function SlateEditor() {
         <Button
           onMouseDown={(event) => {
             event.preventDefault();
-            CustomEditor.toggleItalicMark(editor);
+            CustomEditor.toggleUnderline(editor);
           }}
           type="button"
         >
@@ -364,22 +424,17 @@ export default function SlateEditor() {
       </div>
 
       <Editable
+        spellCheck
+        autoFocus
         onChange={(value) => {
           const content = JSON.stringify(value);
-          console.log(content);
+          // console.log(content);
 
           // localStorage.setItem("content", content);
         }}
         onPaste={(event) => {
           event.preventDefault();
-          const text = event.clipboardData.getData("text/plain");
-          const html = event.clipboardData.getData("text/html");
-          console.log(event.clipboardData.getData("text/html"));
-
-          // const ast = htmlToSlateASTSync(html);
-          // console.log(ast);
-          // const fragment = Reac
-          // Transforms.insertFragment(editor, fragment);
+          CustomEditor.handlePaste(editor, event);
         }}
         className="bg-gray-100 p-2"
         renderElement={renderElement}
@@ -444,42 +499,27 @@ export default function SlateEditor() {
   );
 }
 
-const withEmbeds = (editor: Editor) => {
-  const { isVoid, isInline, insertData } = editor;
-
-  editor.insertData = (data) => {
-    const text = data.getData("text/plain");
-    console.log("data", data.getData("text/plain"));
-
-    const html = data.getData("text/html");
-
-    if (text) {
-      return insertData(data);
-    }
-
-    if (html) {
-      const parse = new DOMParser().parseFromString(html, "text/html");
-      const fragment = deserialize(parse.body);
-      Transforms.insertFragment(editor, fragment);
-      return;
-    }
-    return insertData(data);
-  };
-
-  // editor.isVoid = (element) => {
-  //   return element.type === "image" ? true : isVoid(element);
-  // };
-
-  return editor;
-};
-
 const Leaf = (props) => {
+  let children = props.children;
+  if (props.leaf.bold) {
+    children = <strong>{children}</strong>;
+  }
+  if (props.leaf.code) {
+    children = <code>{children}</code>;
+  }
+  if (props.leaf.italic) {
+    children = <em>{children}</em>;
+  }
+  if (props.leaf.underline) {
+    children = <u className="underline">{children}</u>;
+  }
+
   return (
     <span
       {...props.attributes}
       style={{ fontWeight: props.leaf.bold ? "bold" : "normal" }}
     >
-      {props.children}
+      {children}
     </span>
   );
 };
@@ -522,5 +562,84 @@ const H1 = (props) => {
     <h1 {...props.attributes} className="text-6xl">
       {props.children}
     </h1>
+  );
+};
+
+const Underline = (props) => {
+  return (
+    <u {...props.attributes} className="underline">
+      {props.children}
+    </u>
+  );
+};
+
+const CustomImage = (props) => {
+  return (
+    <img
+      {...props.attributes}
+      src={props.element.url}
+      alt={props.element.alt}
+    />
+  );
+};
+
+const VideoElement = ({ attributes, children, element }) => {
+  const editor = useSlateStatic();
+  const { url } = element;
+  return (
+    <div {...attributes}>
+      <div contentEditable={false}>
+        <div
+          style={{
+            padding: "75% 0 0 0",
+            position: "relative",
+          }}
+        >
+          <iframe
+            title="test"
+            src={`${url}`}
+            style={{
+              position: "absolute",
+              top: "0",
+              left: "0",
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </div>
+        <UrlInput
+          url={url}
+          onChange={(val) => {
+            const path = ReactEditor.findPath(editor, element);
+            const newProperties: Partial<Element> = {
+              url: val,
+            };
+            Transforms.setNodes<Element>(editor, newProperties, {
+              at: path,
+            });
+          }}
+        />
+      </div>
+      {children}
+    </div>
+  );
+};
+
+const UrlInput = ({ url, onChange }) => {
+  const [value, setValue] = React.useState(url);
+  return (
+    <input
+      value={value}
+      onClick={(e) => e.stopPropagation()}
+      style={{
+        marginTop: "5px",
+        boxSizing: "border-box",
+      }}
+      onChange={(e) => {
+        const newUrl = e.target.value;
+        setValue(newUrl);
+        onChange(newUrl);
+      }}
+    />
   );
 };

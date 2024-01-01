@@ -25,6 +25,11 @@ export default class PostController {
             createdAt
             description
             featured
+            categories {
+              id
+              title
+              slug
+            }
             coverImage {
               id
               url
@@ -59,6 +64,11 @@ export default class PostController {
             title
             description
             slug
+            categories {
+              id
+              title
+              slug
+            }
             content {
               raw
             }
@@ -77,6 +87,34 @@ export default class PostController {
     return post;
   };
 
+  public getPostByCategory = async (categoryId: string) => {
+    const { posts } = await this.hygraph.request(
+      gql`
+        query ($categoryId: ID!) {
+          posts(where: { categories_some: { id: $categoryId } }) {
+            title
+            description
+            slug
+            categories {
+              id
+              title
+              slug
+            }
+            coverImage {
+              id
+              url
+            }
+          }
+        }
+      `,
+      {
+        categoryId,
+      }
+    );
+
+    return posts;
+  };
+
   public getPostById = async (id: string) => {
     const { post } = await this.hygraph.request(
       gql`
@@ -87,6 +125,11 @@ export default class PostController {
             description
             featured
             id
+            categories {
+              id
+              title
+              slug
+            }
             content {
               raw
             }
@@ -297,5 +340,78 @@ export default class PostController {
     // } catch (error) {
     //   console.log(error);
     // }
+  };
+
+  public getCategories = async () => {
+    const { categories } = await this.hygraph.request(
+      gql`
+        query {
+          categories {
+            id
+            title
+            slug
+            description
+            createdAt
+          }
+        }
+      `,
+      {
+        featured: true,
+      }
+    );
+
+    return categories;
+  };
+
+  public createCategory = async (data: {
+    title: string;
+    slug: string;
+    description: string;
+  }) => {
+    const { createCategory } = await this.hygraph.request(
+      gql`
+        mutation newCategory(
+          $title: String!
+          $slug: String!
+          $description: String!
+        ) {
+          createCategory(
+            data: { title: $title, slug: $slug, description: $description }
+          ) {
+            id
+            title
+            description
+          }
+        }
+      `,
+      {
+        title: data.title,
+        slug: data.slug,
+        description: data.description,
+      }
+    );
+    console.log(createCategory);
+
+    return createCategory;
+  };
+
+  public getCategoryBySlug = async (slug: string) => {
+    const { category } = await this.hygraph.request(
+      gql`
+        query ($slug: String!) {
+          category(where: { slug: $slug }) {
+            id
+            title
+            description
+            slug
+          }
+        }
+      `,
+      {
+        slug,
+      }
+    );
+
+    return category;
   };
 }

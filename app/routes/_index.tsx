@@ -6,10 +6,11 @@ import PostController from "~/server/controllers/PostController";
 import type { BlogDocument } from "~/server/types";
 
 export default function Index() {
-  const { featured, posts, latest } = useLoaderData<{
+  const { featured, posts, latest, categories } = useLoaderData<{
     featured: BlogDocument[];
     posts: BlogDocument[];
     latest: BlogDocument[];
+    categories: any[];
   }>();
 
   return (
@@ -41,6 +42,18 @@ export default function Index() {
         </div>
       </section>
 
+      <section className="flex gap-3">
+        {categories.map((category, index) => (
+          <Link
+            to={`/categories/${category.slug}`}
+            key={index}
+            className="flex gap-3 bg-gray-200 rounded-xl px-2 py-1 border-gray-400 border"
+          >
+            <p>{category.title}</p>
+          </Link>
+        ))}
+      </section>
+
       <section className="">
         <div className="flex border-b-4 border-gray-300">
           <h2 className="underline underline-offset-8 ">Featured </h2>
@@ -70,7 +83,6 @@ export default function Index() {
                   </p>
                   <p className="text-gray-500">
                     {moment(featured[0]?.createdAt).format("MMM DD, YYYY")}
-                    {/* - 5 mins read */}
                   </p>
                 </div>
               </div>
@@ -127,8 +139,7 @@ export default function Index() {
                   <div className="mt-auto">
                     {/* <p className="font-semibold ">{post?.createdBy?.name}</p> */}
                     <p className="text-gray-500 ">
-                      {moment(post?.createdAt).format("MMM DD, YYYY")} - 5 mins
-                      read
+                      {moment(post?.createdAt).format("MMM DD, YYYY")}
                     </p>
                   </div>
                 </div>
@@ -144,7 +155,7 @@ export default function Index() {
             <h2 className="underline underline-offset-8 ">Latest Posts </h2>
           </div>
 
-          <div className="md:w-[65%] gap-6 grid grid-rows-1 md:grid-cols-2">
+          <div className="gap-6 grid grid-rows-1 md:grid-cols-2">
             {latest.map((post, index) => (
               <Link
                 to={`/blogs/${post?.slug}`}
@@ -166,8 +177,7 @@ export default function Index() {
                   <div className="mt-auto">
                     <p className="font-semibold">{post?.createdBy?.name}</p>
                     <p className="text-gray-500">
-                      {moment(post?.createdAt).format("MMM DD, YYYY")} - 5 mins
-                      read
+                      {moment(post?.createdAt).format("MMM DD, YYYY")}
                     </p>
                   </div>
                 </div>
@@ -195,8 +205,7 @@ export default function Index() {
                 <div className="mt-auto">
                   <p className="font-semibold"> {post?.createdBy?.name}</p>
                   <p className="text-gray-500">
-                    {moment(post?.createdAt).format("MMM DD, YYYY")} - 5 mins
-                    read
+                    {moment(post?.createdAt).format("MMM DD, YYYY")} -
                   </p>
                 </div>
               </div>
@@ -213,8 +222,9 @@ export const loader = async ({ request }) => {
   const posts = await postController.getPosts();
   const featured = await postController.getFeaturedPosts();
   const latest = await postController.getLatestPosts();
+  const categories = await postController.getCategories();
 
-  return { featured, posts, latest };
+  return { featured, posts, latest, categories };
 };
 
 export const meta: MetaFunction = () => {

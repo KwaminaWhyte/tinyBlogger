@@ -22,16 +22,16 @@ export default function ConsoleLayout({
           <div className="gap-3 flex">
             {[
               { path: "/console", label: "Dashboard" },
-              { path: "/console/blogs/create", label: "Create" },
+              { path: "/console/blogs/create", label: "Create Post" },
+              { path: "/console/categories/create", label: "Create Category" },
               // { path: "/about", label: "About" },
             ].map((item, index) => (
               <NavLink
                 key={index}
                 to={item.path}
-                className={({ isActive, isPending }) =>
-                  isPending
-                    ? "pending"
-                    : isActive
+                end
+                className={({ isActive }) =>
+                  isActive
                     ? "text-black font-semibold hover:text-gray-600"
                     : "text-gray-800 hover:text-gray-600"
                 }
