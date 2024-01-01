@@ -16,7 +16,7 @@ export default function Index() {
   return (
     <PublicLayout className=" min-h-screen gap-11">
       <section className="flex">
-        <div className="md:w-[50%] flex flex-col justify-center gap-6">
+        <div className="md:w-[50%] h-[35vh] md:my-auto flex flex-col justify-center gap-6">
           <h1 className="md:text-7xl text-3xl">Welcome to Blogger.</h1>
 
           <p>

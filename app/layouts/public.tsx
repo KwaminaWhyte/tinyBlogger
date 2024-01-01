@@ -16,10 +16,10 @@ export default function PublicLayout({
     <div className="flex flex-col">
       <div className="h-14 backdrop-blur-md bg-white/50 z-50 flex w-full gap-3 fixed top-0 left-0 right-0 items-center">
         <nav className="md:w-[85%] w-[96%] mx-auto flex justify-between items-center ">
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-3">
             <Link
               to="/"
-              className="font-bold text-purple-700 hover:text-black montage-font text-xl"
+              className="font-bold text-purple-700 hover:text-black montage-font text-lg md:text-xl"
             >
               Blogger.
             </Link>
@@ -29,7 +29,7 @@ export default function PublicLayout({
                 e.preventDefault();
                 return navigate(`/search?query=${e.target.query.value}`);
               }}
-              className="flex gap-2 items-center bg-gray-100 rounded-lg px-3 py-2"
+              className="flex gap-2 flex-1 items-center bg-gray-100 rounded-lg px-3 py-2"
             >
               <SearchIcon className="text-gray-400" />
               <input
