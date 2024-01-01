@@ -29,13 +29,13 @@ export default function PublicLayout({
                 e.preventDefault();
                 return navigate(`/search?query=${e.target.query.value}`);
               }}
-              className="flex gap-2 flex-1 items-center bg-gray-100 rounded-lg px-3 py-2"
+              className="flex gap-2 md:min-w-72 w-48 items-center bg-gray-100 rounded-lg px-3 py-2"
             >
-              <SearchIcon className="text-gray-400" />
+              <SearchIcon className="text-gray-400 hidden md:flex" />
               <input
                 name="query"
                 defaultValue={query}
-                className="outline-none border-none active:outline-none bg-transparent active:border-none"
+                className="outline-none flex-1 border-none active:outline-none bg-transparent active:border-none"
                 placeholder="Search..."
               />
             </Form>
