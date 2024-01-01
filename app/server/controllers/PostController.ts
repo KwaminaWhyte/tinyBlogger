@@ -135,6 +135,10 @@ export default class PostController {
             content {
               raw
             }
+            coverImage {
+              id
+              url
+            }
           }
         }
       `,
@@ -273,6 +277,7 @@ export default class PostController {
       gql`
         query ($featured: Boolean!) {
           posts(where: { featured: $featured }, last: 10) {
+            id
             title
             slug
             createdAt
@@ -311,6 +316,7 @@ export default class PostController {
       gql`
         query {
           posts(orderBy: updatedAt_DESC) {
+            id
             title
             slug
             createdAt
@@ -462,6 +468,10 @@ export default class PostController {
             }
             content {
               raw
+            }
+            coverImage {
+              id
+              url
             }
             createdAt
           }
