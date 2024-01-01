@@ -42,12 +42,12 @@ export default function Index() {
         </div>
       </section>
 
-      <section className="flex gap-3">
+      <section className="flex gap-3 overflow-x-auto">
         {categories.map((category, index) => (
           <Link
             to={`/categories/${category.slug}`}
             key={index}
-            className="flex gap-3 bg-gray-200 rounded-xl px-2 py-1 border-gray-400 border"
+            className="flex gap-3 bg-gray-200 rounded-xl px-2 py-1 border-gray-400 border whitespace-no-wrap"
           >
             <p>{category.title}</p>
           </Link>
