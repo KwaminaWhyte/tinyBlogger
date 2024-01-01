@@ -1,14 +1,60 @@
 import { type MetaFunction, type LoaderFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData } from "@remix-run/react";
 import PublicLayout from "~/layouts/public";
 import moment from "moment";
 import { ClientOnly } from "remix-utils/client-only";
 import { RichText } from "@graphcms/rich-text-react-renderer";
-import { GraphQLClient, gql } from "graphql-request";
 import PostController from "~/server/controllers/PostController";
+import { CommentIcon, ShareIcon, ThumbUpIcon } from "~/components/icons";
+import type { PostDocument } from "~/server/types";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "~/components/ui/sheet";
+import { Textarea } from "~/components/ui/textarea";
+
+const comments = [
+  {
+    id: 1,
+    name: "John Doe",
+    comment:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptatibus.",
+    createdAt: "2021-10-10",
+  },
+  {
+    id: 2,
+    name: "John Doe",
+    comment:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptatibus.",
+    createdAt: "2021-10-10",
+  },
+  {
+    id: 3,
+    name: "John Doe",
+    comment:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptatibus.",
+    createdAt: "2021-10-10",
+  },
+  {
+    id: 4,
+    name: "John Doe",
+    comment:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptatibus.",
+    createdAt: "2021-10-10",
+  },
+];
 
 export default function Blog() {
-  const { post, slug } = useLoaderData();
+  const { post, slug } = useLoaderData<{ slug: string; post: PostDocument }>();
 
   return (
     <PublicLayout>
@@ -16,13 +62,80 @@ export default function Blog() {
         <h1 className="md:text-6xl text-3xl text-center md:w-[70%] mx-auto">
           {post?.title}
         </h1>
-
         <p className="text-center md:w-[70%] mx-auto">{post?.description}</p>
-
         <p className="ml-auto ">
           {moment(post.createdAt).format("MMM DD, YYYY")}
-          {/* - 10 mins Read */}
         </p>
+      </section>
+
+      <section className="border-y flex items-center justify-between md:w-[50%] gap-7 border-gray-200 py-3 mx-auto px-5">
+        <div className="flex items-center gap-5">
+          <div className="flex gap-1 items-center cursor-pointer">
+            <ThumbUpIcon className="text-gray-500" />
+            <p>3k</p>
+          </div>
+
+          <Sheet>
+            <SheetTrigger asChild>
+              <div className="flex gap-1 items-center cursor-pointer">
+                <CommentIcon className="text-gray-500" />
+                <p>123</p>
+              </div>
+            </SheetTrigger>
+            <SheetContent className="md:min-w-[600px]">
+              <SheetHeader>
+                <SheetTitle>Responses (165)</SheetTitle>
+                <SheetDescription>
+                  <Form className="border-b pb-5 border-gray-400">
+                    <div className="flex flex-col gap-4 py-4">
+                      <div className="flex gap-5 w-full">
+                        <div className="flex flex-1 flex-col gap-1">
+                          <Label htmlFor="name">Name</Label>
+                          <Input
+                            type="text"
+                            name="name"
+                            placeholder="John Doe"
+                          />
+                        </div>
+
+                        <div className="flex flex-1 flex-col gap-1">
+                          <Label htmlFor="email">Email</Label>
+                          <Input type="email" name="email" placeholder="" />
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-1">
+                        <Label htmlFor="comment">Comment</Label>
+                        <Textarea name="comment" placeholder="Your comment" />
+                      </div>
+                    </div>
+
+                    <SheetFooter>
+                      <Button type="submit">Comment</Button>
+                    </SheetFooter>
+                  </Form>
+                </SheetDescription>
+              </SheetHeader>
+              <div className="grid gap-4 py-4">
+                {comments.map((comment) => (
+                  <div key={comment.id} className="flex gap-5">
+                    <div className="flex flex-col gap-1">
+                      <p className="text-sm font-bold">{comment.name}</p>
+                      <p className="text-sm">{comment.comment}</p>
+                    </div>
+                    <p className="ml-auto text-sm">
+                      {moment(comment.createdAt).format("MMM DD, YYYY")}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+
+        <div>
+          <ShareIcon className="text-gray-500" />
+        </div>
       </section>
 
       <img

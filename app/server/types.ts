@@ -8,7 +8,7 @@ export interface UserDocument extends Document {
   lastName: string;
 }
 
-export type BlogDocument = {
+export type PostDocument = {
   _id: string;
   title: string;
   description: string;

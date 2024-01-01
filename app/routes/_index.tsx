@@ -3,13 +3,13 @@ import { Link, useLoaderData } from "@remix-run/react";
 import moment from "moment";
 import PublicLayout from "~/layouts/public";
 import PostController from "~/server/controllers/PostController";
-import type { BlogDocument } from "~/server/types";
+import type { PostDocument } from "~/server/types";
 
 export default function Index() {
   const { featured, posts, latest, categories } = useLoaderData<{
-    featured: BlogDocument[];
-    posts: BlogDocument[];
-    latest: BlogDocument[];
+    featured: PostDocument[];
+    posts: PostDocument[];
+    latest: PostDocument[];
     categories: any[];
   }>();
 
