@@ -452,6 +452,7 @@ export default class PostController {
             title
             description
             featured
+            slug
             categories {
               id
               title
