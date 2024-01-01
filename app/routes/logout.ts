@@ -3,7 +3,7 @@ import { redirect } from "@remix-run/node";
 import UserController from "~/server/controllers/UserController";
 
 export const action: ActionFunction = async ({ request }) => {
-  const adminAuthControlle = await new UserController(request);
+  const adminAuthControlle = new UserController(request);
   return await adminAuthControlle.logout();
 };
 

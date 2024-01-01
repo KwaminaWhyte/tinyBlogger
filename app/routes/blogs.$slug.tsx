@@ -1,4 +1,8 @@
-import { type MetaFunction, type LoaderFunction } from "@remix-run/node";
+import {
+  type MetaFunction,
+  type LoaderFunction,
+  ActionFunction,
+} from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import PublicLayout from "~/layouts/public";
 import moment from "moment";
@@ -78,21 +82,23 @@ export default function Blog() {
         <div className="flex items-center gap-5">
           <div className="flex gap-1 items-center cursor-pointer">
             <ThumbUpIcon className="text-gray-500" />
-            <p>3k</p>
+            {/* <p>3ks</p> */}
           </div>
 
           <Sheet>
             <SheetTrigger asChild>
               <div className="flex gap-1 items-center cursor-pointer">
                 <CommentIcon className="text-gray-500" />
-                <p>123</p>
+                <p>{comments.length}</p>
               </div>
             </SheetTrigger>
             <SheetContent className="md:min-w-[600px] w-[100vw]">
               <SheetHeader>
                 <SheetTitle>Responses ({comments.length})</SheetTitle>
                 <SheetDescription>
-                  <Form className="border-b pb-5 border-gray-400">
+                  <Form method="POST" className="border-b pb-5 border-gray-400">
+                    <input type="hidden" name="postId" value={post.id} />
+                    <input type="hidden" name="slug" value={slug} />
                     <div className="flex flex-col gap-4 py-4">
                       <div className="flex flex-col md:flex-row gap-5 w-full">
                         <div className="flex flex-1 flex-col gap-1">
@@ -133,7 +139,7 @@ export default function Blog() {
                       <p className="ml-3 text-sm">{comment.comment}</p>
                     </div>
                     <p className="ml-auto text-sm text-gray-500">
-                      {moment(comment.createdAt).format("MMM DD, YYYY")}
+                      {moment(comment.createdAt).format("MMM DD, YYYY - H:m a")}
                     </p>
                   </div>
                 ))}
@@ -227,6 +233,24 @@ export default function Blog() {
     </PublicDetailLayout>
   );
 }
+
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+  const name = formData.get("name") as string;
+  const email = formData.get("email") as string;
+  const comment = formData.get("comment") as string;
+  const postId = formData.get("postId") as string;
+  const slug = formData.get("slug") as string;
+
+  const commentController = new CommentController(request);
+  return await commentController.createComment({
+    postId,
+    name,
+    email,
+    comment,
+    slug,
+  });
+};
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const { slug } = params as { slug: string };

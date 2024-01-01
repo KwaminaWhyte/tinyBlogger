@@ -86,7 +86,7 @@ export const action: ActionFunction = async ({ request }) => {
   const slug = formData.get("slug") as string;
   const content = formData.get("content") as string;
 
-  const postController = await new PostController(request);
+  const postController = new PostController(request);
   return await postController.createPost({
     title,
     description,

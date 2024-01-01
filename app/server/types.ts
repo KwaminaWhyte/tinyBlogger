@@ -9,7 +9,7 @@ export interface UserDocument extends Document {
 }
 
 export type PostDocument = {
-  _id: string;
+  id: string;
   title: string;
   description: string;
   content: string;

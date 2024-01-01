@@ -68,7 +68,7 @@ export default function Index() {
               <img
                 src={featured[0]?.coverImage?.url}
                 alt=""
-                className="w-full h-60 object-cover rounded-sm"
+                className="w-full h-60 object-cover bg-gray-100 rounded-sm"
               />
 
               <div className="flex-1 flex flex-col gap-2">
@@ -81,7 +81,7 @@ export default function Index() {
                   <p className="font-semibold">
                     {featured[0]?.createdBy?.name}
                   </p>
-                  <p className="text-gray-500 ml-auto">
+                  <p className="text-gray-500 ml-auto text-xs">
                     {moment(featured[0]?.createdAt).format("MMM DD, YYYY")}
                   </p>
                 </div>
@@ -98,7 +98,7 @@ export default function Index() {
                   <img
                     src={post?.coverImage?.url}
                     alt=""
-                    className="w-44 object-cover rounded-sm"
+                    className="w-44 object-cover bg-gray-100 rounded-sm"
                   />
 
                   <div className="flex flex-col gap-2 flex-1">
@@ -109,9 +109,8 @@ export default function Index() {
 
                     <div className="mt-auto flex flex-col">
                       {/* <p className="font-semibold mt-auto">{post?.createdBy?.name}</p> */}
-                      <p className="text-gray-500 ml-auto">
-                        {moment(post?.createdAt).format("MMM DD, YYYY")} - 5
-                        mins read
+                      <p className="text-gray-500 ml-auto text-xs">
+                        {moment(post?.createdAt).format("MMM DD, YYYY")}
                       </p>
                     </div>
                   </div>
@@ -130,7 +129,7 @@ export default function Index() {
                 <img
                   src={post?.coverImage?.url}
                   alt=""
-                  className="w-32 object-cover rounded-sm"
+                  className="w-32 object-cover bg-gray-100 rounded-sm"
                 />
 
                 <div className="flex flex-col gap-3 flex-1">
@@ -138,7 +137,7 @@ export default function Index() {
 
                   <div className="mt-auto flex flex-col">
                     {/* <p className="font-semibold ">{post?.createdBy?.name}</p> */}
-                    <p className="text-gray-500 ml-auto">
+                    <p className="text-gray-500 ml-auto text-xs">
                       {moment(post?.createdAt).format("MMM DD, YYYY")}
                     </p>
                   </div>
@@ -165,7 +164,7 @@ export default function Index() {
                 <img
                   src={post?.coverImage?.url}
                   alt=""
-                  className="w-full h-40 object-cover rounded-sm"
+                  className="w-full h-40 object-cover bg-gray-100 rounded-sm"
                 />
 
                 <div className="flex-1">
@@ -176,7 +175,7 @@ export default function Index() {
 
                   <div className="mt-auto flex flex-col">
                     <p className="font-semibold">{post?.createdBy?.name}</p>
-                    <p className="text-gray-500 ml-auto">
+                    <p className="text-gray-500 ml-auto text-xs">
                       {moment(post?.createdAt).format("MMM DD, YYYY")}
                     </p>
                   </div>
@@ -204,7 +203,7 @@ export default function Index() {
                 <p>{post.title}</p>
                 <div className="mt-auto">
                   <p className="font-semibold"> {post?.createdBy?.name}</p>
-                  <p className="text-gray-500">
+                  <p className="text-gray-500 text-xs">
                     {moment(post?.createdAt).format("MMM DD, YYYY")} -
                   </p>
                 </div>

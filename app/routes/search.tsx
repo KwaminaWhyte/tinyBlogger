@@ -67,7 +67,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);
   const query = url.searchParams.get("query") as string;
 
-  const postController = await new PostController(request);
+  const postController = new PostController(request);
   const categories = await postController.searchCategories(query);
   const posts = await postController.searchPosts(query);
 

@@ -65,7 +65,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   // const url = new URL(request.url);
   // const slug = url.searchParams.get("slug") as string;
 
-  const postController = await new PostController(request);
+  const postController = new PostController(request);
   const category = await postController.getCategoryBySlug(slug);
   const posts = await postController.getPostByCategory(category.id);
 

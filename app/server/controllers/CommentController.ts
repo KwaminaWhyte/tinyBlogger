@@ -18,7 +18,7 @@ export default class CommentController {
     const { comments } = await this.hygraph.request(
       gql`
         query getComments($postId: ID!) {
-          comments(where: { post: { id: $postId } }) {
+          comments(where: { post: { id: $postId } }, orderBy: createdAt_DESC) {
             id
             name
             email
@@ -35,9 +35,11 @@ export default class CommentController {
   };
 
   public createComment = async (data: {
+    postId: string;
     name: string;
     email: string;
     comment: string;
+    slug: string;
   }) => {
     const { createComment } = await this.hygraph.request(
       gql`
@@ -45,9 +47,15 @@ export default class CommentController {
           $name: String!
           $email: String!
           $comment: String!
+          $postId: ID!
         ) {
           createComment(
-            data: { name: $name, email: $email, comment: $comment }
+            data: {
+              name: $name
+              email: $email
+              comment: $comment
+              post: { connect: { id: $postId } }
+            }
           ) {
             id
             name
@@ -57,14 +65,14 @@ export default class CommentController {
         }
       `,
       {
+        postId: data.postId,
         name: data.name,
         email: data.email,
         comment: data.comment,
       }
     );
-    console.log(createComment);
 
-    return redirect(`/console/blogs/${createComment.id}`);
+    return redirect(`/blogs/${data.slug}`);
   };
 
   public publishComment = async (id: string) => {
