@@ -90,7 +90,7 @@ export default function Blog() {
             </SheetTrigger>
             <SheetContent className="md:min-w-[600px] w-[100vw]">
               <SheetHeader>
-                <SheetTitle>Responses (165)</SheetTitle>
+                <SheetTitle>Responses ({comments.length})</SheetTitle>
                 <SheetDescription>
                   <Form className="border-b pb-5 border-gray-400">
                     <div className="flex flex-col gap-4 py-4">
