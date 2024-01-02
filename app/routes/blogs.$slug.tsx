@@ -3,12 +3,17 @@ import {
   type LoaderFunction,
   type ActionFunction,
 } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import moment from "moment";
 import { ClientOnly } from "remix-utils/client-only";
 import { RichText } from "@graphcms/rich-text-react-renderer";
 import PostController from "~/server/controllers/PostController";
-import { CommentIcon, ShareIcon, ThumbUpIcon } from "~/components/icons";
+import {
+  CommentIcon,
+  EyeIcon,
+  ShareIcon,
+  ThumbUpIcon,
+} from "~/components/icons";
 import type { PostDocument } from "~/server/types";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -41,6 +46,18 @@ export default function Blog() {
     email: "",
   });
 
+  const handleShare = async () => {
+    try {
+      await navigator.share({
+        title: `${post?.title} | Blogger.`,
+        text: `${post?.description} | Blogger.`,
+        url: window.location.href,
+      });
+    } catch (error) {
+      console.error("Error sharing:", error);
+    }
+  };
+
   useEffect(() => {
     const userData = localStorage.getItem("userData");
     if (userData) {
@@ -69,21 +86,33 @@ export default function Blog() {
 
   return (
     <PublicDetailLayout>
-      <section className="flex gap-5 flex-col my-11">
-        <h1 className="md:text-6xl text-3xl text-center md:w-[70%] mx-auto">
+      <section className="rounded-md  relative flex flex-col gap-5 my-11 h-96 items-center justify-center bg-black/70 p-4 ">
+        <h1 className="md:text-6xl text-white text-3xl text-center md:w-[70%] mx-auto">
           {post?.title}
         </h1>
-        <p className="text-center md:w-[70%] mx-auto">{post?.description}</p>
-        <p className="ml-auto ">
-          {moment(post.createdAt).format("MMM DD, YYYY")}
+        <p className="text-center text-white md:w-[70%] mx-auto">
+          {post?.description}
         </p>
+        <p className="ml-auto text-white">
+          {moment(post.createdAt).format("MMMM DD, YYYY")}
+        </p>
+        <img
+          src={post?.coverImage?.url}
+          alt=""
+          className="w-full absolute -z-10 h-full object-cover rounded-md"
+        />
       </section>
 
-      <section className="border-y flex items-center justify-between w-full md:w-[50%] gap-7 border-gray-200 py-3 mx-auto px-5">
+      <section className="border-y flex items-center justify-between mb-5 w-full md:w-[50%] gap-7 border-gray-200 py-3 mx-auto px-5">
         <div className="flex items-center gap-5">
           <div className="flex gap-1 items-center cursor-pointer">
+            <EyeIcon className="text-gray-500" />
+            <p>2k</p>
+          </div>
+
+          <div className="flex gap-1 items-center cursor-pointer">
             <ThumbUpIcon className="text-gray-500" />
-            {/* <p>3ks</p> */}
+            <p>1k</p>
           </div>
 
           <Sheet open={open} onOpenChange={() => setOpen(!open)}>
@@ -163,15 +192,21 @@ export default function Blog() {
         </div>
 
         <div>
-          <ShareIcon className="text-gray-500" />
+          <ShareIcon onClick={handleShare} className="text-gray-500" />
         </div>
       </section>
 
-      <img
-        src={post?.coverImage?.url}
-        alt=""
-        className="my-5 w-full rounded-md"
-      />
+      <section className="flex gap-3 overflow-x-auto mb-5 items-center w-full justify-center">
+        {post.categories.map((category, index) => (
+          <Link
+            to={`/categories/${category.slug}`}
+            key={index}
+            className="bg-slate-900 rounded-xl capitalize px-2 py-1 text-white border text-nowrap"
+          >
+            {category.title}
+          </Link>
+        ))}
+      </section>
 
       <ClientOnly fallback={<p className="text-center">Loading content</p>}>
         {() => (
@@ -212,7 +247,7 @@ export default function Blog() {
               p: ({ children }) => <p className="my-3">{children}</p>,
               ol: ({ children }) => <ol className="my-3 ml-2">{children}</ol>,
               ul: ({ children }) => <ul className="my-3 ml-2">{children}</ul>,
-              li: ({ children }) => <li className="my-4"> - {children}</li>,
+              li: ({ children }) => <li className="my-1"> - {children}</li>,
               a: ({ children, href }) => (
                 <a
                   className="text-purple-600 hover:text-purple-800 underline underline-offset-2 transition-all duration-150"
@@ -223,7 +258,7 @@ export default function Blog() {
                 </a>
               ),
               code: ({ children }) => (
-                <code className="rounded-md bg-gray-200 p-1 text-sm">
+                <code className="rounded-md bg-gray-200 p-1 text-sm text-wrap">
                   {children}
                 </code>
               ),
@@ -233,7 +268,7 @@ export default function Blog() {
                 </blockquote>
               ),
               code_block: ({ children }) => (
-                <pre className="code-block my-3 bg-gray-200 p-1 text-sm ">
+                <pre className="code-block my-3 bg-gray-200 p-2 text-sm rounded-sm whitespace-break-spaces">
                   {children}
                 </pre>
               ),

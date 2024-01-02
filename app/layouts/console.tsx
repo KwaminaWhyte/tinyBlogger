@@ -10,7 +10,7 @@ export default function ConsoleLayout({
 }) {
   return (
     <div className="flex flex-col">
-      <div className="md:w-[85%] w-[96%] mx-auto h-20 backdrop-blur-md bg-white/50 z-50 flex gap-3 fixed top-0 left-0 right-0 items-center">
+      <div className="md:w-[75%] w-[96%] mx-auto h-20 backdrop-blur-md bg-white/50 z-50 flex gap-3 fixed top-0 left-0 right-0 items-center">
         <nav className="flex justify-between items-center w-full">
           <Link
             to="/"
@@ -45,7 +45,7 @@ export default function ConsoleLayout({
       </div>
 
       <main
-        className={`md:w-[85%] w-[96%] flex flex-col mt-20 mb-8 mx-auto bg-red-500" ${className}`}
+        className={`md:w-[75%] w-[96%] flex flex-col mt-20 mb-8 mx-auto bg-red-500" ${className}`}
       >
         {children}
       </main>

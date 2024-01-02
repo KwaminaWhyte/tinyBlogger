@@ -119,22 +119,24 @@ export default function Index() {
             </div>
           </div>
 
-          <div className="w-[35%] flex justify-between flex-col gap-3">
+          <div className="md:w-[35%] w-full flex justify-between flex-col gap-3">
             {featured.slice(3, 6).map((post, index) => (
               <Link
                 to={`/blogs/${post?.slug}`}
                 key={index}
-                className="flex gap-3"
+                className="flex gap-3 flex-1"
               >
                 <img
                   src={post?.coverImage?.url}
                   alt=""
-                  className="w-32 object-cover bg-gray-100 rounded-sm"
+                  className="w-44 h-full object-cover bg-gray-100 rounded-sm"
                 />
 
                 <div className="flex flex-col gap-3 flex-1">
                   <p className="font-semibold">{post.title}</p>
-
+                  <p className="text-gray-800 line-clamp-2">
+                    {featured[0]?.description}
+                  </p>
                   <div className="mt-auto flex flex-col">
                     {/* <p className="font-semibold ">{post?.createdBy?.name}</p> */}
                     <p className="text-gray-500 ml-auto text-xs">

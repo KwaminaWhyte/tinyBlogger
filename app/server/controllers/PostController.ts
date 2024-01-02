@@ -19,7 +19,7 @@ export default class PostController {
     const { posts } = await this.hygraph.request(
       gql`
         query {
-          posts(last: 8) {
+          posts(last: 8, stage: PUBLISHED) {
             title
             slug
             createdAt
@@ -275,7 +275,12 @@ export default class PostController {
     const { posts } = await this.hygraph.request(
       gql`
         query ($featured: Boolean!) {
-          posts(where: { featured: $featured }, last: 10) {
+          posts(
+            where: { featured: $featured }
+            first: 6
+            orderBy: createdAt_DESC
+            stage: PUBLISHED
+          ) {
             id
             title
             slug
@@ -285,6 +290,11 @@ export default class PostController {
             coverImage {
               id
               url
+            }
+            categories {
+              id
+              title
+              slug
             }
             createdBy {
               id
@@ -314,7 +324,7 @@ export default class PostController {
     const { posts } = await this.hygraph.request(
       gql`
         query {
-          posts(orderBy: updatedAt_DESC) {
+          posts(orderBy: updatedAt_DESC, stage: PUBLISHED) {
             id
             title
             slug
@@ -324,6 +334,11 @@ export default class PostController {
             coverImage {
               id
               url
+            }
+            categories {
+              id
+              title
+              slug
             }
             createdBy {
               id
@@ -353,7 +368,7 @@ export default class PostController {
     const { categories } = await this.hygraph.request(
       gql`
         query {
-          categories {
+          categories(stage: PUBLISHED) {
             id
             title
             slug

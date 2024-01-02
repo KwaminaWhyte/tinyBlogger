@@ -18,7 +18,7 @@ export default class CommentController {
     const { comments } = await this.hygraph.request(
       gql`
         query getComments() {
-          comments(stage: PUBLISHED, orderBy: comment_DESC) {
+          comments(orderBy: comment_DESC) {
             id
             name
             email

@@ -16,7 +16,7 @@ export default function PublicDetailLayout({
   return (
     <div className="flex flex-col">
       <div className="h-14 backdrop-blur-md bg-white/50 z-50 flex w-full gap-3 fixed top-0 left-0 right-0 items-center">
-        <nav className="md:w-[85%] w-[96%] mx-auto flex justify-between items-center ">
+        <nav className="md:w-[75%] w-[96%] mx-auto flex justify-between items-center ">
           <div className="flex items-center gap-3">
             <svg
               onClick={() => navigate(-1)}
@@ -40,14 +40,14 @@ export default function PublicDetailLayout({
       </div>
 
       <main
-        className={`md:w-[85%] w-[93%] flex flex-col mt-14 mb-8 mx-auto bg-red-500" ${className}`}
+        className={`md:w-[75%] w-[93%] flex flex-col mt-14 mb-8 mx-auto bg-red-500" ${className}`}
       >
         {children}
       </main>
 
       <Toaster />
 
-      {/* <footer className="md:w-[85%] w-[96%] mx-auto mt-11">
+      {/* <footer className="md:w-[75%] w-[96%] mx-auto mt-11">
         <p>Footer</p>
       </footer> */}
     </div>
