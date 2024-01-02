@@ -1,6 +1,7 @@
-import { Form, Link, NavLink, useNavigate } from "@remix-run/react";
+import { useNavigate } from "@remix-run/react";
 import React, { type ReactNode } from "react";
 import { SearchIcon } from "~/components/icons";
+import { Toaster } from "~/components/ui/sonner";
 
 export default function PublicDetailLayout({
   children,
@@ -39,10 +40,12 @@ export default function PublicDetailLayout({
       </div>
 
       <main
-        className={`md:w-[85%] w-[96%] flex flex-col mt-14 mb-8 mx-auto bg-red-500" ${className}`}
+        className={`md:w-[85%] w-[93%] flex flex-col mt-14 mb-8 mx-auto bg-red-500" ${className}`}
       >
         {children}
       </main>
+
+      <Toaster />
 
       {/* <footer className="md:w-[85%] w-[96%] mx-auto mt-11">
         <p>Footer</p>

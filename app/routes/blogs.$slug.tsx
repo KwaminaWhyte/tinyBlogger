@@ -1,10 +1,9 @@
 import {
   type MetaFunction,
   type LoaderFunction,
-  ActionFunction,
+  type ActionFunction,
 } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
-import PublicLayout from "~/layouts/public";
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import moment from "moment";
 import { ClientOnly } from "remix-utils/client-only";
 import { RichText } from "@graphcms/rich-text-react-renderer";
@@ -16,7 +15,6 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetFooter,
@@ -27,44 +25,51 @@ import {
 import { Textarea } from "~/components/ui/textarea";
 import CommentController from "~/server/controllers/CommentController";
 import PublicDetailLayout from "~/layouts/public-detail";
-
-// const comments = [
-//   {
-//     id: 1,
-//     name: "John Doe",
-//     comment:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptatibus.",
-//     createdAt: "2021-10-10",
-//   },
-//   {
-//     id: 2,
-//     name: "John Doe",
-//     comment:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptatibus.",
-//     createdAt: "2021-10-10",
-//   },
-//   {
-//     id: 3,
-//     name: "John Doe",
-//     comment:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptatibus.",
-//     createdAt: "2021-10-10",
-//   },
-//   {
-//     id: 4,
-//     name: "John Doe",
-//     comment:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptatibus.",
-//     createdAt: "2021-10-10",
-//   },
-// ];
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function Blog() {
+  const actionData = useActionData();
   const { post, slug, comments } = useLoaderData<{
     slug: string;
     post: PostDocument;
     comments: any[];
   }>();
+  const [open, setOpen] = useState(false);
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+  });
+
+  useEffect(() => {
+    const userData = localStorage.getItem("userData");
+    if (userData) {
+      setUserData(JSON.parse(userData));
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log("actionData", actionData);
+
+    setOpen(false);
+    if (actionData?.id) {
+      console.log(actionData);
+
+      toast("Comment has been submitted", {
+        description:
+          "Your comment has been submitted successfully and is awaiting moderation.",
+        // action: {
+        //   label: "Undo",
+        //   onClick: () => console.log("Undo"),
+        // },
+      });
+
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({ name: actionData.name, email: actionData.email })
+      );
+    }
+  }, [actionData]);
 
   return (
     <PublicDetailLayout>
@@ -85,7 +90,7 @@ export default function Blog() {
             {/* <p>3ks</p> */}
           </div>
 
-          <Sheet>
+          <Sheet open={open} onOpenChange={() => setOpen(!open)}>
             <SheetTrigger asChild>
               <div className="flex gap-1 items-center cursor-pointer">
                 <CommentIcon className="text-gray-500" />
@@ -95,39 +100,52 @@ export default function Blog() {
             <SheetContent className="md:min-w-[600px] w-[100vw]">
               <SheetHeader>
                 <SheetTitle>Responses ({comments.length})</SheetTitle>
-                <SheetDescription>
-                  <Form method="POST" className="border-b pb-5 border-gray-400">
-                    <input type="hidden" name="postId" value={post.id} />
-                    <input type="hidden" name="slug" value={slug} />
-                    <div className="flex flex-col gap-4 py-4">
-                      <div className="flex flex-col md:flex-row gap-5 w-full">
-                        <div className="flex flex-1 flex-col gap-1">
-                          <Label htmlFor="name">Name</Label>
-                          <Input
-                            type="text"
-                            name="name"
-                            placeholder="John Doe"
-                          />
-                        </div>
-
-                        <div className="flex flex-1 flex-col gap-1">
-                          <Label htmlFor="email">Email</Label>
-                          <Input type="email" name="email" placeholder="" />
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col gap-1">
-                        <Label htmlFor="comment">Comment</Label>
-                        <Textarea name="comment" placeholder="Your comment" />
-                      </div>
+              </SheetHeader>
+              <Form method="POST" className="border-b pb-5 border-gray-400">
+                <input type="hidden" name="postId" value={post.id} />
+                <input type="hidden" name="slug" value={slug} />
+                <div className="flex flex-col gap-4 py-4">
+                  <div className="flex flex-col md:flex-row gap-5 w-full">
+                    <div
+                      className={`"flex flex-1 flex-col gap-1 ${
+                        userData.name != "" ? "hidden" : ""
+                      }`}
+                    >
+                      <Label htmlFor="name">Name</Label>
+                      <Input
+                        type="text"
+                        name="name"
+                        placeholder="John Doe"
+                        defaultValue={userData.name}
+                      />
                     </div>
 
-                    <SheetFooter>
-                      <Button type="submit">Comment</Button>
-                    </SheetFooter>
-                  </Form>
-                </SheetDescription>
-              </SheetHeader>
+                    <div
+                      className={`"flex flex-1 flex-col gap-1 ${
+                        userData.email != "" ? "hidden" : ""
+                      }`}
+                    >
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        type="email"
+                        name="email"
+                        placeholder=""
+                        defaultValue={userData.email}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <Label htmlFor="comment">Comment</Label>
+                    <Textarea name="comment" placeholder="Your comment" />
+                  </div>
+                </div>
+
+                <SheetFooter>
+                  <Button type="submit">Comment</Button>
+                </SheetFooter>
+              </Form>
+
               <div className="grid gap-4 py-4">
                 {comments.length === 0 && (
                   <p className="text-center">No comments yet</p>
@@ -259,7 +277,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const postController = new PostController(request);
   const post = await postController.getPostBySlug(slug);
-  console.log({ post });
 
   const commentController = new CommentController(request);
   const comments = await commentController.getCommentsByPost(post.id);

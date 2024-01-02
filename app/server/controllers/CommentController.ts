@@ -71,8 +71,9 @@ export default class CommentController {
         comment: data.comment,
       }
     );
+    console.log(createComment);
 
-    return redirect(`/blogs/${data.slug}`);
+    return createComment;
   };
 
   public publishComment = async (id: string) => {

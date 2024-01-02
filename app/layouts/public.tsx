@@ -66,7 +66,7 @@ export default function PublicLayout({
       </div>
 
       <main
-        className={`md:w-[85%] w-[96%] flex flex-col mt-14 mb-8 mx-auto bg-red-500" ${className}`}
+        className={`md:w-[85%] w-[93%] flex flex-col mt-14 mb-8 mx-auto bg-red-500" ${className}`}
       >
         {children}
       </main>
