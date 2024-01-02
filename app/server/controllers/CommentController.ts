@@ -14,6 +14,25 @@ export default class CommentController {
     });
   }
 
+  public getUnpublishedComments = async () => {
+    const { comments } = await this.hygraph.request(
+      gql`
+        query getComments() {
+          comments(stage: PUBLISHED, orderBy: comment_DESC) {
+            id
+            name
+            email
+            comment
+            stage
+            createdAt
+          }
+        }
+      `
+    );
+
+    return comments;
+  };
+
   public getCommentsByPost = async (postId: string) => {
     const { comments } = await this.hygraph.request(
       gql`
@@ -78,7 +97,7 @@ export default class CommentController {
   public publishComment = async (id: string) => {
     const { publishComment } = await this.hygraph.request(
       gql`
-        mutation publishComment($id: String!) {
+        mutation publishComment($id: ID!) {
           publishComment(where: { id: $id }, to: PUBLISHED) {
             id
             title
@@ -117,11 +136,11 @@ export default class CommentController {
     return unpublishComment;
   };
 
-  public deleteComment = async (slug: string) => {
+  public deleteComment = async (id: string) => {
     const { deleteComment } = await this.hygraph.request(
       gql`
-        mutation deleteComment($slug: String!) {
-          deleteComment(where: { slug: $slug }) {
+        mutation deleteComment($id: ID!) {
+          deleteComment(where: { id: $id }) {
             id
             title
             content {
@@ -131,7 +150,7 @@ export default class CommentController {
         }
       `,
       {
-        slug,
+        id,
       }
     );
 

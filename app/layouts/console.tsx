@@ -24,6 +24,7 @@ export default function ConsoleLayout({
               { path: "/console", label: "Dashboard" },
               { path: "/console/blogs/create", label: "Create Post" },
               { path: "/console/categories/create", label: "Create Category" },
+              { path: "/console/comments", label: "Comments" },
               // { path: "/about", label: "About" },
             ].map((item, index) => (
               <NavLink
