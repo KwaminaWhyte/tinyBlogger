@@ -190,7 +190,6 @@ export default class PostController {
         featured: true,
       }
     );
-    console.log(createPost);
 
     // coverImage: {
     //   create: {

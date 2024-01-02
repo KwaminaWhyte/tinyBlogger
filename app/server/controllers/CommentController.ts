@@ -71,7 +71,6 @@ export default class CommentController {
         comment: data.comment,
       }
     );
-    console.log(createComment);
 
     return createComment;
   };

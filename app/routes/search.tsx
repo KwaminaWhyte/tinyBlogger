@@ -10,7 +10,6 @@ export default function CategoryDetails() {
     posts: any[];
     query: string;
   }>();
-  console.log({ categories, posts });
 
   return (
     <PublicLayout query={query}>

@@ -49,12 +49,8 @@ export default function Blog() {
   }, []);
 
   useEffect(() => {
-    console.log("actionData", actionData);
-
     setOpen(false);
     if (actionData?.id) {
-      console.log(actionData);
-
       toast("Comment has been submitted", {
         description:
           "Your comment has been submitted successfully and is awaiting moderation.",

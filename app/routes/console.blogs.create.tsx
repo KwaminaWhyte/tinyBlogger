@@ -38,7 +38,6 @@ export default function CreateBlog() {
     // const content = {
     //   children: ast,
     // };
-    // console.log(JSON.stringify(content, null, 2));
   }, []);
 
   return (

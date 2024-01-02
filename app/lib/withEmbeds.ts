@@ -10,7 +10,6 @@ const withEmbeds = (editor: Editor) => {
 
   //   editor.insertData = (data) => {
   //     const text = data.getData("text/plain");
-  //     console.log("data", data.getData("text/plain"));
 
   //     const html = data.getData("text/html");
 
