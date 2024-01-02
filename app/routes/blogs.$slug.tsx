@@ -238,7 +238,11 @@ export default function Blog() {
                 </pre>
               ),
               img: ({ src, title }) => (
-                <img src={src} alt={title} srcset="" className="rounded-sm" />
+                <img
+                  src={src}
+                  alt={title}
+                  className="rounded-sm w-[90%] mx-auto"
+                />
               ),
             }}
           />
