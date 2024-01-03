@@ -22,8 +22,8 @@ export default function ConsoleLayout({
           <div className="gap-3 flex">
             {[
               { path: "/console", label: "Dashboard" },
-              { path: "/console/blogs/create", label: "Create Post" },
-              { path: "/console/categories/create", label: "Create Category" },
+              { path: "/console/posts/create", label: "Create Post" },
+              { path: "/console/categories", label: "Create Category" },
               { path: "/console/comments", label: "Comments" },
               // { path: "/about", label: "About" },
             ].map((item, index) => (

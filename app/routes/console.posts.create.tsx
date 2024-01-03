@@ -72,7 +72,7 @@ export default function CreateBlog() {
       {/* coverImage */}
 
       <ClientOnly fallback={<p>Loading Editor, please be patient...</p>}>
-        {() => <SlateEditor />}
+        {() => <SlateEditor onChange={setContent} />}
       </ClientOnly>
     </ConsoleLayout>
   );
@@ -90,41 +90,7 @@ export const action: ActionFunction = async ({ request }) => {
     title,
     description,
     slug,
-    content: {
-      children: [
-        {
-          type: "bulleted-list",
-          children: [
-            {
-              type: "list-item",
-              children: [
-                {
-                  type: "list-item-child",
-                  children: [
-                    {
-                      text: "Hey ",
-                    },
-                    {
-                      type: "link",
-                      href: "thing",
-                      openInNewTab: false,
-                      children: [
-                        {
-                          text: "link text",
-                        },
-                      ],
-                    },
-                    {
-                      text: " here",
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
+    content: content,
   });
 };
 

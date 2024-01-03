@@ -5,8 +5,6 @@ import {
 } from "@remix-run/node";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import moment from "moment";
-import { ClientOnly } from "remix-utils/client-only";
-import { RichText } from "@graphcms/rich-text-react-renderer";
 import PostController from "~/server/controllers/PostController";
 import {
   CommentIcon,
@@ -32,6 +30,7 @@ import CommentController from "~/server/controllers/CommentController";
 import PublicDetailLayout from "~/layouts/public-detail";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import CustomRenderer from "~/components/custom-renderer";
 
 export default function Blog() {
   const actionData = useActionData();
@@ -67,7 +66,7 @@ export default function Blog() {
 
   useEffect(() => {
     setOpen(false);
-    if (actionData?.id) {
+    if (actionData?._id) {
       toast("Comment has been submitted", {
         description:
           "Your comment has been submitted successfully and is awaiting moderation.",
@@ -97,7 +96,7 @@ export default function Blog() {
           {moment(post.createdAt).format("MMMM DD, YYYY")}
         </p>
         <img
-          src={post?.coverImage?.url}
+          src={post?.featureImage?.src}
           alt=""
           className="w-full absolute -z-10 h-full object-cover rounded-md"
         />
@@ -127,7 +126,7 @@ export default function Blog() {
                 <SheetTitle>Responses ({comments.length})</SheetTitle>
               </SheetHeader>
               <Form method="POST" className="border-b pb-5 border-gray-400">
-                <input type="hidden" name="postId" value={post.id} />
+                <input type="hidden" name="postId" value={post._id} />
                 <input type="hidden" name="slug" value={slug} />
                 <div className="flex flex-col gap-4 py-4">
                   <div className="flex flex-col md:flex-row gap-5 w-full">
@@ -176,7 +175,7 @@ export default function Blog() {
                   <p className="text-center">No comments yet</p>
                 )}
                 {comments.map((comment) => (
-                  <div key={comment.id} className="flex flex-col">
+                  <div key={comment._id} className="flex flex-col">
                     <div className="flex flex-col">
                       <p className="font-bold">{comment.name}</p>
                       <p className="ml-3 text-sm">{comment.comment}</p>
@@ -208,81 +207,7 @@ export default function Blog() {
         ))}
       </section>
 
-      <ClientOnly fallback={<p className="text-center">Loading content</p>}>
-        {() => (
-          <RichText
-            content={post?.content?.raw.children}
-            renderers={{
-              h1: ({ children }) => (
-                <h1 className="md:text-6xl my-4 text-3xl font-bold montserrat-font">
-                  {children}
-                </h1>
-              ),
-              h2: ({ children }) => (
-                <h2 className="md:text-5xl my-3 text-2xl font-bold montserrat-font">
-                  {children}
-                </h2>
-              ),
-              h3: ({ children }) => (
-                <h3 className="md:text-4xl my-2 text-2xl font-bold montserrat-font">
-                  {children}
-                </h3>
-              ),
-              h4: ({ children }) => (
-                <h4 className="my-1.5 md:text-3xl text-xl font-bold montserrat-font">
-                  {children}
-                </h4>
-              ),
-              h5: ({ children }) => (
-                <h4 className="my-1 md:text-2xl text-lg font-bold montserrat-font">
-                  {children}
-                </h4>
-              ),
-              h6: ({ children }) => (
-                <h4 className="my-0.5 md:text-xl text-base font-bold montserrat-font">
-                  {children}
-                </h4>
-              ),
-              bold: ({ children }) => <strong>{children}</strong>,
-              p: ({ children }) => <p className="my-3">{children}</p>,
-              ol: ({ children }) => <ol className="my-3 ml-2">{children}</ol>,
-              ul: ({ children }) => <ul className="my-3 ml-2">{children}</ul>,
-              li: ({ children }) => <li className="my-1"> - {children}</li>,
-              a: ({ children, href }) => (
-                <a
-                  className="text-purple-600 hover:text-purple-800 underline underline-offset-2 transition-all duration-150"
-                  href={href}
-                  target="_black"
-                >
-                  {children}
-                </a>
-              ),
-              code: ({ children }) => (
-                <code className="rounded-md bg-gray-200 p-1 text-sm text-wrap">
-                  {children}
-                </code>
-              ),
-              blockquote: ({ children }) => (
-                <blockquote className="my-3 border-l-2 border-purple-800 pl-4">
-                  {children}
-                </blockquote>
-              ),
-              code_block: ({ children }) => (
-                <pre className="code-block my-3 bg-gray-200 p-2 text-sm rounded-sm whitespace-break-spaces">
-                  {children}
-                </pre>
-              ),
-              img: ({ src, title }) => (
-                <img
-                  src={src}
-                  alt={title}
-                  className="rounded-sm w-[90%] mx-auto"
-                />
-              ),
-            }}
-          />
-        )}
-      </ClientOnly>
+      <CustomRenderer content={JSON.parse(post?.content)} />
     </PublicDetailLayout>
   );
 }
@@ -307,14 +232,12 @@ export const action: ActionFunction = async ({ request }) => {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const { slug } = params as { slug: string };
-  // const url = new URL(request.url);
-  // const slug = url.searchParams.get("slug") as string;
 
   const postController = new PostController(request);
   const post = await postController.getPostBySlug(slug);
 
   const commentController = new CommentController(request);
-  const comments = await commentController.getCommentsByPost(post.id);
+  const comments = await commentController.getCommentsByPost(post._id);
 
   return { post, slug, comments };
 };

@@ -16,6 +16,15 @@ import {
 } from "slate-react";
 import { Button } from "./ui/button";
 import withEmbeds from "~/lib/withEmbeds";
+import ItalicNode from "./slate-nodes/ItalicNode";
+import CodeBlockNode from "./slate-nodes/CodeBlockNode";
+import EmbedNode from "./slate-nodes/EmbedNode";
+import {
+  ListItemNode,
+  OrderedListNode,
+  UnorderedListNode,
+} from "./slate-nodes/ListINode";
+import AlignmentNode from "./slate-nodes/AlignmentNode";
 
 type CustomText = {
   bold?: boolean;
@@ -24,7 +33,17 @@ type CustomText = {
 };
 
 type CustomElement = {
-  type: "paragraph" | "link" | "code" | "h1" | "underline" | "image" | "video";
+  type:
+    | "paragraph"
+    | "link"
+    | "code"
+    | "h1"
+    | "underline"
+    | "image"
+    | "video"
+    | "bulleted-list"
+    | "list-item"
+    | "list-item-child";
   children: CustomText[] | CustomElement[];
   href?: string;
   url?: string;
@@ -56,7 +75,6 @@ const CustomEditor = {
   handlePaste(editor: Editor, event: ClipboardEvent) {
     const text = event.clipboardData.getData("text/plain");
     const html = event.clipboardData.getData("text/html");
-    console.log("embed", event.clipboardData.getData("text/html"));
   },
 
   isBoldMarkActive(editor: Editor) {
@@ -256,18 +274,49 @@ const initialValue: CustomElement[] = [
     ],
   },
   {
-    type: "video",
-    url: "https://youtu.be/yXd0z1shhoU",
-    children: [{ text: "" }],
+    type: "bulleted-list",
+    children: [
+      {
+        type: "list-item",
+        children: [
+          {
+            type: "list-item-child",
+            children: [
+              {
+                text: "Hey ",
+              },
+              {
+                type: "link",
+                href: "thing",
+                openInNewTab: false,
+                children: [
+                  {
+                    text: "link text",
+                  },
+                ],
+              },
+              {
+                text: " here",
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
-  {
-    type: "image",
-    children: [{ text: "" }],
-    url: "https://plus.unsplash.com/premium_photo-1665423291654-f937fd6e649e?q=80&w=3269&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
+  // {
+  //   type: "video",
+  //   url: "https://youtu.be/yXd0z1shhoU",
+  //   children: [{ text: "" }],
+  // },
+  // {
+  //   type: "image",
+  //   children: [{ text: "" }],
+  //   url: "https://plus.unsplash.com/premium_photo-1665423291654-f937fd6e649e?q=80&w=3269&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  // },
 ];
 
-export default function SlateEditor() {
+export default function SlateEditor({ onChange }) {
   const editor = React.useMemo(() => withEmbeds(withReact(createEditor())), []);
   const [value, setValue] = React.useState<CustomElement[]>(initialValue);
 
@@ -276,17 +325,29 @@ export default function SlateEditor() {
       case "link":
         return <LinkElement {...props} />;
       case "code":
-        return <CodeBlock {...props} />;
+        return <CodeBlockNode {...props} />;
       case "h1":
         return <H1 {...props} />;
       case "underline":
         return <Underline {...props} />;
       case "italic":
-        return <Italic {...props} />;
+        return <ItalicNode {...props} />;
       case "image":
         return <CustomImage {...props} />;
       case "video":
         return <VideoElement {...props} />;
+      case "embed":
+        return <EmbedNode {...props} />;
+      case "list-item":
+        return <ListItemNode {...props} />;
+      case "ordered-list":
+        return <OrderedListNode {...props} />;
+      case "unordered-list":
+        return <UnorderedListNode {...props} />;
+      // case 'image': return <ImageNode {...props} />
+      // case 'imageLink': return <ImageLinkNode {...props} />
+      case "alignment":
+        return <AlignmentNode {...props} />;
       default:
         return <DefaultElement {...props} />;
     }
@@ -299,20 +360,27 @@ export default function SlateEditor() {
   return (
     <Slate
       editor={editor}
-      initialValue={initialValue}
+      initialValue={value}
+      onValueChange={(value) => {
+        setValue(value);
+        onChange(value);
+      }}
       onChange={(value) => {
+        // setValue(value);
         const isAstChang = editor.operations.some(
           (op) => op.type === "set_selection"
         );
 
         if (isAstChang) {
           const content = JSON.stringify(value);
-          localStorage.setItem("content", content);
+
+          // localStorage.setItem("contsent", content);
         }
       }}
     >
       <div className="flex gap-1">
         <Button
+          size="ms"
           onMouseDown={(event) => {
             event.preventDefault();
             CustomEditor.toggleBoldMark(editor);
@@ -323,6 +391,7 @@ export default function SlateEditor() {
         </Button>
 
         <Button
+          size="ms"
           onMouseDown={(event) => {
             event.preventDefault();
             CustomEditor.toggleItalicMark(editor);
@@ -333,6 +402,7 @@ export default function SlateEditor() {
         </Button>
 
         <Button
+          size="ms"
           onMouseDown={(event) => {
             event.preventDefault();
             CustomEditor.toggleUnderline(editor);
@@ -343,6 +413,7 @@ export default function SlateEditor() {
         </Button>
 
         <Button
+          size="ms"
           onMouseDown={(event) => {
             event.preventDefault();
             CustomEditor.toggleCodeBlock(editor);
@@ -353,6 +424,7 @@ export default function SlateEditor() {
         </Button>
 
         <Button
+          size="ms"
           onMouseDown={(event) => {
             event.preventDefault();
             CustomEditor.toggleLink(editor);
@@ -363,6 +435,7 @@ export default function SlateEditor() {
         </Button>
 
         <Button
+          size="ms"
           onMouseDown={(event) => {
             event.preventDefault();
             CustomEditor.toggleBulletedList(editor);
@@ -373,6 +446,7 @@ export default function SlateEditor() {
         </Button>
 
         <Button
+          size="ms"
           onMouseDown={(event) => {
             event.preventDefault();
             CustomEditor.toggleNumberedList(editor);
@@ -383,6 +457,7 @@ export default function SlateEditor() {
         </Button>
 
         <Button
+          size="ms"
           onMouseDown={(event) => {
             event.preventDefault();
             CustomEditor.toggleBlockQuote(editor);
@@ -393,6 +468,7 @@ export default function SlateEditor() {
         </Button>
 
         <Button
+          size="ms"
           onMouseDown={(event) => {
             event.preventDefault();
             CustomEditor.toggleH1(editor);
@@ -403,6 +479,7 @@ export default function SlateEditor() {
         </Button>
 
         <Button
+          size="ms"
           onMouseDown={(event) => {
             event.preventDefault();
             CustomEditor.toggleH1(editor);
@@ -413,6 +490,7 @@ export default function SlateEditor() {
         </Button>
 
         <Button
+          size="ms"
           onMouseDown={(event) => {
             event.preventDefault();
             CustomEditor.toggleH1(editor);
@@ -424,18 +502,16 @@ export default function SlateEditor() {
       </div>
 
       <Editable
-        spellCheck
-        autoFocus
+        // spellCheck
+        // autoFocus
         onChange={(value) => {
-          const content = JSON.stringify(value);
-          // console.log(content);
-
+          // const content = JSON.stringify(value);
           // localStorage.setItem("content", content);
         }}
-        onPaste={(event) => {
-          event.preventDefault();
-          CustomEditor.handlePaste(editor, event);
-        }}
+        // onPaste={(event) => {
+        // event.preventDefault();
+        // CustomEditor.handlePaste(editor, event);
+        // }}
         className="bg-gray-100 p-2"
         renderElement={renderElement}
         renderLeaf={renderLeaf}
@@ -450,43 +526,36 @@ export default function SlateEditor() {
               CustomEditor.toggleCodeBlock(editor);
               break;
             }
-
             case "b": {
               event.preventDefault();
               CustomEditor.toggleBoldMark(editor);
               break;
             }
-
             case "i": {
               event.preventDefault();
               CustomEditor.toggleItalicMark(editor);
               break;
             }
-
             case "l": {
               event.preventDefault();
               CustomEditor.toggleLink(editor);
               break;
             }
-
             case "u": {
               event.preventDefault();
               CustomEditor.toggleBulletedList(editor);
               break;
             }
-
             case "o": {
               event.preventDefault();
               CustomEditor.toggleNumberedList(editor);
               break;
             }
-
             case "q": {
               event.preventDefault();
               CustomEditor.toggleBlockQuote(editor);
               break;
             }
-
             case "h": {
               event.preventDefault();
               CustomEditor.toggleH1(editor);
@@ -538,22 +607,6 @@ const LinkElement = (props) => {
     >
       {props.children}
     </a>
-  );
-};
-
-const CodeBlock = (props) => {
-  return (
-    <pre {...props.attributes} style={{ backgroundColor: "red" }}>
-      <code>{props.children}</code>
-    </pre>
-  );
-};
-
-const Italic = (props) => {
-  return (
-    <em {...props.attributes} className="italic">
-      {props.children}
-    </em>
   );
 };
 

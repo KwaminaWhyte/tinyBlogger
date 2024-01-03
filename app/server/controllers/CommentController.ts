@@ -1,5 +1,6 @@
 import { redirect } from "@remix-run/node";
 import { GraphQLClient, gql } from "graphql-request";
+import Comment from "../models/Comment";
 
 export default class CommentController {
   private request: Request;
@@ -14,41 +15,28 @@ export default class CommentController {
     });
   }
 
-  public getUnpublishedComments = async () => {
-    const { comments } = await this.hygraph.request(
-      gql`
-        query getComments() {
-          comments(orderBy: comment_DESC) {
-            id
-            name
-            email
-            comment
-            stage
-            createdAt
-          }
-        }
-      `
-    );
+  public getPublishedComments = async () => {
+    const comments = await Comment.find({ stage: "PUBLISHED" });
+    return comments;
+  };
 
+  public getUnpublishedComments = async () => {
+    const comments = await Comment.find({ stage: "DRAFT" });
+    return comments;
+  };
+
+  public getUnlistedComments = async () => {
+    const comments = await Comment.find({ stage: "UNLISTED" });
     return comments;
   };
 
   public getCommentsByPost = async (postId: string) => {
-    const { comments } = await this.hygraph.request(
-      gql`
-        query getComments($postId: ID!) {
-          comments(where: { post: { id: $postId } }, orderBy: createdAt_DESC) {
-            id
-            name
-            email
-            comment
-          }
-        }
-      `,
-      {
-        postId,
-      }
-    );
+    const comments = await Comment.find({
+      post: postId,
+      stage: "PUBLISHED",
+    }).sort({
+      createdAt: "desc",
+    });
 
     return comments;
   };
@@ -60,106 +48,49 @@ export default class CommentController {
     comment: string;
     slug: string;
   }) => {
-    const { createComment } = await this.hygraph.request(
-      gql`
-        mutation newComment(
-          $name: String!
-          $email: String!
-          $comment: String!
-          $postId: ID!
-        ) {
-          createComment(
-            data: {
-              name: $name
-              email: $email
-              comment: $comment
-              post: { connect: { id: $postId } }
-            }
-          ) {
-            id
-            name
-            email
-            comment
-          }
-        }
-      `,
-      {
-        postId: data.postId,
-        name: data.name,
-        email: data.email,
-        comment: data.comment,
-      }
-    );
+    const newComment = await Comment.create({
+      post: data.postId,
+      name: data.name,
+      email: data.email,
+      comment: data.comment,
+    });
 
-    return createComment;
+    return newComment;
   };
 
   public publishComment = async (id: string) => {
-    const { publishComment } = await this.hygraph.request(
-      gql`
-        mutation publishComment($id: ID!) {
-          publishComment(where: { id: $id }, to: PUBLISHED) {
-            id
-            title
-            content {
-              raw
-            }
-          }
-        }
-      `,
+    const publishedComment = await Comment.findByIdAndUpdate(
+      id,
       {
-        id,
-      }
+        stage: "PUBLISHED",
+      },
+      { new: true }
     );
 
-    return publishComment;
+    return publishedComment;
   };
 
-  public unpublishComment = async (slug: string) => {
-    const { unpublishComment } = await this.hygraph.request(
-      gql`
-        mutation unpublishComment($slug: String!) {
-          unpublishComment(where: { slug: $slug }, from: PUBLISHED) {
-            id
-            title
-            content {
-              raw
-            }
-          }
-        }
-      `,
+  public unlistComment = async (id: string) => {
+    const unlistedComment = await Comment.findByIdAndUpdate(
+      id,
       {
-        slug,
-      }
+        stage: "UNLISTED",
+      },
+      { new: true }
     );
 
-    return unpublishComment;
+    return unlistedComment;
   };
 
   public deleteComment = async (id: string) => {
-    const { deleteComment } = await this.hygraph.request(
-      gql`
-        mutation deleteComment($id: ID!) {
-          deleteComment(where: { id: $id }) {
-            id
-            title
-            content {
-              raw
-            }
-          }
-        }
-      `,
-      {
-        id,
-      }
-    );
-
-    return deleteComment;
+    await Comment.findByIdAndDelete(id);
+    return true;
   };
 
-  public updateComment = async (_id: string, body: any) => {
+  public updateComment = async (_id: string, comment: any) => {
     try {
-      await Comment.findByIdAndUpdate(_id, body);
+      await Comment.findByIdAndUpdate(_id, { comment });
+      return true;
     } catch (error) {
       console.log(error);
     }

@@ -1,25 +1,58 @@
-import { type Document } from "mongoose";
-
-export interface UserDocument extends Document {
-  id: string;
+export type UserDocument = {
+  _id: string;
   email: string;
   password: string;
   firstName: string;
   lastName: string;
-}
+};
 
 export type PostDocument = {
-  id: string;
+  _id: string;
+  user: UserDocument;
   title: string;
   description: string;
   content: string;
   slug: string;
-  categories: string[];
-  coverImage: {
-    url: string;
-    id: string;
+  categories: CategoryDocument[];
+  featureImage: {
+    src: string;
+    _id: string;
   };
   tags: string[];
+  likes: number;
+  featured: boolean;
+  stage: "PUBLISHED" | "DRAFT" | "UNLISTED";
+  comments: CommentDocument[];
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type CategoryDocument = {
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  featured: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type CommentDocument = {
+  _id: string;
+  post: PostDocument;
+  name: string;
+  email: string;
+  comment: string;
+  stage: "PUBLISHED" | "DRAFT" | "UNLISTED";
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type ImageDocument = {
+  _id: string;
+  title: string;
+  url: string;
+  externalId: string;
   createdAt: Date;
   updatedAt: Date;
 };

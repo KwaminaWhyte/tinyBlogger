@@ -1,7 +1,8 @@
 import { type Model, Schema } from "mongoose";
 import { mongoose } from "~/server/mongoose";
+import type { PostDocument } from "../types";
 
-const postSchema = new Schema(
+const postSchema = new Schema<PostDocument>(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -24,8 +25,10 @@ const postSchema = new Schema(
       type: String,
       required: true,
     },
-    image: {
-      type: String,
+    featureImage: {
+      type: Schema.Types.ObjectId,
+      ref: "images",
+      required: true,
     },
     likes: {
       type: Number,
@@ -35,20 +38,22 @@ const postSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    stage: {
+      type: String,
+      enum: ["PUBLISHED", "DRAFT", "UNLISTED"],
+      default: "DRAFT",
+    },
+    categories: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "categories",
+        required: true,
+      },
+    ],
     comments: [
       {
-        username: {
-          type: String,
-          required: true,
-        },
-        email: {
-          type: String,
-          required: true,
-        },
-        content: {
-          type: String,
-          required: true,
-        },
+        type: Schema.Types.ObjectId,
+        ref: "users",
       },
     ],
   },
@@ -57,11 +62,11 @@ const postSchema = new Schema(
   }
 );
 
-let Post: Model<any>;
+let Post: Model<PostDocument>;
 try {
-  Post = mongoose.model<any>("posts");
+  Post = mongoose.model<PostDocument>("posts");
 } catch (error) {
-  Post = mongoose.model<any>("posts", postSchema);
+  Post = mongoose.model<PostDocument>("posts", postSchema);
 }
 
 export default Post;

@@ -1,7 +1,8 @@
 import { redirect } from "@remix-run/node";
 import Post from "../models/Post";
 import { GraphQLClient, gql } from "graphql-request";
-
+import fs from "fs";
+import Category from "../models/Category";
 export default class PostController {
   private request: Request;
   private hygraph: any;
@@ -16,74 +17,87 @@ export default class PostController {
   }
 
   public getPosts = async () => {
-    const { posts } = await this.hygraph.request(
-      gql`
-        query {
-          posts(last: 8, stage: PUBLISHED) {
-            title
-            slug
-            createdAt
-            description
-            featured
-            categories {
-              id
-              title
-              slug
-            }
-            coverImage {
-              id
-              url
-            }
-            createdBy {
-              id
-              name
-            }
-          }
-        }
-      `,
-      {
-        featured: true,
-      }
-    );
+    // const { posts } = await this.hygraph.request(
+    //   gql`
+    //     query {
+    //       posts(last: 8, stage: PUBLISHED) {
+    //         title
+    //         slug
+    //         createdAt
+    //         description
+    //         featured
+    //         categories {
+    //           id
+    //           title
+    //           slug
+    //         }
+    //         coverImage {
+    //           id
+    //           url
+    //         }
+    //         createdBy {
+    //           id
+    //           name
+    //         }
+    //       }
+    //     }
+    //   `,
+    //   {
+    //     featured: true,
+    //   }
+    // );
 
-    return posts;
-
-    // try {
-    //   const posts = await Post.find();
-    //   return posts;
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      const posts = await Post.find();
+      return posts;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   public getPostBySlug = async (slug: string) => {
-    const { post } = await this.hygraph.request(
-      gql`
-        query ($slug: String!) {
-          post(where: { slug: $slug }) {
-            id
-            title
-            description
-            slug
-            categories {
-              id
-              title
-              slug
-            }
-            content {
-              raw
-            }
-            coverImage {
-              id
-              url
-            }
-          }
-        }
-      `,
-      {
-        slug,
-      }
-    );
+    // const { post } = await this.hygraph.request(
+    //   gql`
+    //     query ($slug: String!) {
+    //       post(where: { slug: $slug }) {
+    //         id
+    //         title
+    //         description
+    //         slug
+    //         categories {
+    //           id
+    //           title
+    //           slug
+    //         }
+    //         content {
+    //           raw
+    //         }
+    //         coverImage {
+    //           id
+    //           url
+    //         }
+    //       }
+    //     }
+    //   `,
+    //   {
+    //     slug,
+    //   }
+    // );
+
+    // const jsonData = JSON.stringify(post?.content?.raw.children);
+    // // Specify the file path and name
+    // const filePath = "example.json";
+
+    // // Write the JSON data to the file
+    // fs.writeFile(filePath, jsonData, "utf8", (err) => {
+    //   if (err) {
+    //     console.error("Error writing to file:", err);
+    //   } else {
+    //     console.log(`Data has been written to ${filePath}`);
+    //   }
+    // });
+
+    const post = await Post.findOne({ slug }).populate("categories");
 
     return post;
   };
@@ -118,34 +132,7 @@ export default class PostController {
   };
 
   public getPostById = async (id: string) => {
-    const { post } = await this.hygraph.request(
-      gql`
-        query getPost($id: ID!) {
-          post(where: { id: $id }) {
-            title
-            createdAt
-            description
-            featured
-            id
-            categories {
-              id
-              title
-              slug
-            }
-            content {
-              raw
-            }
-            coverImage {
-              id
-              url
-            }
-          }
-        }
-      `,
-      {
-        id,
-      }
-    );
+    const post = await Post.findById(id);
 
     return post;
   };
@@ -154,50 +141,16 @@ export default class PostController {
     title: string;
     slug: string;
     description: string;
-    content: any;
+    content: string;
   }) => {
-    const { createPost } = await this.hygraph.request(
-      gql`
-        mutation newPost(
-          $title: String!
-          $slug: String!
-          $description: String!
-          $content: RichTextAST!
-          $featured: Boolean!
-        ) {
-          createPost(
-            data: {
-              title: $title
-              slug: $slug
-              description: $description
-              content: $content
-              featured: $featured
-            }
-          ) {
-            id
-            title
-            content {
-              raw
-            }
-          }
-        }
-      `,
-      {
-        title: data.title,
-        slug: data.slug,
-        description: data.description,
-        content: data.content,
-        featured: true,
-      }
-    );
-
-    // coverImage: {
-    //   create: {
-    //     handle: "v30Okuf2S2ftz3knUu4g"
-    //     fileName: "somes.png"
-    //   }
-    // }
-    return redirect(`/console/blogs/${createPost.id}`);
+    const newPost = await Post.create({
+      title: data.title,
+      slug: data.slug,
+      description: data.description,
+      content: data.content,
+      featured: true,
+    });
+    return redirect(`/console/blogs/${newPost._id}`);
   };
 
   public publishPost = async (slug: string) => {
@@ -272,149 +225,98 @@ export default class PostController {
   };
 
   public getFeaturedPosts = async () => {
-    const { posts } = await this.hygraph.request(
-      gql`
-        query ($featured: Boolean!) {
-          posts(
-            where: { featured: $featured }
-            first: 6
-            orderBy: createdAt_DESC
-            stage: PUBLISHED
-          ) {
-            id
-            title
-            slug
-            createdAt
-            description
-            featured
-            coverImage {
-              id
-              url
-            }
-            categories {
-              id
-              title
-              slug
-            }
-            createdBy {
-              id
-              name
-            }
-          }
-        }
-      `,
-      {
-        featured: true,
-      }
-    );
+    // const { posts } = await this.hygraph.request(
+    //   gql`
+    //     query ($featured: Boolean!) {
+    //       posts(
+    //         where: { featured: $featured }
+    //         first: 6
+    //         orderBy: createdAt_DESC
+    //         stage: PUBLISHED
+    //       ) {
+    //         id
+    //         title
+    //         slug
+    //         createdAt
+    //         description
+    //         featured
+    //         coverImage {
+    //           id
+    //           url
+    //         }
+    //         categories {
+    //           id
+    //           title
+    //           slug
+    //         }
+    //         createdBy {
+    //           id
+    //           name
+    //         }
+    //       }
+    //     }
+    //   `,
+    //   {
+    //     featured: true,
+    //   }
+    // );
 
-    return posts;
-
-    // try {
-    //   const posts = await Post.find({ featured: true })
-    //     .select("-content")
-    //     .limit(6);
-    //   return posts;
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      const posts = await Post.find({ featured: true, stage: "PUBLISHED" })
+        .select("-content")
+        .limit(6);
+      return posts;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   public getLatestPosts = async () => {
-    const { posts } = await this.hygraph.request(
-      gql`
-        query {
-          posts(orderBy: updatedAt_DESC, stage: PUBLISHED) {
-            id
-            title
-            slug
-            createdAt
-            description
-            featured
-            coverImage {
-              id
-              url
-            }
-            categories {
-              id
-              title
-              slug
-            }
-            createdBy {
-              id
-              name
-            }
-          }
-        }
-      `,
-      {
-        featured: true,
-      }
-    );
-
-    return posts;
-
-    // try {
-    //   const posts = await Post.find({ featured: true })
-    //     .select("-content")
-    //     .limit(6);
-    //   return posts;
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      const posts = await Post.find({ featured: true })
+        .select("-content")
+        .sort({ createdAt: "desc" })
+        .limit(6);
+      return posts;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   public getCategories = async () => {
-    const { categories } = await this.hygraph.request(
-      gql`
-        query {
-          categories(stage: PUBLISHED) {
-            id
-            title
-            slug
-            description
-            createdAt
-          }
-        }
-      `,
-      {
-        featured: true,
-      }
-    );
+    // const { categories } = await this.hygraph.request(
+    //   gql`
+    //     query {
+    //       categories(stage: PUBLISHED) {
+    //         id
+    //         title
+    //         slug
+    //         description
+    //         createdAt
+    //       }
+    //     }
+    //   `,
+    //   {
+    //     featured: true,
+    //   }
+    // );
+
+    const categories = await Category.find();
 
     return categories;
   };
 
   public createCategory = async (data: {
     title: string;
-    slug: string;
     description: string;
   }) => {
-    const { createCategory } = await this.hygraph.request(
-      gql`
-        mutation newCategory(
-          $title: String!
-          $slug: String!
-          $description: String!
-        ) {
-          createCategory(
-            data: { title: $title, slug: $slug, description: $description }
-          ) {
-            id
-            title
-            description
-          }
-        }
-      `,
-      {
-        title: data.title,
-        slug: data.slug,
-        description: data.description,
-      }
-    );
-    console.log(createCategory);
+    const newCategory = await Category.create({
+      title: data.title,
+      slug: this.genetateSlug(data.title),
+      description: data.description,
+    });
 
-    return createCategory;
+    return newCategory;
   };
 
   public getCategoryBySlug = async (slug: string) => {
@@ -497,5 +399,12 @@ export default class PostController {
     );
 
     return posts;
+  };
+
+  genetateSlug = (title: string) => {
+    return title
+      .toLowerCase()
+      .replace(/[^\w ]+/g, "")
+      .replace(/ +/g, "-");
   };
 }
