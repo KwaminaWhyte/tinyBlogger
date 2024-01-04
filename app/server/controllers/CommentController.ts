@@ -1,5 +1,4 @@
 import { redirect } from "@remix-run/node";
-import { GraphQLClient, gql } from "graphql-request";
 import Comment from "../models/Comment";
 
 export default class CommentController {
@@ -8,11 +7,6 @@ export default class CommentController {
 
   constructor(request: Request) {
     this.request = request;
-    this.hygraph = new GraphQLClient(`${process.env.HYGRAPH_ENDPOINT}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.HYGRAPH_TOKEN}`,
-      },
-    });
   }
 
   public getPublishedComments = async () => {

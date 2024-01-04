@@ -32,4 +32,9 @@ try {
   Category = mongoose.model<CategoryDocument>("categories", categorySchema);
 }
 
+Category.createIndexes({
+  title: "text",
+  description: "text",
+});
+
 export default Category;

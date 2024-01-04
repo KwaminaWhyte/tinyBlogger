@@ -69,4 +69,9 @@ try {
   Post = mongoose.model<PostDocument>("posts", postSchema);
 }
 
+Post.createIndexes({
+  title: "text",
+  description: "text",
+});
+
 export default Post;
