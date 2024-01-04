@@ -11,24 +11,24 @@ const postSchema = new Schema<PostDocument>(
     },
     title: {
       type: String,
-      required: true,
+      // required: true,
     },
     slug: {
       type: String,
-      required: true,
+      // required: true,
     },
     description: {
       type: String,
-      required: true,
+      // required: true,
     },
     content: {
       type: String,
-      required: true,
+      // required: true,
     },
     featureImage: {
       type: Schema.Types.ObjectId,
       ref: "images",
-      required: true,
+      // required: true,
     },
     likes: {
       type: Number,
@@ -47,7 +47,7 @@ const postSchema = new Schema<PostDocument>(
       {
         type: Schema.Types.ObjectId,
         ref: "categories",
-        required: true,
+        // required: true,
       },
     ],
     comments: [

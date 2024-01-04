@@ -4,7 +4,7 @@ import { useSubmit } from "@remix-run/react";
 import React, { useEffect, useState } from "react";
 import { ClientOnly } from "remix-utils/client-only";
 import ConsoleLayout from "~/layouts/console";
-import SlateEditor from "~/components/state-editor.client";
+import { PlateEditor } from "~/components/plate-editor.client";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -31,14 +31,7 @@ export default function CreateBlog() {
     );
   };
 
-  useEffect(() => {
-    // const htmlString =
-    //   '<ul><li>Hey <a href="thing">link text</a> here</li></ul>';
-    // // const ast = htmlToSlateASTSync(htmlString);
-    // const content = {
-    //   children: ast,
-    // };
-  }, []);
+  console.log(content);
 
   return (
     <ConsoleLayout className="gap-5">
@@ -72,7 +65,19 @@ export default function CreateBlog() {
       {/* coverImage */}
 
       <ClientOnly fallback={<p>Loading Editor, please be patient...</p>}>
-        {() => <SlateEditor onChange={setContent} />}
+        {() => (
+          <PlateEditor
+            onChange={setContent}
+            value={content}
+            initialValue={[
+              {
+                id: "1",
+                type: "p",
+                children: [{ text: "Hello, World!" }],
+              },
+            ]}
+          />
+        )}
       </ClientOnly>
     </ConsoleLayout>
   );

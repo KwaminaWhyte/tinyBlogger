@@ -30,7 +30,8 @@ import CommentController from "~/server/controllers/CommentController";
 import PublicDetailLayout from "~/layouts/public-detail";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import CustomRenderer from "~/components/custom-renderer";
+import { ClientOnly } from "remix-utils/client-only";
+import { PlateEditor } from "~/components/plate-editor.client";
 
 export default function Blog() {
   const actionData = useActionData();
@@ -207,7 +208,16 @@ export default function Blog() {
         ))}
       </section>
 
-      <CustomRenderer content={JSON.parse(post?.content)} />
+      <ClientOnly fallback={<p>Loading Editor, please be patient...</p>}>
+        {() => (
+          <PlateEditor
+            forClients={true}
+            readOnly={true}
+            value={JSON.parse(post?.content)}
+            initialValue={JSON.parse(post?.content)}
+          />
+        )}
+      </ClientOnly>
     </PublicDetailLayout>
   );
 }

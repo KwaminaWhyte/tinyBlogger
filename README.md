@@ -41,3 +41,37 @@ Make sure to deploy the output of `remix build`
 
 - [html-to-slate-ast](https://github.com/hygraph/rich-text/tree/main/packages/html-to-slate-ast)
 - [somethign](https://github.com/jasonkuhrt/graphql-request/blob/main/examples/request-handle-raw-response.ts)
+
+// {
+// "$schema": "https://platejs.org/schema.json",
+// "style": "default",
+// "rsc": false,
+// "tailwind": {
+// "config": "tailwind.config.js",
+// "css": "app/tailwind.css",
+// "baseColor": "slate",
+// "cssVariables": true,
+// "prefix": ""
+// },
+// "aliases": {
+// "components": "~/components"
+// }
+// }
+
+{
+"$schema": "https://ui.shadcn.com/schema.json",
+"style": "new-york",
+"rsc": false,
+"tsx": true,
+"tailwind": {
+"config": "tailwind.config.js",
+"css": "app/tailwind.css",
+"baseColor": "slate",
+"cssVariables": true,
+"prefix": ""
+},
+"aliases": {
+"components": "~/components",
+"utils": "~/lib/utils"
+}
+}

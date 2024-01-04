@@ -1,13 +1,27 @@
-import { type MetaFunction, type LoaderFunction } from "@remix-run/node";
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import {
+  type MetaFunction,
+  type LoaderFunction,
+  type ActionFunction,
+} from "@remix-run/node";
+import { Link, useLoaderData, useSubmit } from "@remix-run/react";
 import moment from "moment";
 import PostController from "~/server/controllers/PostController";
-import ConsoleLayout from "~/layouts/console";
-import CustomRenderer from "~/components/custom-renderer";
 import { EyeIcon, ShareIcon, ThumbUpIcon } from "~/components/icons";
+import { ClientOnly } from "remix-utils/client-only";
+import { PlateEditor } from "~/components/plate-editor.client";
+import { useState } from "react";
+import ConsoleDetailLayout from "~/layouts/console-detail";
+import type { PostDocument } from "~/server/types";
+import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
+import { Input } from "~/components/ui/input";
 
 export default function Blog() {
-  const { post } = useLoaderData<{ post: any }>();
+  const submit = useSubmit();
+  const { post, postId } = useLoaderData<{ post: PostDocument }>();
+  const [content, setContent] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleShare = async () => {
     try {
@@ -21,8 +35,63 @@ export default function Blog() {
     }
   };
 
+  const handleSubmit = () => {
+    submit(
+      {
+        postId,
+        title,
+        description,
+        // slug: genetateSlug(title),
+        content: JSON.stringify(content),
+      },
+      {
+        method: "post",
+        encType: "multipart/form-data",
+      }
+    );
+  };
+
   return (
-    <ConsoleLayout>
+    <ConsoleDetailLayout
+      rightContent={
+        <div className="flex items-center gap-3">
+          <p
+            className={`text-sm px-2 py-1 text-white font-semibold rounded-lg ${
+              post.stage == "DRAFT" ? "bg-red-500 " : "bg-green-500"
+            } text-foreground`}
+          >
+            {post.stage}
+          </p>
+
+          <Button variant="outline">Save</Button>
+
+          <Button>Save & Publish</Button>
+        </div>
+      }
+    >
+      <section>
+        <Button onClick={() => handleSubmit()}>Save</Button>
+
+        <div className="grid w-full items-center gap-1.5">
+          <Label htmlFor="title">Title</Label>
+          <Input
+            id="title"
+            type="text"
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+          />
+        </div>
+
+        <div className="grid w-full items-center gap-1.5">
+          <Label htmlFor="description">Description</Label>
+          <Input
+            id="description"
+            type="text"
+            onChange={(e) => setDescription(e.target.value)}
+            value={description}
+          />
+        </div>
+      </section>
       <section className="rounded-md  relative flex flex-col gap-5 my-11 h-96 items-center justify-center bg-black/70 p-4 ">
         <h1 className="md:text-6xl text-white text-3xl text-center md:w-[70%] mx-auto">
           {post?.title}
@@ -69,10 +138,35 @@ export default function Blog() {
           </Link>
         ))}
       </section>
-      <CustomRenderer content={JSON.parse(post?.content)} />
-    </ConsoleLayout>
+
+      <ClientOnly fallback={<p>Loading Editor, please be patient...</p>}>
+        {() => (
+          <PlateEditor
+            onChange={setContent}
+            value={content}
+            initialValue={JSON.parse(post?.content)}
+          />
+        )}
+      </ClientOnly>
+    </ConsoleDetailLayout>
   );
 }
+
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+  const title = formData.get("title") as string;
+  const description = formData.get("description") as string;
+  const slug = formData.get("slug") as string;
+  const content = formData.get("content") as string;
+  const postId = formData.get("postId") as string;
+
+  const postController = new PostController(request);
+  return await postController.updatePost(postId, {
+    title,
+    description,
+    content: content,
+  });
+};
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const { postId } = params as { postId: string };
@@ -80,7 +174,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const postController = new PostController(request);
   const post = await postController.getPostById(postId);
 
-  return { post };
+  return { post, postId };
 };
 
 export const meta: MetaFunction = ({ data }) => {

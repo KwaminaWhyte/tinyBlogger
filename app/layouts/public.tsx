@@ -25,7 +25,7 @@ export default function PublicLayout({
   const navigate = useNavigate();
   return (
     <div className="flex flex-col">
-      <div className="h-14 backdrop-blur-md bg-white/50 z-50 flex w-full gap-3 fixed top-0 left-0 right-0 items-center">
+      <div className="h-16 backdrop-blur-md bg-white/50 z-50 flex w-full gap-3 fixed top-0 left-0 right-0 items-center">
         <nav className="md:w-[85%] w-[96%] gap-3 mx-auto flex justify-between items-center ">
           <div className="flex items-center gap-3">
             <Link
@@ -78,7 +78,7 @@ export default function PublicLayout({
                 </SheetDescription>
               </SheetHeader>
               <div className="grid gap-4 py-4">
-                <p>contents</p>
+                <p>content</p>
               </div>
               <SheetFooter>
                 <SheetClose asChild>

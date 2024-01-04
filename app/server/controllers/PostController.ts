@@ -33,31 +33,6 @@ export default class PostController {
   };
 
   public getPostByCategory = async (categoryId: string) => {
-    // const { posts } = await this.hygraph.request(
-    //   gql`
-    //     query ($categoryId: ID!) {
-    //       posts(where: { categories_some: { id: $categoryId } }) {
-    //         id
-    //         title
-    //         description
-    //         slug
-    //         categories {
-    //           id
-    //           title
-    //           slug
-    //         }
-    //         coverImage {
-    //           id
-    //           url
-    //         }
-    //       }
-    //     }
-    //   `,
-    //   {
-    //     categoryId,
-    //   }
-    // );
-
     const posts = await Post.find({
       categories: {
         $elemMatch: { $eq: new mongoose.Types.ObjectId(categoryId) },
@@ -86,7 +61,7 @@ export default class PostController {
       content: data.content,
       featured: true,
     });
-    return redirect(`/console/blogs/${newPost._id}`);
+    return redirect(`/console/posts/${newPost._id}`);
   };
 
   public publishPost = async (id: string) => {
@@ -126,14 +101,14 @@ export default class PostController {
     data: {
       title: string;
       description: string;
-      contents: string;
+      content: string;
     }
   ) => {
     try {
       await Post.findByIdAndUpdate(_id, {
         title: data.title,
         description: data.description,
-        contents: data.contents,
+        content: data.content,
       });
     } catch (error) {
       console.log(error);
