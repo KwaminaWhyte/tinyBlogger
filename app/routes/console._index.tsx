@@ -11,20 +11,62 @@ import PostController from "~/server/controllers/PostController";
 import type { PostDocument } from "~/server/types";
 
 export default function ConsoleIndex() {
-  const { posts } = useLoaderData<{ categories: PostDocument[] }>();
-  console.log(posts);
+  const { unpublishedPosts, publishedPosts } = useLoaderData<{
+    unpublishedPosts: PostDocument[];
+    publishedPosts: PostDocument[];
+    categories: PostDocument[];
+  }>();
+  console.log(unpublishedPosts);
 
   return (
-    <ConsoleLayout>
+    <ConsoleLayout className="gap-5">
       <section className="flex flex-col gap-3">
         <div className="w-full border-b-4 border-gray-300">
-          <h2 className="underline underline-offset-8 ">Latest Posts </h2>
+          <h2 className="underline underline-offset-8 ">Unpublished Posts </h2>
         </div>
 
-        <div className="gap-6 grid grid-rows-1 md:grid-cols-2">
-          {posts.map((post, index) => (
+        <div className="gap-6 grid grid-rows-1 md:grid-cols-3">
+          {unpublishedPosts.map((post, index) => (
             <Link
-              to={`/blogs/${post?.slug}`}
+              to={`/console/posts/${post?._id}`}
+              className="flex-1 gap-3 flex flex-col"
+              key={index}
+            >
+              <img
+                src={
+                  post?.featureImage?.url
+                    ? post?.featureImage?.url
+                    : "https://th.bing.com/th/id/R.20d3e94846b0317ba981e9b4d3ecdabb?rik=wRXoSyZgG3cbIA&pid=ImgRaw&r=0"
+                }
+                alt=""
+                className="w-full h-40 object-cover bg-gray-100 rounded-sm"
+              />
+
+              <div className="flex-1">
+                <p className="font-semibold text-xl">{post.title}</p>
+                <p className="text-gray-500 line-clamp-2">{post.description}</p>
+
+                <div className="mt-auto flex flex-col">
+                  <p className="font-semibold">{post?.createdBy?.name}</p>
+                  <p className="text-gray-500 ml-auto text-xs">
+                    {moment(post?.createdAt).format("MMM DD, YYYY")}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <div className="w-full border-b-4 border-gray-300">
+          <h2 className="underline underline-offset-8 ">Published Posts </h2>
+        </div>
+
+        <div className="gap-6 grid grid-rows-1 md:grid-cols-3">
+          {publishedPosts.map((post, index) => (
+            <Link
+              to={`/console/posts/${post?._id}`}
               className="flex-1 gap-3 flex flex-col"
               key={index}
             >
@@ -71,9 +113,10 @@ export const action: ActionFunction = async ({ request }) => {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const postController = new PostController(request);
-  const posts = await postController.getUnpublishedPosts();
+  const unpublishedPosts = await postController.getUnpublishedPosts();
+  const publishedPosts = await postController.getPosts();
 
-  return { posts };
+  return { unpublishedPosts, publishedPosts };
 };
 
 export const meta: MetaFunction = () => {

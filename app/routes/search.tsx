@@ -34,7 +34,7 @@ export default function CategoryDetails() {
       <section className="grid md:grid-cols-3 grid-cols-1 gap-4 ">
         {posts.map((post, index) => (
           <Link
-            to={`/blogs/${post?.slug}`}
+            to={`/posts/${post?.slug}`}
             className="flex-1 gap-3 flex flex-col"
             key={index}
           >

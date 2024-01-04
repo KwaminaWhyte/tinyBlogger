@@ -231,4 +231,4 @@ export const meta: MetaFunction = ({ data }) => {
   ];
 };
 
-// http://localhost:3000/console/blogs/clqwnzh3vbwe80buq8k5if1eh
+// http://localhost:3000/console/posts/clqwnzh3vbwe80buq8k5if1eh

@@ -31,6 +31,20 @@ export default class PostController {
     }
   };
 
+  public getPopularPosts = async () => {
+    try {
+      const posts = await Post.find({ stage: "PUBLISHED" })
+        .populate("featureImage")
+        .populate("categories")
+        .select("-content")
+        .sort({ likes: -1 })
+        .limit(5);
+      return posts;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   public getUnpublishedPosts = async () => {
     try {
       const posts = await Post.find({ stage: "DRAFT" })

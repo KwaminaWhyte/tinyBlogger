@@ -6,9 +6,9 @@ import PostController from "~/server/controllers/PostController";
 import type { PostDocument } from "~/server/types";
 
 export default function Index() {
-  const { featured, posts, latest, categories } = useLoaderData<{
+  const { featured, popularPosts, latest, categories } = useLoaderData<{
     featured: PostDocument[];
-    posts: PostDocument[];
+    popularPosts: PostDocument[];
     latest: PostDocument[];
     categories: any[];
   }>();
@@ -62,7 +62,7 @@ export default function Index() {
         <div className="flex mt-11 h-fit gap-3 flex-col md:flex-row ">
           <div className="md:w-[65%] w-full flex md:flex-row flex-col gap-3">
             <Link
-              to={`/blogs/${featured[0]?.slug}`}
+              to={`/posts/${featured[0]?.slug}`}
               className="flex-1 gap-3 md:w-[65%] w-full flex flex-col"
             >
               <img
@@ -95,7 +95,7 @@ export default function Index() {
             <div className="flex-1 flex gap-3 flex-col ">
               {featured.slice(1, 3).map((post, index) => (
                 <Link
-                  to={`/blogs/${post?.slug}`}
+                  to={`/posts/${post?.slug}`}
                   key={index}
                   className="flex gap-3  flex-1"
                 >
@@ -130,7 +130,7 @@ export default function Index() {
           <div className="md:w-[35%] w-full flex justify-between flex-col gap-3">
             {featured.slice(3, 6).map((post, index) => (
               <Link
-                to={`/blogs/${post?.slug}`}
+                to={`/posts/${post?.slug}`}
                 key={index}
                 className="flex gap-3 flex-1"
               >
@@ -162,7 +162,7 @@ export default function Index() {
         </div>
       </section>
 
-      <section className="min-h-screen relative flex gap-5 md:flex-row flex-col">
+      <section className="min-h-screen flex gap-5 md:flex-row flex-col">
         <div className="flex md:w-[65%]  flex-col gap-3 ">
           <div className="w-full border-b-4 border-gray-300">
             <h2 className="underline underline-offset-8 ">Latest Posts </h2>
@@ -171,7 +171,7 @@ export default function Index() {
           <div className="gap-6 grid grid-rows-1 md:grid-cols-2">
             {latest.map((post, index) => (
               <Link
-                to={`/blogs/${post?.slug}`}
+                to={`/posts/${post?.slug}`}
                 className="flex-1 gap-3 flex flex-col"
                 key={index}
               >
@@ -203,7 +203,7 @@ export default function Index() {
           </div>
         </div>
 
-        <div className="md:w-[35%] flex flex-col gap-3 sticky top-14">
+        <div className="md:w-[35%] flex flex-col gap-3 sticky top-[57px] ">
           <div className="flex border-b-4 border-gray-300">
             <div className="w-full">
               <h2 className="underline underline-offset-8 text">
@@ -212,21 +212,26 @@ export default function Index() {
             </div>
           </div>
 
-          {posts.slice(0, 5).map((post, index) => (
-            <div key={index} className="flex gap-6 ">
+          {popularPosts.map((post, index) => (
+            <Link
+              to={`/posts/${post.slug}`}
+              key={index}
+              className="flex gap-6 w-full"
+            >
               <p className="font-semibold text-3xl text-gray-400 w-11">{`0${
                 index + 1
               }`}</p>
-              <div>
-                <p>{post.title}</p>
-                <div className="mt-auto">
+              <div className="flex-1">
+                <p className="font-semibold">{post.title}</p>
+                <p className="line-clamp-1 text-gray-600">{post.description}</p>
+                <div className="mt-auto flex flex-col">
                   <p className="font-semibold"> {post?.createdBy?.name}</p>
-                  <p className="text-gray-500 text-xs">
-                    {moment(post?.createdAt).format("MMM DD, YYYY")} -
+                  <p className="text-gray-500 text-xs ml-auto">
+                    {moment(post?.createdAt).format("MMM DD, YYYY")}
                   </p>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
@@ -236,12 +241,12 @@ export default function Index() {
 
 export const loader = async ({ request }) => {
   const postController = new PostController(request);
-  const posts = await postController.getPosts();
+  const popularPosts = await postController.getPopularPosts();
   const featured = await postController.getFeaturedPosts();
   const latest = await postController.getLatestPosts();
   const categories = await postController.getCategories();
 
-  return { featured, posts, latest, categories };
+  return { featured, popularPosts, latest, categories };
 };
 
 export const meta: MetaFunction = () => {
