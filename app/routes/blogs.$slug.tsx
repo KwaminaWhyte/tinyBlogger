@@ -71,10 +71,6 @@ export default function Blog() {
       toast("Comment has been submitted", {
         description:
           "Your comment has been submitted successfully and is awaiting moderation.",
-        // action: {
-        //   label: "Undo",
-        //   onClick: () => console.log("Undo"),
-        // },
       });
 
       localStorage.setItem(

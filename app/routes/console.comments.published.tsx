@@ -7,14 +7,12 @@ import { useLoaderData, useSubmit } from "@remix-run/react";
 import moment from "moment";
 import React from "react";
 import { Button } from "~/components/ui/button";
-import ConsoleLayout from "~/layouts/console";
 import CommentController from "~/server/controllers/CommentController";
 import type { CommentDocument } from "~/server/types";
 
 export default function ConsoleComments() {
   const submit = useSubmit();
   const { comments } = useLoaderData<{ comments: CommentDocument[] }>();
-  console.log(comments);
 
   return (
     <div>

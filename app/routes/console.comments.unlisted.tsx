@@ -14,7 +14,6 @@ import type { CommentDocument } from "~/server/types";
 export default function ConsoleComments() {
   const submit = useSubmit();
   const { comments } = useLoaderData<{ comments: CommentDocument[] }>();
-  console.log(comments);
 
   return (
     <div>

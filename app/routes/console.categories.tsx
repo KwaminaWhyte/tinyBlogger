@@ -4,7 +4,6 @@ import {
   type MetaFunction,
 } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
-import React, { useEffect, useState } from "react";
 import ConsoleLayout from "~/layouts/console";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -14,7 +13,6 @@ import type { CategoryDocument } from "~/server/types";
 
 export default function CreateBlog() {
   const { categories } = useLoaderData<{ categories: CategoryDocument[] }>();
-  console.log(categories);
 
   return (
     <ConsoleLayout className="gap-5 ">

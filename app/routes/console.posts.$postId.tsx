@@ -32,7 +32,6 @@ export default function Blog() {
   const [content, setContent] = useState(JSON.parse(post.content));
   const [title, setTitle] = useState(post.title);
   const [description, setDescription] = useState(post.description);
-  console.log(post);
 
   const handleShare = async () => {
     try {
@@ -67,10 +66,6 @@ export default function Blog() {
     if (actionData?._id) {
       toast("Comment has been submitted", {
         description: "Post Updated Ssuccessfully",
-        // action: {
-        //   label: "Undo",
-        //   onClick: () => console.log("Undo"),
-        // },
       });
     }
   }, [actionData]);
@@ -198,7 +193,7 @@ export const action: ActionFunction = async ({ request }) => {
       content: content,
     });
   } else if (actionType == "update-publish") {
-    return await postController.updateAndublishPost(postId, {
+    return await postController.updateAndPublishPost(postId, {
       title,
       description,
       content: content,

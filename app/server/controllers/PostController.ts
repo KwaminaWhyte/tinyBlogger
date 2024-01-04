@@ -23,6 +23,20 @@ export default class PostController {
       const posts = await Post.find({ stage: "PUBLISHED" })
         .populate("featureImage")
         .populate("categories")
+        .select("-content")
+        .sort({ createdAt: "desc" });
+      return posts;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  public getUnpublishedPosts = async () => {
+    try {
+      const posts = await Post.find({ stage: "DRAFT" })
+        .populate("featureImage")
+        .populate("categories")
+        .select("-content")
         .sort({ createdAt: "desc" });
       return posts;
     } catch (error) {
@@ -151,7 +165,7 @@ export default class PostController {
     }
   };
 
-  public updateAndublishPost = async (
+  public updateAndPublishPost = async (
     _id: string,
     data: {
       title: string;

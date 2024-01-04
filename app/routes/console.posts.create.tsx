@@ -78,7 +78,6 @@ export default function CreateBlog() {
     axios
       .get("/api/check-slug?slug=" + genetateSlug(title))
       .then((res) => {
-        console.log(res.data);
         if (res.data.status == 400) {
           setSlug(genetateSlug(title) + "-1");
         } else {

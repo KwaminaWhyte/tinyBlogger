@@ -13,7 +13,6 @@ import type { CommentDocument } from "~/server/types";
 
 export default function ConsoleComments() {
   const { comments } = useLoaderData<{ comments: CommentDocument[] }>();
-  console.log(comments);
 
   return (
     <ConsoleLayout>

@@ -6,8 +6,6 @@ import PostController from "~/server/controllers/PostController";
 export default function ConsolePosts() {
   const { posts } = useLoaderData<{ posts: any[] }>();
 
-  console.log(posts);
-
   return <div>ConsolePosts</div>;
 }
 

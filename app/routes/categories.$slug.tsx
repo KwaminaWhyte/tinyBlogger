@@ -9,7 +9,6 @@ export default function CategoryDetails() {
     category: any;
     posts: any[];
   }>();
-  console.log({ category, posts });
 
   return (
     <PublicLayout>
