@@ -15,14 +15,16 @@ export type PostDocument = {
   slug: string;
   categories: CategoryDocument[];
   featureImage: {
-    src: string;
     _id: string;
+    url: string;
+    externalId: string;
   };
   tags: string[];
   likes: number;
   featured: boolean;
   stage: "PUBLISHED" | "DRAFT" | "UNLISTED";
   comments: CommentDocument[];
+  publishedDate: Date;
   createdAt: Date;
   updatedAt: Date;
 };

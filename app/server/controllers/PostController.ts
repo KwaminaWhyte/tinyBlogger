@@ -1,9 +1,10 @@
-import { redirect } from "@remix-run/node";
+import { redirect, json } from "@remix-run/node";
 import Post from "../models/Post";
 import { GraphQLClient, gql } from "graphql-request";
 import fs from "fs";
 import Category from "../models/Category";
 import mongoose from "mongoose";
+import Image from "../models/Image";
 export default class PostController {
   private request: Request;
   private hygraph: any;
@@ -19,7 +20,10 @@ export default class PostController {
 
   public getPosts = async () => {
     try {
-      const posts = await Post.find();
+      const posts = await Post.find({ stage: "PUBLISHED" })
+        .populate("featureImage")
+        .populate("categories")
+        .sort({ createdAt: "desc" });
       return posts;
     } catch (error) {
       console.log(error);
@@ -27,9 +31,19 @@ export default class PostController {
   };
 
   public getPostBySlug = async (slug: string) => {
-    const post = await Post.findOne({ slug }).populate("categories");
+    const post = await Post.findOne({ slug })
+      .populate("categories")
+      .populate("featureImage");
 
     return post;
+  };
+
+  public checkSlug = async (slug: string) => {
+    const slugExist = await Post.findOne({ slug });
+    if (slugExist) {
+      return json({ message: "Slug already exist", status: 400 });
+    }
+    return json({ message: "Slug is available", status: 200 });
   };
 
   public getPostByCategory = async (categoryId: string) => {
@@ -37,13 +51,17 @@ export default class PostController {
       categories: {
         $elemMatch: { $eq: new mongoose.Types.ObjectId(categoryId) },
       },
-    });
+    })
+      .populate("featureImage")
+      .populate("categories");
 
     return posts;
   };
 
   public getPostById = async (id: string) => {
-    const post = await Post.findById(id);
+    const post = await Post.findById(id)
+      .populate("featureImage")
+      .populate("categories");
 
     return post;
   };
@@ -53,14 +71,25 @@ export default class PostController {
     slug: string;
     description: string;
     content: string;
+    featureImage: {
+      url: string;
+      externalId: string;
+    };
   }) => {
+    const newImage = await Image.create({
+      url: data.featureImage.url,
+      externalId: data.featureImage.externalId,
+    });
+
     const newPost = await Post.create({
       title: data.title,
       slug: data.slug,
       description: data.description,
       content: data.content,
       featured: true,
+      featureImage: newImage._id,
     });
+
     return redirect(`/console/posts/${newPost._id}`);
   };
 
@@ -105,11 +134,46 @@ export default class PostController {
     }
   ) => {
     try {
-      await Post.findByIdAndUpdate(_id, {
-        title: data.title,
-        description: data.description,
-        content: data.content,
-      });
+      const updatedPost = await Post.findByIdAndUpdate(
+        _id,
+        {
+          title: data.title,
+          description: data.description,
+          content: data.content,
+        },
+        {
+          new: true,
+        }
+      );
+      return updatedPost;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  public updateAndublishPost = async (
+    _id: string,
+    data: {
+      title: string;
+      description: string;
+      content: string;
+    }
+  ) => {
+    try {
+      const updatedPost = await Post.findByIdAndUpdate(
+        _id,
+        {
+          title: data.title,
+          description: data.description,
+          content: data.content,
+          stage: "PUBLISHED",
+          publishedDate: Date.now(),
+        },
+        {
+          new: true,
+        }
+      );
+      return updatedPost;
     } catch (error) {
       console.log(error);
     }
@@ -118,6 +182,8 @@ export default class PostController {
   public getFeaturedPosts = async () => {
     try {
       const posts = await Post.find({ featured: true, stage: "PUBLISHED" })
+        .populate("featureImage")
+        .populate("categories")
         .select("-content")
         .limit(6);
       return posts;
@@ -128,7 +194,9 @@ export default class PostController {
 
   public getLatestPosts = async () => {
     try {
-      const posts = await Post.find({ featured: true })
+      const posts = await Post.find({ featured: true, stage: "PUBLISHED" })
+        .populate("featureImage")
+        .populate("categories")
         .select("-content")
         .sort({ createdAt: "desc" })
         .limit(6);

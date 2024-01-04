@@ -113,12 +113,12 @@ export default function PublicLayout({
       </div>
 
       <main
-        className={`md:w-[80%] w-[93%] flex flex-col mt-14 mb-8 mx-auto bg-red-500" ${className}`}
+        className={`md:w-[85%] w-[93%] flex flex-col mt-14 mb-8 mx-auto bg-red-500" ${className}`}
       >
         {children}
       </main>
 
-      <footer className="md:w-[75%] w-[96%] mx-auto mt-11">
+      <footer className="md:w-[85%] w-[96%] mx-auto mt-11">
         <p>Footer</p>
       </footer>
     </div>

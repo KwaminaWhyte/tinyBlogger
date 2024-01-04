@@ -97,7 +97,7 @@ export default function Blog() {
           {moment(post.createdAt).format("MMMM DD, YYYY")}
         </p>
         <img
-          src={post?.featureImage?.src}
+          src={post?.featureImage?.url}
           alt=""
           className="w-full absolute -z-10 h-full object-cover rounded-md"
         />
@@ -253,7 +253,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export const meta: MetaFunction = ({ data }) => {
-  const post = data?.post;
+  const post = data?.post as PostDocument;
   return [
     { title: `${post?.title} | Blogger.` },
     {
@@ -267,7 +267,7 @@ export const meta: MetaFunction = ({ data }) => {
     },
     {
       name: "og:image",
-      content: post?.coverImage?.url,
+      content: post?.featureImage?.url,
     },
     { name: "og:url", content: "https://tinyblogger.vercel.app" },
   ];

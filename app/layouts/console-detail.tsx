@@ -1,25 +1,42 @@
-import { Link, NavLink } from "@remix-run/react";
+import { Link, NavLink, useNavigate } from "@remix-run/react";
 import React, { type ReactNode } from "react";
 
 export default function ConsoleDetailLayout({
   children,
   className,
   rightContent,
+  title,
 }: {
   children: ReactNode;
   className?: string;
   rightContent?: ReactNode;
+  title?: string;
 }) {
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col">
       <div className="md:w-[75%] w-[96%] mx-auto h-16 backdrop-blur-md bg-white/50 z-50 flex gap-3 fixed top-0 left-0 right-0 items-center">
         <nav className="flex justify-between items-center w-full">
-          <Link
-            to="/"
-            className="font-bold text-purple-700 hover:text-black montage-font text-xl"
-          >
-            Blogger.
-          </Link>
+          <div className="flex items-center gap-3">
+            <svg
+              onClick={() => navigate(-1)}
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-8 h-8 p-1 rounded-sm bg-gray-100 cursor-pointer text-gray-800"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 19.5 8.25 12l7.5-7.5"
+              />
+            </svg>
+
+            <p className="font-semibold text-base">{title}</p>
+          </div>
 
           {rightContent}
         </nav>

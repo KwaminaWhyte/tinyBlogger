@@ -4,10 +4,6 @@ import type { ImageDocument } from "../types";
 
 const imageSchema = new Schema<ImageDocument>(
   {
-    title: {
-      type: String,
-      required: true,
-    },
     url: {
       type: String,
       required: true,

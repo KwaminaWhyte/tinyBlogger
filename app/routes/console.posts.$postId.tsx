@@ -3,25 +3,36 @@ import {
   type LoaderFunction,
   type ActionFunction,
 } from "@remix-run/node";
-import { Link, useLoaderData, useSubmit } from "@remix-run/react";
+import {
+  Link,
+  useActionData,
+  useLoaderData,
+  useSubmit,
+} from "@remix-run/react";
 import moment from "moment";
 import PostController from "~/server/controllers/PostController";
 import { EyeIcon, ShareIcon, ThumbUpIcon } from "~/components/icons";
 import { ClientOnly } from "remix-utils/client-only";
 import { PlateEditor } from "~/components/plate-editor.client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ConsoleDetailLayout from "~/layouts/console-detail";
 import type { PostDocument } from "~/server/types";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
+import { toast } from "sonner";
 
 export default function Blog() {
   const submit = useSubmit();
-  const { post, postId } = useLoaderData<{ post: PostDocument }>();
-  const [content, setContent] = useState("");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const actionData = useActionData();
+  const { post, postId } = useLoaderData<{
+    post: PostDocument;
+    postId: string;
+  }>();
+  const [content, setContent] = useState(JSON.parse(post.content));
+  const [title, setTitle] = useState(post.title);
+  const [description, setDescription] = useState(post.description);
+  console.log(post);
 
   const handleShare = async () => {
     try {
@@ -35,9 +46,10 @@ export default function Blog() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (actionType: string) => {
     submit(
       {
+        actionType,
         postId,
         title,
         description,
@@ -51,27 +63,42 @@ export default function Blog() {
     );
   };
 
+  useEffect(() => {
+    if (actionData?._id) {
+      toast("Comment has been submitted", {
+        description: "Post Updated Ssuccessfully",
+        // action: {
+        //   label: "Undo",
+        //   onClick: () => console.log("Undo"),
+        // },
+      });
+    }
+  }, [actionData]);
+
   return (
     <ConsoleDetailLayout
+      title="Review Post"
       rightContent={
         <div className="flex items-center gap-3">
           <p
-            className={`text-sm px-2 py-1 text-white font-semibold rounded-lg ${
-              post.stage == "DRAFT" ? "bg-red-500 " : "bg-green-500"
+            className={`text-xs px-2 py-1 text-white font-semibold rounded-lg bg-opacity-85 ${
+              post.stage == "DRAFT" ? "bg-red-500 " : "bg-green-600"
             } text-foreground`}
           >
             {post.stage}
           </p>
 
-          <Button variant="outline">Save</Button>
+          <Button onClick={() => handleSubmit("update")} variant="outline">
+            Save
+          </Button>
 
-          <Button>Save & Publish</Button>
+          <Button onClick={() => handleSubmit("update-publish")}>
+            Save & Publish
+          </Button>
         </div>
       }
     >
-      <section>
-        <Button onClick={() => handleSubmit()}>Save</Button>
-
+      <section className="flex flex-col gap-3">
         <div className="grid w-full items-center gap-1.5">
           <Label htmlFor="title">Title</Label>
           <Input
@@ -92,6 +119,7 @@ export default function Blog() {
           />
         </div>
       </section>
+
       <section className="rounded-md  relative flex flex-col gap-5 my-11 h-96 items-center justify-center bg-black/70 p-4 ">
         <h1 className="md:text-6xl text-white text-3xl text-center md:w-[70%] mx-auto">
           {post?.title}
@@ -103,7 +131,7 @@ export default function Blog() {
           {moment(post.createdAt).format("MMMM DD, YYYY")}
         </p>
         <img
-          src={post?.coverImage?.url}
+          src={post?.featureImage?.url}
           alt=""
           className="w-full absolute -z-10 h-full object-cover rounded-md"
         />
@@ -159,13 +187,23 @@ export const action: ActionFunction = async ({ request }) => {
   const slug = formData.get("slug") as string;
   const content = formData.get("content") as string;
   const postId = formData.get("postId") as string;
+  const actionType = formData.get("actionType") as string;
 
   const postController = new PostController(request);
-  return await postController.updatePost(postId, {
-    title,
-    description,
-    content: content,
-  });
+
+  if (actionType == "update") {
+    return await postController.updatePost(postId, {
+      title,
+      description,
+      content: content,
+    });
+  } else if (actionType == "update-publish") {
+    return await postController.updateAndublishPost(postId, {
+      title,
+      description,
+      content: content,
+    });
+  }
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {

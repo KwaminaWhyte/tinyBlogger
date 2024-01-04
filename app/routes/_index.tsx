@@ -59,14 +59,18 @@ export default function Index() {
           <h2 className="underline underline-offset-8 ">Featured </h2>
         </div>
 
-        <div className="flex mt-11 gap-3 flex-col md:flex-row ">
+        <div className="flex mt-11 h-fit gap-3 flex-col md:flex-row ">
           <div className="md:w-[65%] w-full flex md:flex-row flex-col gap-3">
             <Link
               to={`/blogs/${featured[0]?.slug}`}
               className="flex-1 gap-3 md:w-[65%] w-full flex flex-col"
             >
               <img
-                src={featured[0]?.coverImage?.url}
+                src={
+                  featured[0]?.featureImage?.url
+                    ? featured[0]?.featureImage?.url
+                    : "https://th.bing.com/th/id/R.20d3e94846b0317ba981e9b4d3ecdabb?rik=wRXoSyZgG3cbIA&pid=ImgRaw&r=0"
+                }
                 alt=""
                 className="w-full h-60 object-cover bg-gray-100 rounded-sm"
               />
@@ -96,7 +100,11 @@ export default function Index() {
                   className="flex gap-3  flex-1"
                 >
                   <img
-                    src={post?.coverImage?.url}
+                    src={
+                      post?.featureImage?.url
+                        ? post?.featureImage?.url
+                        : "https://th.bing.com/th/id/R.20d3e94846b0317ba981e9b4d3ecdabb?rik=wRXoSyZgG3cbIA&pid=ImgRaw&r=0"
+                    }
                     alt=""
                     className="w-44 object-cover bg-gray-100 rounded-sm"
                   />
@@ -127,9 +135,13 @@ export default function Index() {
                 className="flex gap-3 flex-1"
               >
                 <img
-                  src={post?.coverImage?.url}
+                  src={
+                    post?.featureImage?.url
+                      ? post?.featureImage?.url
+                      : "https://th.bing.com/th/id/R.20d3e94846b0317ba981e9b4d3ecdabb?rik=wRXoSyZgG3cbIA&pid=ImgRaw&r=0"
+                  }
                   alt=""
-                  className="w-44 h-full object-cover bg-gray-100 rounded-sm"
+                  className="w-44 md:h-24 object-cover bg-gray-100 rounded-sm"
                 />
 
                 <div className="flex flex-col gap-3 flex-1">
@@ -150,7 +162,7 @@ export default function Index() {
         </div>
       </section>
 
-      <section className="min-h-screen flex gap-5 md:flex-row flex-col">
+      <section className="min-h-screen relative flex gap-5 md:flex-row flex-col">
         <div className="flex md:w-[65%]  flex-col gap-3 ">
           <div className="w-full border-b-4 border-gray-300">
             <h2 className="underline underline-offset-8 ">Latest Posts </h2>
@@ -164,7 +176,11 @@ export default function Index() {
                 key={index}
               >
                 <img
-                  src={post?.coverImage?.url}
+                  src={
+                    post?.featureImage?.url
+                      ? post?.featureImage?.url
+                      : "https://th.bing.com/th/id/R.20d3e94846b0317ba981e9b4d3ecdabb?rik=wRXoSyZgG3cbIA&pid=ImgRaw&r=0"
+                  }
                   alt=""
                   className="w-full h-40 object-cover bg-gray-100 rounded-sm"
                 />
@@ -187,11 +203,11 @@ export default function Index() {
           </div>
         </div>
 
-        <div className="md:w-[35%] flex flex-col gap-3">
+        <div className="md:w-[35%] flex flex-col gap-3 sticky top-14">
           <div className="flex border-b-4 border-gray-300">
             <div className="w-full">
               <h2 className="underline underline-offset-8 text">
-                Popular Posts{" "}
+                Popular Posts
               </h2>
             </div>
           </div>

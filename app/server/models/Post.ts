@@ -11,7 +11,7 @@ const postSchema = new Schema<PostDocument>(
     },
     title: {
       type: String,
-      // required: true,
+      required: true,
     },
     slug: {
       type: String,
@@ -28,7 +28,7 @@ const postSchema = new Schema<PostDocument>(
     featureImage: {
       type: Schema.Types.ObjectId,
       ref: "images",
-      // required: true,
+      required: true,
     },
     likes: {
       type: Number,
@@ -56,6 +56,10 @@ const postSchema = new Schema<PostDocument>(
         ref: "users",
       },
     ],
+    publishedDate: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     timestamps: true,
