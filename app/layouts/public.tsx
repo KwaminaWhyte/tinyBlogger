@@ -68,7 +68,7 @@ export default function PublicLayout({
             <DialogTrigger asChild>
               <Button
                 variant="outline"
-                className="md:min-w-72 md:max-w-96 items-center"
+                className="md:min-w-72 md:max-w-96 flex-1 items-center"
               >
                 <SearchIcon className="text-gray-400 hidden md:flex mr-3" />
                 Search
@@ -137,7 +137,7 @@ export default function PublicLayout({
             </DialogContent>
           </Dialog>
 
-          <div className="gap-3 hidden md:flex items-center">
+          <div className="gap-3 items-center flex">
             <Sheet>
               <SheetTrigger asChild className="">
                 <svg

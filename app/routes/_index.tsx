@@ -21,7 +21,7 @@ export default function Index() {
             Welcome to Blogger.
           </h1>
 
-          <p className="text">
+          <p className="text-center md:text-justify">
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias
             maxime reiciendis quae porro explicabo iste adipisci culpa quos
             earum doloremque, vitae maiores?
