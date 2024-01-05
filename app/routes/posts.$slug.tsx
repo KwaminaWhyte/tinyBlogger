@@ -183,23 +183,8 @@ export default function Blog() {
             </SheetContent>
           </Sheet>
 
-          <div
-            className="flex gap-1 items-center cursor-pointer"
-            onClick={() =>
-              submit(
-                {
-                  actionType: "like",
-                  postId: post?._id,
-                  name: userData.name,
-                  email: userData.email,
-                },
-                {
-                  method: "POST",
-                }
-              )
-            }
-          >
-            {post.likes.includes(userData.email) ? (
+          <div className="flex gap-1 items-center cursor-pointer">
+            {post?.likes?.includes(userData.email) ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -210,6 +195,19 @@ export default function Blog() {
               </svg>
             ) : (
               <svg
+                onClick={() =>
+                  submit(
+                    {
+                      actionType: "like",
+                      postId: post?._id,
+                      name: userData.name,
+                      email: userData.email,
+                    },
+                    {
+                      method: "POST",
+                    }
+                  )
+                }
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
