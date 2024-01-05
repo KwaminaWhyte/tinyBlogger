@@ -16,33 +16,35 @@ export default function Index() {
   return (
     <PublicLayout className=" min-h-screen gap-11">
       <section className="flex">
-        <div className="md:w-[50%] h-[35vh] md:my-auto flex flex-col justify-center gap-6">
-          <h1 className="md:text-7xl text-3xl">Welcome to Blogger.</h1>
+        <div className="md:w-[80%] mx-auto h-[35vh] md:my-auto flex flex-col justify-center gap-7">
+          <h1 className="md:text-8xl text-3xl text-center">
+            Welcome to Blogger.
+          </h1>
 
-          <p>
+          <p className="text">
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias
             maxime reiciendis quae porro explicabo iste adipisci culpa quos
             earum doloremque, vitae maiores?
           </p>
 
-          <Link
+          {/* <Link
             className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-10 rounded-md px-8"
             to="/explore"
           >
             Explore
-          </Link>
+          </Link> */}
         </div>
 
-        <div className="w-[50%] hidden md:block">
+        {/* <div className="w-[50%] hidden md:block">
           <img
             src="https://static.vecteezy.com/system/resources/previews/007/783/955/original/online-education-illustration-concept-flat-illustration-isolated-on-white-background-vector.jpg"
             alt=""
             className="w-full rounded-sm"
           />
-        </div>
+        </div> */}
       </section>
 
-      <section className="flex gap-3 overflow-x-auto">
+      <section className="md:flex hidden gap-3 overflow-x-auto">
         {categories.map((category, index) => (
           <Link
             to={`/categories/${category.slug}`}

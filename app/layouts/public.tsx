@@ -28,7 +28,7 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import axios from "axios";
-import { PostDocument } from "~/server/types";
+import type { PostDocument } from "~/server/types";
 import moment from "moment";
 
 export default function PublicLayout({
@@ -131,60 +131,58 @@ export default function PublicLayout({
             </DialogContent>
           </Dialog>
 
-          <Sheet>
-            <SheetTrigger asChild className="md:hidden">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                />
-              </svg>
-            </SheetTrigger>
-            <SheetContent side="left">
-              <SheetHeader>
-                <SheetTitle>Edit profile</SheetTitle>
-                <SheetDescription>
-                  Make changes to your profile here. Click save when you're
-                  done.
-                </SheetDescription>
-              </SheetHeader>
-              <div className="grid gap-4 py-4">
-                <p>content</p>
-              </div>
-              <SheetFooter>
-                <SheetClose asChild>
-                  <Button type="submit">Save changes</Button>
-                </SheetClose>
-              </SheetFooter>
-            </SheetContent>
-          </Sheet>
-
           <div className="gap-3 hidden md:flex items-center">
-            {[
-              { path: "/", label: "Home" },
-              // { path: "/explore", label: "Explore" },
-              // { path: "/about", label: "About" },
-            ].map((item, index) => (
-              <NavLink
-                key={index}
-                to={item.path}
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-black dark:text-primary font-semibold hover:text-gray-500"
-                    : "text-gray-800 hover:text-gray-600"
-                }
-              >
-                {item.label}
-              </NavLink>
-            ))}
+            <Sheet>
+              <SheetTrigger asChild className="">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  />
+                </svg>
+              </SheetTrigger>
+              <SheetContent side="left" className="md:max-w-[900px] w-screen">
+                <SheetHeader>
+                  <SheetTitle>Edit profile</SheetTitle>
+                  <SheetDescription>
+                    Make changes to your profile here. Click save when you're
+                    done.
+                  </SheetDescription>
+                </SheetHeader>
+                <div className="grid gap-4 py-4">
+                  {[
+                    { path: "/", label: "Home" },
+                    // { path: "/explore", label: "Explore" },
+                    // { path: "/about", label: "About" },
+                  ].map((item, index) => (
+                    <NavLink
+                      key={index}
+                      to={item.path}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "text-black dark:text-primary font-semibold hover:text-gray-500"
+                          : "text-gray-800 hover:text-gray-600"
+                      }
+                    >
+                      {item.label}
+                    </NavLink>
+                  ))}
+                </div>
+                <SheetFooter>
+                  <SheetClose asChild>
+                    <Button type="submit">Save changes</Button>
+                  </SheetClose>
+                </SheetFooter>
+              </SheetContent>
+            </Sheet>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
