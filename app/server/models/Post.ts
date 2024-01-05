@@ -15,7 +15,7 @@ const postSchema = new Schema<PostDocument>(
     },
     slug: {
       type: String,
-      // required: true,
+      required: true,
     },
     description: {
       type: String,
@@ -29,10 +29,6 @@ const postSchema = new Schema<PostDocument>(
       type: Schema.Types.ObjectId,
       ref: "images",
       required: true,
-    },
-    likes: {
-      type: Number,
-      default: 0,
     },
     featured: {
       type: Boolean,
@@ -54,6 +50,18 @@ const postSchema = new Schema<PostDocument>(
       {
         type: Schema.Types.ObjectId,
         ref: "users",
+      },
+    ],
+    likes: [
+      {
+        type: String,
+      },
+    ],
+    views: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "views",
+        required: true,
       },
     ],
     publishedDate: {

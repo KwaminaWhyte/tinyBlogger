@@ -16,7 +16,6 @@ export default function ConsoleIndex() {
     publishedPosts: PostDocument[];
     categories: PostDocument[];
   }>();
-  console.log(unpublishedPosts);
 
   return (
     <ConsoleLayout className="gap-5">

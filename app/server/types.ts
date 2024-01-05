@@ -20,7 +20,8 @@ export type PostDocument = {
     externalId: string;
   };
   tags: string[];
-  likes: number;
+  likes: string[];
+  views: ViewDocument[];
   featured: boolean;
   stage: "PUBLISHED" | "DRAFT" | "UNLISTED";
   comments: CommentDocument[];
@@ -58,3 +59,13 @@ export type ImageDocument = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export interface ViewDocument extends Document {
+  _id: string;
+  post: PostDocument;
+  ipAddress: string;
+  city: string;
+  country: string;
+  latitude: string;
+  longitude: string;
+}

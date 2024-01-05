@@ -4,9 +4,7 @@ import { SearchIcon } from "~/components/icons";
 import { Button } from "~/components/ui/button";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
@@ -94,7 +92,6 @@ export default function PublicLayout({
                       axios
                         .get(`/api/search?query=${e.target.value}`)
                         .then((res) => {
-                          console.log(res.data);
                           setPostsResults(res.data.posts);
                         });
                     }}

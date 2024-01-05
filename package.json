@@ -67,6 +67,7 @@
     "@udecode/plate-tabbable": "^29.0.1",
     "@udecode/plate-table": "^29.0.1",
     "@udecode/plate-trailing-block": "^29.0.1",
+    "@vercel/edge": "^1.1.1",
     "axios": "^1.6.3",
     "bcryptjs": "^2.4.3",
     "cheerio": "^1.0.0-rc.12",

@@ -1,21 +1,18 @@
 import { redirect, json } from "@remix-run/node";
 import Post from "../models/Post";
-import { GraphQLClient, gql } from "graphql-request";
+import { geolocation, ipAddress } from "@vercel/edge";
 import fs from "fs";
 import Category from "../models/Category";
 import mongoose from "mongoose";
 import Image from "../models/Image";
+import { View } from "../models/View";
+
 export default class PostController {
   private request: Request;
   private hygraph: any;
 
   constructor(request: Request) {
     this.request = request;
-    this.hygraph = new GraphQLClient(`${process.env.HYGRAPH_ENDPOINT}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.HYGRAPH_TOKEN}`,
-      },
-    });
   }
 
   public getPosts = async () => {
@@ -276,6 +273,62 @@ export default class PostController {
       .exec();
 
     return posts;
+  };
+
+  public likePost = async ({
+    email,
+    postId,
+  }: {
+    email: string;
+    postId: string;
+  }) => {
+    console.log({
+      email,
+      postId,
+    });
+
+    await Post.findByIdAndUpdate(postId, {
+      $push: { likes: email },
+    });
+
+    return true;
+  };
+
+  public updateViews = async ({ postId }: { postId: string }) => {
+    const ip = ipAddress(this.request) || "unknown";
+    const { city, country, latitude, longitude } = geolocation(this.request);
+
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    let exist = await View.findOne({
+      post: postId,
+      ipAddress: ip,
+      createdAt: {
+        $gte: today,
+        $lt: tomorrow,
+      },
+    });
+
+    if (exist) {
+      return true;
+    } else {
+      let view = await View.create({
+        post: postId,
+        ipAddress: ip,
+        city,
+        country,
+        latitude,
+        longitude,
+      });
+
+      await Post.findByIdAndUpdate(postId, {
+        $push: { views: view?._id },
+      });
+      return true;
+    }
   };
 
   genetateSlug = (title: string) => {
