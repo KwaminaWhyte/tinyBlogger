@@ -270,7 +270,10 @@ export default class PostController {
   public searchPosts = async (query: string) => {
     const posts = await Post.find({
       $text: { $search: query },
-    }).exec();
+      stage: "PUBLISHED",
+    })
+      .populate("featureImage")
+      .exec();
 
     return posts;
   };

@@ -117,7 +117,7 @@ import { BlockquoteElement } from "~/components/plate-ui/blockquote-element";
 import { CodeBlockElement } from "~/components/plate-ui/code-block-element";
 import { CodeLineElement } from "~/components/plate-ui/code-line-element";
 import { CodeSyntaxLeaf } from "~/components/plate-ui/code-syntax-leaf";
-import { ExcalidrawElement } from "~/components/plate-ui/excalidraw-element";
+// import { ExcalidrawElement } from "~/components/plate-ui/excalidraw-element";
 import { HrElement } from "~/components/plate-ui/hr-element";
 import { ImageElement } from "~/components/plate-ui/image-element";
 import { LinkElement } from "~/components/plate-ui/link-element";
@@ -268,9 +268,7 @@ const plugins = createPlugins(
     createSelectOnBackspacePlugin({
       options: {
         query: {
-          allow: [
-            // ELEMENT_IMAGE, ELEMENT_HR
-          ],
+          allow: [ELEMENT_IMAGE, ELEMENT_HR],
         },
       },
     }),
@@ -317,7 +315,7 @@ const plugins = createPlugins(
         [ELEMENT_CODE_BLOCK]: CodeBlockElement,
         [ELEMENT_CODE_LINE]: CodeLineElement,
         [ELEMENT_CODE_SYNTAX]: CodeSyntaxLeaf,
-        [ELEMENT_EXCALIDRAW]: ExcalidrawElement,
+        // [ELEMENT_EXCALIDRAW]: ExcalidrawElement,
         [ELEMENT_HR]: HrElement,
         [ELEMENT_IMAGE]: ImageElement,
         [ELEMENT_LINK]: LinkElement,
@@ -378,7 +376,7 @@ export function PlateEditor({
             <FixedToolbarButtons forClients={forClients} />
           </FixedToolbar>
 
-          <Editor />
+          <Editor className="px-11 py-5" />
 
           <FloatingToolbar>
             <FloatingToolbarButtons />

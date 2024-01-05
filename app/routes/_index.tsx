@@ -77,7 +77,7 @@ export default function Index() {
 
               <div className="flex-1 flex flex-col gap-2">
                 <p className="font-semibold text-xl">{featured[0]?.title}</p>
-                <p className="text-gray-800 line-clamp-2">
+                <p className="text-gray-600 line-clamp-2">
                   {featured[0]?.description}
                 </p>
 
@@ -111,7 +111,7 @@ export default function Index() {
 
                   <div className="flex flex-col gap-2 flex-1">
                     <p className="font-semibold">{post.title}</p>
-                    <p className="text-gray-800 line-clamp-2">
+                    <p className="text-gray-600 line-clamp-2">
                       {post.description}
                     </p>
 
@@ -146,8 +146,8 @@ export default function Index() {
 
                 <div className="flex flex-col gap-3 flex-1">
                   <p className="font-semibold">{post.title}</p>
-                  <p className="text-gray-800 line-clamp-2">
-                    {featured[0]?.description}
+                  <p className="text-gray-600 line-clamp-2">
+                    {post?.description}
                   </p>
                   <div className="mt-auto flex flex-col">
                     {/* <p className="font-semibold ">{post?.createdBy?.name}</p> */}

@@ -46,7 +46,7 @@ export default function ConsoleIndex() {
                 <p className="font-semibold text-xl">{post.title}</p>
                 <p className="text-gray-500 line-clamp-2">{post.description}</p>
 
-                <div className="mt-auto flex flex-col">
+                <div className=" flex flex-col">
                   <p className="font-semibold">{post?.createdBy?.name}</p>
                   <p className="text-gray-500 ml-auto text-xs">
                     {moment(post?.createdAt).format("MMM DD, YYYY")}
