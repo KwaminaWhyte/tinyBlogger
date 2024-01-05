@@ -376,7 +376,7 @@ export function PlateEditor({
             <FixedToolbarButtons forClients={forClients} />
           </FixedToolbar>
 
-          <Editor className="px-11 py-5" />
+          <Editor className="md:px-11 md:py-5" />
 
           <FloatingToolbar>
             <FloatingToolbarButtons />

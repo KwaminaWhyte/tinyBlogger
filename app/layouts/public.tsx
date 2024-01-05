@@ -12,7 +12,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "~/components/ui/sheet";
-import { Moon, Sun } from "lucide-react";
+import {
+  FacebookIcon,
+  InstagramIcon,
+  Moon,
+  Sun,
+  YoutubeIcon,
+} from "lucide-react";
 import { Theme, useTheme } from "remix-themes";
 import {
   DropdownMenu,
@@ -151,11 +157,7 @@ export default function PublicLayout({
               </SheetTrigger>
               <SheetContent side="left" className="md:max-w-[900px] w-screen">
                 <SheetHeader>
-                  <SheetTitle>Edit profile</SheetTitle>
-                  <SheetDescription>
-                    Make changes to your profile here. Click save when you're
-                    done.
-                  </SheetDescription>
+                  <SheetTitle>Blogger.</SheetTitle>
                 </SheetHeader>
                 <div className="grid gap-4 py-4">
                   {[
@@ -177,9 +179,23 @@ export default function PublicLayout({
                   ))}
                 </div>
                 <SheetFooter>
-                  <SheetClose asChild>
-                    <Button type="submit">Save changes</Button>
-                  </SheetClose>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                        <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                        <span className="sr-only">Toggle theme</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => setTheme(Theme.LIGHT)}>
+                        Light
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setTheme(Theme.DARK)}>
+                        Dark
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </SheetFooter>
               </SheetContent>
             </Sheet>
@@ -211,8 +227,13 @@ export default function PublicLayout({
         {children}
       </main>
 
-      <footer className="md:w-[85%] w-[96%] mx-auto mt-11">
-        <p>Footer</p>
+      <footer className="md:w-[85%] flex justify-between w-[93%] mx-auto h-20 items-center mt-11">
+        <p className="font-semibold montage-font">Blogger.</p>
+        <div className="flex items-center gap-5">
+          <FacebookIcon className="w-6 h-6" />
+          <InstagramIcon className="w-6 h-6" />
+          <YoutubeIcon className="w-6 h-6" />
+        </div>
       </footer>
     </div>
   );
