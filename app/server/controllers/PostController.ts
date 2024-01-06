@@ -84,9 +84,8 @@ export default class PostController {
   };
 
   public getPostById = async (id: string) => {
-    const post = await Post.findById(id)
-      .populate("featureImage")
-      .populate("categories");
+    const post = await Post.findById(id).populate("featureImage");
+    // .populate("categories");
 
     return post;
   };
@@ -156,12 +155,14 @@ export default class PostController {
       description: string;
       content: string;
       featureImage: string;
+      categories: string[];
     }
   ) => {
     let modData = {
       title: data.title,
       description: data.description,
       content: data.content,
+      categories: data.categories,
     };
 
     try {
@@ -190,12 +191,14 @@ export default class PostController {
       description: string;
       content: string;
       featureImage: string;
+      categories: string[];
     }
   ) => {
     let modData = {
       title: data.title,
       description: data.description,
       content: data.content,
+      categories: data.categories,
     };
 
     try {

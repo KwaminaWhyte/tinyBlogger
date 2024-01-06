@@ -1,5 +1,6 @@
 import { Link, NavLink } from "@remix-run/react";
 import React, { type ReactNode } from "react";
+import { Toaster } from "~/components/ui/sonner";
 
 export default function ConsoleLayout({
   children,
@@ -49,6 +50,8 @@ export default function ConsoleLayout({
       >
         {children}
       </main>
+
+      <Toaster />
     </div>
   );
 }

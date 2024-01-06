@@ -16,7 +16,7 @@ import { ClientOnly } from "remix-utils/client-only";
 import { PlateEditor } from "~/components/plate-editor.client";
 import { useEffect, useState } from "react";
 import ConsoleDetailLayout from "~/layouts/console-detail";
-import type { PostDocument } from "~/server/types";
+import type { CategoryDocument, PostDocument } from "~/server/types";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
@@ -25,14 +25,30 @@ import { toast } from "sonner";
 export default function Blog() {
   const submit = useSubmit();
   const actionData = useActionData();
-  const { post, postId } = useLoaderData<{
+  const { post, postId, categories } = useLoaderData<{
     post: PostDocument;
+    categories: CategoryDocument[];
     postId: string;
   }>();
   const [content, setContent] = useState(JSON.parse(post.content));
   const [title, setTitle] = useState(post.title);
   const [description, setDescription] = useState(post.description);
   const [base64String, setBase64String] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState(
+    post.categories ? post.categories : []
+  );
+
+  const handleCategoryClick = (category: string) => {
+    const index = selectedCategories.indexOf(category);
+
+    if (index === -1) {
+      setSelectedCategories(selectedCategories.concat(category));
+    } else {
+      setSelectedCategories(
+        selectedCategories.filter((item) => item !== category)
+      );
+    }
+  };
 
   const handleShare = async () => {
     try {
@@ -56,6 +72,7 @@ export default function Blog() {
         // slug: genetateSlug(title),
         content: JSON.stringify(content),
         featureImage: base64String,
+        categories: JSON.stringify(selectedCategories),
       },
       {
         method: "post",
@@ -131,6 +148,25 @@ export default function Blog() {
             value={description}
           />
         </div>
+
+        <div className="grid w-full items-center gap-1.5">
+          <Label htmlFor="description">Categories</Label>
+          <div className="flex gap-3">
+            {categories.map((category) => (
+              <p
+                onClick={() => handleCategoryClick(category?._id)}
+                key={category?._id}
+                className={`px-2 py-1  rounded-xl text-white cursor-pointer capitalize ${
+                  selectedCategories.includes(category?._id)
+                    ? "ring-2 ring-primary ring-offset-2 bg-primary"
+                    : "bg-primary/80"
+                }`}
+              >
+                {category.title}
+              </p>
+            ))}
+          </div>
+        </div>
       </section>
 
       <section className="rounded-md  relative flex flex-col gap-5 my-8 h-96 items-center justify-center bg-black/70 p-4 ">
@@ -178,18 +214,6 @@ export default function Blog() {
         </div>
       </section>
 
-      <section className="flex gap-3 overflow-x-auto mb-5 items-center w-full justify-center">
-        {post?.categories?.map((category, index) => (
-          <Link
-            to={`/categories/${category.slug}`}
-            key={index}
-            className="bg-slate-900 rounded-xl capitalize px-2 py-1 text-white border text-nowrap"
-          >
-            {category.title}
-          </Link>
-        ))}
-      </section>
-
       <ClientOnly fallback={<p>Loading Editor, please be patient...</p>}>
         {() => (
           <PlateEditor
@@ -212,6 +236,7 @@ export const action: ActionFunction = async ({ request }) => {
   const postId = formData.get("postId") as string;
   const actionType = formData.get("actionType") as string;
   const featureImage = formData.get("featureImage") as string;
+  const categories = formData.get("categories") as string;
 
   const postController = new PostController(request);
 
@@ -221,6 +246,7 @@ export const action: ActionFunction = async ({ request }) => {
       description,
       content: content,
       featureImage,
+      categories: JSON.parse(categories),
     });
   } else if (actionType == "update-publish") {
     return await postController.updateAndPublishPost(postId, {
@@ -228,6 +254,7 @@ export const action: ActionFunction = async ({ request }) => {
       description,
       content: content,
       featureImage,
+      categories: JSON.parse(categories),
     });
   }
 };
@@ -237,8 +264,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const postController = new PostController(request);
   const post = await postController.getPostById(postId);
+  const categories = await postController.getCategories();
 
-  return { post, postId };
+  return { post, postId, categories };
 };
 
 export const meta: MetaFunction = ({ data }) => {
