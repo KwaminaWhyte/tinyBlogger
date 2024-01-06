@@ -1,5 +1,6 @@
-import { Link, NavLink, useNavigate } from "@remix-run/react";
+import { useNavigate } from "@remix-run/react";
 import React, { type ReactNode } from "react";
+import { Toaster } from "~/components/ui/sonner";
 
 export default function ConsoleDetailLayout({
   children,
@@ -47,6 +48,7 @@ export default function ConsoleDetailLayout({
       >
         {children}
       </main>
+      <Toaster />
     </div>
   );
 }

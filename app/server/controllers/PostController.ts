@@ -96,14 +96,12 @@ export default class PostController {
     slug: string;
     description: string;
     content: string;
-    featureImage: {
-      url: string;
-      externalId: string;
-    };
+    featureImage: string;
+    categories: string[];
   }) => {
     const newImage = await Image.create({
-      url: data.featureImage.url,
-      externalId: data.featureImage.externalId,
+      url: data.featureImage,
+      externalId: "aafaaf",
     });
 
     const newPost = await Post.create({
@@ -113,6 +111,7 @@ export default class PostController {
       content: data.content,
       featured: true,
       featureImage: newImage._id,
+      categories: data.categories,
     });
 
     return redirect(`/console/posts/${newPost._id}`);
@@ -156,23 +155,31 @@ export default class PostController {
       title: string;
       description: string;
       content: string;
+      featureImage: string;
     }
   ) => {
+    let modData = {
+      title: data.title,
+      description: data.description,
+      content: data.content,
+    };
+
     try {
-      const updatedPost = await Post.findByIdAndUpdate(
-        _id,
-        {
-          title: data.title,
-          description: data.description,
-          content: data.content,
-        },
-        {
-          new: true,
-        }
-      );
+      if (data.featureImage) {
+        const newImage = await Image.create({
+          url: data.featureImage,
+          externalId: "aafaaf",
+        });
+        modData["featureImage"] = newImage?._id;
+      }
+
+      const updatedPost = await Post.findByIdAndUpdate(_id, modData, {
+        new: true,
+      });
       return updatedPost;
     } catch (error) {
       console.log(error);
+      throw new Error(JSON.stringify(error));
     }
   };
 
@@ -182,25 +189,31 @@ export default class PostController {
       title: string;
       description: string;
       content: string;
+      featureImage: string;
     }
   ) => {
+    let modData = {
+      title: data.title,
+      description: data.description,
+      content: data.content,
+    };
+
     try {
-      const updatedPost = await Post.findByIdAndUpdate(
-        _id,
-        {
-          title: data.title,
-          description: data.description,
-          content: data.content,
-          stage: "PUBLISHED",
-          publishedDate: Date.now(),
-        },
-        {
-          new: true,
-        }
-      );
+      if (data.featureImage) {
+        const newImage = await Image.create({
+          url: data.featureImage,
+          externalId: "aafaaf",
+        });
+        modData["featureImage"] = newImage?._id;
+      }
+
+      const updatedPost = await Post.findByIdAndUpdate(_id, modData, {
+        new: true,
+      });
       return updatedPost;
     } catch (error) {
       console.log(error);
+      throw new Error(JSON.stringify(error));
     }
   };
 

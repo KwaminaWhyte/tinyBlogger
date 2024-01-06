@@ -1,8 +1,11 @@
-import { type ActionFunction, type MetaFunction } from "@remix-run/node";
-import { useSubmit } from "@remix-run/react";
+import {
+  type LoaderFunction,
+  type ActionFunction,
+  type MetaFunction,
+} from "@remix-run/node";
+import { useLoaderData, useSubmit } from "@remix-run/react";
 import React, { useEffect, useState } from "react";
 import { ClientOnly } from "remix-utils/client-only";
-import ConsoleLayout from "~/layouts/console";
 import { PlateEditor } from "~/components/plate-editor.client";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -10,68 +13,41 @@ import { Label } from "~/components/ui/label";
 import PostController from "~/server/controllers/PostController";
 import axios from "axios";
 import ConsoleDetailLayout from "~/layouts/console-detail";
-import { set } from "lodash";
+import type { CategoryDocument } from "~/server/types";
 
 export default function CreateBlog() {
+  const { categories } = useLoaderData<{ categories: CategoryDocument[] }>();
   const submit = useSubmit();
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
-  const [featureImage, setFeatureImage] = useState<{
-    url?: string;
-    externalId?: string;
-  }>({});
-  const [file, setFile] = useState<{ file: any; previewUrl: string }>({});
+  const [base64String, setBase64String] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  const handleFileChange = (event) => {
-    const image = {
-      file: event.target.files[0],
-      previewUrl: URL.createObjectURL(event.target.files[0]),
-    };
-    setFile(image);
+  const handleCategoryClick = (category: string) => {
+    const index = selectedCategories.indexOf(category);
+
+    if (index === -1) {
+      setSelectedCategories(selectedCategories.concat(category));
+    } else {
+      setSelectedCategories(
+        selectedCategories.filter((item) => item !== category)
+      );
+    }
   };
 
-  const handleUpload = async () => {
-    const formData = new FormData();
-    formData.append("file", file.file);
-    formData.append("upload_preset", "hostel");
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
 
-    axios
-      .post("https://api.cloudinary.com/v1_1/app-deity/image/upload", formData)
-      .then((response) => {
-        localStorage.setItem(
-          "featureImage",
-          JSON.stringify({
-            url: response.data.secure_url,
-            externalId: response.data.asset_id,
-          })
-        );
-
-        setFeatureImage({
-          url: response.data.secure_url,
-          externalId: response.data.asset_id,
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  const handleSubmit = () => {
-    submit(
-      {
-        title,
-        description,
-        slug: genetateSlug(title),
-        content: JSON.stringify(content),
-        featureImage: JSON.stringify(featureImage),
-      },
-      {
-        method: "post",
-        encType: "multipart/form-data",
-      }
-    );
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result;
+        setBase64String(base64);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   useEffect(() => {
@@ -103,7 +79,25 @@ export default function CreateBlog() {
             {post.stage}
           </p> */}
 
-          <Button onClick={() => handleSubmit()} variant="outline">
+          <Button
+            onClick={() =>
+              submit(
+                {
+                  title,
+                  description,
+                  slug: genetateSlug(title),
+                  content: JSON.stringify(content),
+                  featureImage: base64String,
+                  categories: JSON.stringify(selectedCategories),
+                },
+                {
+                  method: "post",
+                  encType: "multipart/form-data",
+                }
+              )
+            }
+            variant="outline"
+          >
             Save
           </Button>
         </div>
@@ -134,22 +128,36 @@ export default function CreateBlog() {
         />
       </div>
 
+      <div className="grid w-full items-center gap-1.5">
+        <Label htmlFor="description">Categories</Label>
+        <div className="flex gap-3">
+          {categories.map((category) => (
+            <p
+              onClick={() => handleCategoryClick(category?._id)}
+              key={category?._id}
+              className={`px-2 py-1  rounded-xl text-white cursor-pointer capitalize ${
+                selectedCategories.includes(category?._id)
+                  ? "ring-2 ring-primary ring-offset-2 bg-primary"
+                  : "bg-primary/80"
+              }`}
+            >
+              {category.title}
+            </p>
+          ))}
+        </div>
+      </div>
+
       <div className="flex gap-5 items-center">
         <div className="flex flex-col">
           <img
             src={
-              file?.previewUrl
-                ? file.previewUrl
+              base64String
+                ? base64String
                 : "https://th.bing.com/th/id/R.20d3e94846b0317ba981e9b4d3ecdabb?rik=wRXoSyZgG3cbIA&pid=ImgRaw&r=0"
             }
             alt=""
             className="w-60 border border-gray-200 h-36 object-cover rounded-lg "
           />
-          {featureImage.url && (
-            <p className="text-green-600 text-sm text-center font-semibold">
-              Image Uploaded Successfully
-            </p>
-          )}
         </div>
 
         <div className="flex flex-col gap-3">
@@ -158,12 +166,8 @@ export default function CreateBlog() {
             id="image"
             name="image"
             accept=".png,.jpg,jpeg"
-            multiple
-            onChange={handleFileChange}
+            onChange={handleImageChange}
           />
-          <Button type="button" onClick={handleUpload}>
-            Upload
-          </Button>
         </div>
       </div>
 
@@ -193,6 +197,7 @@ export const action: ActionFunction = async ({ request }) => {
   const slug = formData.get("slug") as string;
   const content = formData.get("content") as string;
   const featureImage = formData.get("featureImage") as string;
+  const categories = formData.get("categories") as string;
 
   const postController = new PostController(request);
   return await postController.createPost({
@@ -200,8 +205,16 @@ export const action: ActionFunction = async ({ request }) => {
     description,
     slug,
     content: content,
-    featureImage: JSON.parse(featureImage),
+    featureImage,
+    categories: JSON.parse(categories),
   });
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const postController = new PostController(request);
+  const categories = await postController.getCategories();
+
+  return { categories };
 };
 
 export const meta: MetaFunction = () => {

@@ -120,7 +120,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Blogger. - Categories" },
+    { title: "Posts - Blogger." },
     {
       name: "description",
       content: "Blog about anything and everything",
