@@ -1,6 +1,5 @@
 import { useNavigate } from "@remix-run/react";
 import React, { type ReactNode } from "react";
-import { SearchIcon } from "~/components/icons";
 import { Toaster } from "~/components/ui/sonner";
 
 export default function PublicDetailLayout({

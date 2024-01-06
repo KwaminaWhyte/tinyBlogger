@@ -266,6 +266,11 @@ export default class PostController {
     return newCategory;
   };
 
+  public deleteCategory = async (id: string) => {
+    await Category.findByIdAndDelete(id);
+    return true;
+  };
+
   public getCategoryBySlug = async (slug: string) => {
     const category = await Category.findOne({ slug });
 

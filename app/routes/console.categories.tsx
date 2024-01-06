@@ -3,7 +3,7 @@ import {
   type ActionFunction,
   type MetaFunction,
 } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData, useSubmit } from "@remix-run/react";
 import ConsoleLayout from "~/layouts/console";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -12,6 +12,7 @@ import PostController from "~/server/controllers/PostController";
 import type { CategoryDocument } from "~/server/types";
 
 export default function CreateBlog() {
+  const submit = useSubmit();
   const { categories } = useLoaderData<{ categories: CategoryDocument[] }>();
 
   return (
@@ -41,33 +42,33 @@ export default function CreateBlog() {
 
             <div className="ml-auto flex gap-3">
               <Button
-                variant="destructive"
-                // onClick={() =>
-                //   submit(
-                //     {
-                //       actionType: "unlist",
-                //       category: comment?._id,
-                //     },
-                //     {
-                //       method: "POST",
-                //     }
-                //   )
-                // }
-              >
-                Update
-              </Button>
-              <Button
               // onClick={() =>
               //   submit(
               //     {
-              //       actionType: "publish",
-              //       comment: comment?._id,
+              //       actionType: "unlist",
+              //       category: comment?._id,
               //     },
               //     {
               //       method: "POST",
               //     }
               //   )
               // }
+              >
+                Update
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() =>
+                  submit(
+                    {
+                      actionType: "delete",
+                      comment: category?._id,
+                    },
+                    {
+                      method: "POST",
+                    }
+                  )
+                }
               >
                 Delete
               </Button>
@@ -83,12 +84,19 @@ export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
+  const actionType = formData.get("actionType") as string;
+  const comment = formData.get("comment") as string;
 
   const postController = new PostController(request);
-  return await postController.createCategory({
-    title,
-    description,
-  });
+  if (actionType == "delete") {
+    console.log("something...");
+    return await postController.deleteCategory(comment);
+  } else {
+    return await postController.createCategory({
+      title,
+      description,
+    });
+  }
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
