@@ -14,6 +14,7 @@ import PostController from "~/server/controllers/PostController";
 import axios from "axios";
 import ConsoleDetailLayout from "~/layouts/console-detail";
 import type { CategoryDocument } from "~/server/types";
+import { Textarea } from "~/components/ui/textarea";
 
 export default function CreateBlog() {
   const { categories } = useLoaderData<{ categories: CategoryDocument[] }>();
@@ -120,9 +121,8 @@ export default function CreateBlog() {
 
       <div className="grid w-full items-center gap-1.5">
         <Label htmlFor="description">Description</Label>
-        <Input
+        <Textarea
           id="description"
-          type="text"
           onChange={(e) => setDescription(e.target.value)}
           value={description}
         />

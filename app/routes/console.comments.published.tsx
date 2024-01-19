@@ -27,8 +27,9 @@ export default function ConsoleComments() {
             className="flex flex-col bg-gray-50 shadow-lg p-3 rounded-lg"
           >
             <div className="flex gap-3 items-center">
-              <p className="font-semibold">{comment.name}</p>
-              <p> - {comment.email}</p>
+              <p className="font-semibold">
+                {comment.name} - {comment.email}
+              </p>
             </div>
             <p className="ml-11">{comment.comment}</p>
             <p className="ml-auto">

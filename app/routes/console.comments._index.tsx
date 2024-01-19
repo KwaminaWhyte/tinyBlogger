@@ -26,9 +26,10 @@ export default function ConsoleComments() {
             key={index}
             className="flex flex-col bg-gray-50 shadow-lg p-3 rounded-lg"
           >
-            <div className="flex gap-3 items-center">
-              <p className="font-semibold">{comment.name}</p>
-              <p> - {comment.email}</p>
+            <div className="flex items-center">
+              <p className="font-semibold">
+                {comment.name} - {comment.email}
+              </p>
             </div>
             <p className="ml-11">{comment.comment}</p>
             <p className="ml-auto">
@@ -36,6 +37,7 @@ export default function ConsoleComments() {
             </p>
             <div className="ml-auto flex gap-3">
               <Button
+                size="sm"
                 variant="destructive"
                 onClick={() =>
                   submit(
@@ -52,6 +54,7 @@ export default function ConsoleComments() {
                 Unlist
               </Button>
               <Button
+                size="sm"
                 onClick={() =>
                   submit(
                     {

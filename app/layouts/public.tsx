@@ -5,18 +5,11 @@ import { Button } from "~/components/ui/button";
 import {
   Sheet,
   SheetContent,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "~/components/ui/sheet";
-import {
-  FacebookIcon,
-  InstagramIcon,
-  Moon,
-  Sun,
-  YoutubeIcon,
-} from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { Theme, useTheme } from "remix-themes";
 import {
   DropdownMenu,
@@ -34,6 +27,7 @@ import {
 import axios from "axios";
 import type { PostDocument } from "~/server/types";
 import moment from "moment";
+import Footer from "./footer";
 
 export default function PublicLayout({
   children,
@@ -65,11 +59,11 @@ export default function PublicLayout({
           <Dialog>
             <DialogTrigger asChild>
               <Button
-                variant="outline"
-                className="md:min-w-72 md:max-w-96 flex-1 items-center"
+                variant="ghost"
+                size="icon"
+                className="ml-auto items-center"
               >
-                <SearchIcon className="text-gray-400 hidden md:flex mr-3" />
-                Search
+                <SearchIcon />
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[725px]">
@@ -152,48 +146,63 @@ export default function PublicLayout({
                   />
                 </svg>
               </SheetTrigger>
-              <SheetContent side="left" className="md:max-w-[900px] w-screen">
+              <SheetContent side="left" className="md:max-w-[600px] w-screen">
                 <SheetHeader>
                   <SheetTitle>Blogger.</SheetTitle>
                 </SheetHeader>
-                <div className="grid gap-4 py-4">
+                <div className="grid gap-4 py-4 pl-5">
                   {[
-                    { path: "/", label: "Home" },
-                    // { path: "/explore", label: "Explore" },
-                    // { path: "/about", label: "About" },
+                    {
+                      category: "Section 1",
+                      children: [
+                        { label: "item 1", path: "/" },
+                        { label: "About", path: "/about" },
+                      ],
+                    },
+                    {
+                      category: "Section 2",
+                      children: [
+                        { label: "item 1", path: "/" },
+                        { label: "item 2", path: "/about" },
+                        { label: "item 3", path: "/about" },
+                        { label: "item 4", path: "/about" },
+                        { label: "item 5", path: "/about" },
+                      ],
+                    },
+
+                    {
+                      category: "Secction 3",
+                      children: [
+                        { label: "item 1", path: "/" },
+                        { label: "item 2", path: "/about" },
+                        { label: "item 3", path: "/about" },
+                      ],
+                    },
                   ].map((item, index) => (
-                    <NavLink
+                    <div
                       key={index}
-                      to={item.path}
-                      className={({ isActive }) =>
-                        isActive
-                          ? "text-black dark:text-primary font-semibold hover:text-gray-500"
-                          : "text-gray-800 hover:text-gray-600"
-                      }
+                      className="border-b border-muted pb-5 flex flex-col gap-3"
                     >
-                      {item.label}
-                    </NavLink>
+                      <p className="font-bold text-lg">{item.category}</p>
+
+                      <div className="flex flex-col">
+                        {item.children.map((child) => (
+                          <NavLink
+                            key={index}
+                            to={child.path}
+                            // className={({ isActive }) =>
+                            //   isActive
+                            //     ? "text-black dark:text-primary font-semibold hover:text-gray-500"
+                            //     : "text-gray-800 hover:text-gray-600"
+                            // }
+                          >
+                            {child.label}
+                          </NavLink>
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </div>
-                <SheetFooter>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                        <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                        <span className="sr-only">Toggle theme</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => setTheme(Theme.LIGHT)}>
-                        Light
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => setTheme(Theme.DARK)}>
-                        Dark
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </SheetFooter>
               </SheetContent>
             </Sheet>
 
@@ -224,14 +233,7 @@ export default function PublicLayout({
         {children}
       </main>
 
-      <footer className="md:w-[85%] flex justify-between w-[93%] mx-auto h-20 items-center mt-11">
-        <p className="font-semibold montage-font">Blogger.</p>
-        <div className="flex items-center gap-5">
-          <FacebookIcon className="w-6 h-6" />
-          <InstagramIcon className="w-6 h-6" />
-          <YoutubeIcon className="w-6 h-6" />
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -55,7 +55,7 @@ export function App() {
         <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
         <Links />
       </head>
-      <body className="text-base">
+      <body className="text-sm">
         <Outlet />
         <ScrollRestoration />
         <Scripts />

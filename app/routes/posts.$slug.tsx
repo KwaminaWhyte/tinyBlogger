@@ -169,7 +169,10 @@ export default function Blog() {
                   <p className="text-center">No comments yet</p>
                 )}
                 {comments.map((comment) => (
-                  <div key={comment._id} className="flex flex-col">
+                  <div
+                    key={comment._id}
+                    className="flex flex-col border-b pb-2 border-muted"
+                  >
                     <div className="flex flex-col">
                       <p className="font-bold">{comment.name}</p>
                       <p className="ml-3 text-sm">{comment.comment}</p>

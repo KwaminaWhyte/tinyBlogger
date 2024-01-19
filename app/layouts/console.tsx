@@ -22,16 +22,24 @@ export default function ConsoleLayout({
 
           <div className="gap-3 flex">
             {[
-              { path: "/console", label: "Dashboard" },
-              { path: "/console/posts/create", label: "Create Post" },
-              { path: "/console/categories", label: "Create Category" },
-              { path: "/console/comments", label: "Comments" },
+              { end: true, path: "/console", label: "Dashboard" },
+              {
+                end: true,
+                path: "/console/posts/create",
+                label: "Create Post",
+              },
+              {
+                end: true,
+                path: "/console/categories",
+                label: "Create Category",
+              },
+              { end: false, path: "/console/comments", label: "Comments" },
               // { path: "/about", label: "About" },
             ].map((item, index) => (
               <NavLink
                 key={index}
                 to={item.path}
-                end
+                end={item.end}
                 className={({ isActive }) =>
                   isActive
                     ? "text-black font-semibold hover:text-gray-600"

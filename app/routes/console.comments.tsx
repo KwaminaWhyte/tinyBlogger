@@ -20,17 +20,21 @@ export default function ConsoleComments() {
         <h3>Comments</h3>
       </section>
 
-      <section className="flex gap-3 mt-5 mb-6 bg-gray-100 p-2 items-center">
+      <section className="flex gap-3 mt-5 mb-6 bg-gray-100 rounded-md p-2 items-center">
         {[
           { path: "", name: "Unublished" },
           { path: "/published", name: "Published" },
           { path: "/unlisted", name: "Unlisted" },
         ].map((comSection) => (
           <NavLink
-            end={false}
+            end={true}
             key={comSection.name}
             to={`/console/comments${comSection.path}`}
-            className="hover:text-gray-700"
+            className={({ isActive }) =>
+              isActive
+                ? "text-black font-semibold hover:text-gray-600"
+                : "text-gray-800 hover:text-gray-600"
+            }
           >
             {comSection.name}
           </NavLink>
