@@ -94,7 +94,7 @@ export default function Index() {
               </div>
             </Link>
 
-            <div className="flex-1 flex gap-3 flex-col ">
+            <div className="flex-1  gap-3 grid grid-rows-2 ">
               {featured.slice(1, 3).map((post, index) => (
                 <Link
                   to={`/posts/${post?.slug}`}
@@ -108,7 +108,7 @@ export default function Index() {
                         : "https://th.bing.com/th/id/R.20d3e94846b0317ba981e9b4d3ecdabb?rik=wRXoSyZgG3cbIA&pid=ImgRaw&r=0"
                     }
                     alt=""
-                    className="w-44 object-cover bg-gray-100 rounded-sm"
+                    className="w-44 h-32 md:h-full object-cover bg-gray-100 rounded-sm"
                   />
 
                   <div className="flex flex-col gap-2 flex-1">
@@ -129,7 +129,7 @@ export default function Index() {
             </div>
           </div>
 
-          <div className="md:w-[35%] w-full flex justify-between flex-col gap-3">
+          <div className="md:w-[35%] w-full grid grid-rows-3 flex-col gap-3">
             {featured.slice(3, 6).map((post, index) => (
               <Link
                 to={`/posts/${post?.slug}`}
@@ -143,7 +143,7 @@ export default function Index() {
                       : "https://th.bing.com/th/id/R.20d3e94846b0317ba981e9b4d3ecdabb?rik=wRXoSyZgG3cbIA&pid=ImgRaw&r=0"
                   }
                   alt=""
-                  className="w-44 md:h-24 object-cover bg-gray-100 rounded-sm"
+                  className="w-44 h-32 md:h-32 object-cover bg-gray-100 rounded-sm"
                 />
 
                 <div className="flex flex-col gap-3 flex-1">
