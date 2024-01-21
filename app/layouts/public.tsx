@@ -27,7 +27,7 @@ import {
 import axios from "axios";
 import type { PostDocument } from "~/server/types";
 import moment from "moment";
-import Footer from "./footer";
+import Footer from "../components/footer";
 import logo from "~/assets/Penrodes_icon_logo-19.png";
 
 export default function PublicLayout({
