@@ -30,7 +30,7 @@ import { MoreDropdownMenu } from "./more-dropdown-menu";
 import { MARK_BG_COLOR, MARK_COLOR } from "@udecode/plate-font";
 import { ColorDropdownMenu } from "./color-dropdown-menu";
 
-export function FixedToolbarButtons() {
+export function FixedToolbarButtons({ forClients }) {
   const readOnly = useEditorReadOnly();
 
   return (
@@ -112,10 +112,11 @@ export function FixedToolbarButtons() {
         )}
 
         <div className="grow" />
-
-        <ToolbarGroup noSeparator>
-          <ModeDropdownMenu />
-        </ToolbarGroup>
+        {!forClients && (
+          <ToolbarGroup noSeparator>
+            <ModeDropdownMenu />
+          </ToolbarGroup>
+        )}
       </div>
     </div>
   );

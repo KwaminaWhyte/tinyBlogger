@@ -16,8 +16,13 @@ import ConsoleDetailLayout from "~/layouts/console-detail";
 import type { CategoryDocument } from "~/server/types";
 import { Textarea } from "~/components/ui/textarea";
 
+import MultipleSelector, { type Option } from "~/components/multi-selector";
+// import { InlineCode } from '~/components/ui/inline-code';
+
+const OPTIONS: Option[] = [{ label: "empty", value: "Empty" }];
+
 export default function CreateBlog() {
-  const { categories } = useLoaderData<{ categories: CategoryDocument[] }>();
+  // const { categories } = useLoaderData<{ categories: CategoryDocument[] }>();
   const submit = useSubmit();
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
@@ -25,18 +30,46 @@ export default function CreateBlog() {
   const [content, setContent] = useState("");
   const [base64String, setBase64String] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [isTriggered, setIsTriggered] = React.useState(false);
+  console.log({ selectedCategories });
 
-  const handleCategoryClick = (category: string) => {
-    const index = selectedCategories.indexOf(category);
+  const mockSearch = async (value: string): Promise<Option[]> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        if (!value) {
+          resolve(OPTIONS);
+        }
+        axios
+          .get(`/api/search_category?query=${value}`)
+          .then((res) => {
+            const convertedCategories = res.data.map((category) => ({
+              label: category.title,
+              value: category._id,
+            }));
 
-    if (index === -1) {
-      setSelectedCategories(selectedCategories.concat(category));
-    } else {
-      setSelectedCategories(
-        selectedCategories.filter((item) => item !== category)
-      );
-    }
+            console.log(convertedCategories);
+            resolve(convertedCategories);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
+        // const res = OPTIONS.filter((option) => option.value.includes(value));
+      }, 1000);
+    });
   };
+
+  // const handleCategoryClick = (category: string) => {
+  //   const index = selectedCategories.indexOf(category);
+
+  //   if (index === -1) {
+  //     setSelectedCategories(selectedCategories.concat(category));
+  //   } else {
+  //     setSelectedCategories(
+  //       selectedCategories.filter((item) => item !== category)
+  //     );
+  //   }
+  // };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -130,7 +163,36 @@ export default function CreateBlog() {
 
       <div className="grid w-full items-center gap-1.5">
         <Label htmlFor="description">Categories</Label>
-        <div className="flex gap-3">
+
+        <div className="flex w-full flex-col gap-5">
+          <p>
+            {/* Is request been triggered? <InlineCode>{String(isTriggered)}</InlineCode> */}
+          </p>
+          <MultipleSelector
+            onChange={(values) => setSelectedCategories(values)}
+            // selectedValue={(e) => console.log(e)}
+            onSearch={async (value) => {
+              setIsTriggered(true);
+              const res = await mockSearch(value);
+              setIsTriggered(false);
+              return res;
+            }}
+            triggerSearchOnFocus
+            placeholder="trying to search 'a' to get more options..."
+            loadingIndicator={
+              <p className="py-2 text-center text-lg leading-10 text-muted-foreground">
+                loading...
+              </p>
+            }
+            emptyIndicator={
+              <p className="w-full text-center text-lg leading-10 text-muted-foreground">
+                no results found.
+              </p>
+            }
+          />
+        </div>
+
+        {/* <div className="flex gap-3">
           {categories.map((category) => (
             <p
               onClick={() => handleCategoryClick(category?._id)}
@@ -144,7 +206,7 @@ export default function CreateBlog() {
               {category.title}
             </p>
           ))}
-        </div>
+        </div> */}
       </div>
 
       <div className="flex gap-5 items-center">

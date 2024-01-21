@@ -110,7 +110,12 @@ export default class PostController {
       content: data.content,
       featured: true,
       featureImage: newImage._id,
-      categories: data.categories,
+      categories: data.categories
+        ? data.categories.map((category) => ({
+            title: category.label,
+            _id: category.value,
+          }))
+        : [],
     });
 
     return redirect(`/console/posts/${newPost._id}`);
@@ -279,7 +284,30 @@ export default class PostController {
 
   public searchCategories = async (query: string) => {
     const categories = await Category.find({
-      $text: { $search: query },
+      $or: [
+        {
+          title: {
+            $regex: new RegExp(
+              query
+                .split(" ")
+                .map((term) => `(?=.*${term})`)
+                .join(""),
+              "i"
+            ),
+          },
+        },
+        {
+          description: {
+            $regex: new RegExp(
+              query
+                .split(" ")
+                .map((term) => `(?=.*${term})`)
+                .join(""),
+              "i"
+            ),
+          },
+        },
+      ],
     }).exec();
 
     return categories;
@@ -287,7 +315,30 @@ export default class PostController {
 
   public searchPosts = async (query: string) => {
     const posts = await Post.find({
-      $text: { $search: query },
+      $or: [
+        {
+          title: {
+            $regex: new RegExp(
+              query
+                .split(" ")
+                .map((term) => `(?=.*${term})`)
+                .join(""),
+              "i"
+            ),
+          },
+        },
+        {
+          description: {
+            $regex: new RegExp(
+              query
+                .split(" ")
+                .map((term) => `(?=.*${term})`)
+                .join(""),
+              "i"
+            ),
+          },
+        },
+      ],
       stage: "PUBLISHED",
     })
       .populate("featureImage")
