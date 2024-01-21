@@ -4,8 +4,9 @@ import moment from "moment";
 import PublicLayout from "~/layouts/public";
 import PostController from "~/server/controllers/PostController";
 import type { PostDocument } from "~/server/types";
+import { Theme, useTheme } from "remix-themes";
 import fullLogo from "~/assets/Penrodes_logo_Horizintal-16.png";
-import logo from "~/assets/Penrodes_icon_logo-19.png";
+import logoWhite from "~/assets/Penrodes_logo_Horizintal-17.png";
 
 export default function Index() {
   const { featured, popularPosts, latest, categories } = useLoaderData<{
@@ -14,12 +15,18 @@ export default function Index() {
     latest: PostDocument[];
     categories: any[];
   }>();
+  const [theme, setTheme] = useTheme();
+  console.log(theme);
 
   return (
     <PublicLayout className=" min-h-screen gap-11">
       <section className="flex">
         <div className="md:w-[80%] mx-auto h-[35vh] md:my-auto flex flex-col justify-center gap-7">
-          <img src={fullLogo} className="" alt="" />
+          {theme == "dark" ? (
+            <img src={logoWhite} alt="" className="" />
+          ) : (
+            <img src={fullLogo} className="" alt="" />
+          )}
 
           <p className="text-center md:text-justify">
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias

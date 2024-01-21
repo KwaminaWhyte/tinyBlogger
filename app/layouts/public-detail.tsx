@@ -45,10 +45,6 @@ export default function PublicDetailLayout({
       </main>
 
       <Toaster />
-
-      {/* <footer className="md:w-[75%] w-[96%] mx-auto mt-11">
-        <p>Footer</p>
-      </footer> */}
     </div>
   );
 }
