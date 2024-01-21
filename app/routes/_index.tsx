@@ -265,7 +265,8 @@ export const meta: MetaFunction = () => {
     },
     {
       name: "og:image",
-      content: logo,
+      content:
+        "https://tinyblogger.vercel.app/build/_assets/Penrodes_icon_logo-19-5CJYJWAK.png",
     },
     { name: "og:url", content: "https://tinyblogger.vercel.app" },
   ];
