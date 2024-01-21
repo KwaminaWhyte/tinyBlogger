@@ -5,6 +5,7 @@ import PublicLayout from "~/layouts/public";
 import PostController from "~/server/controllers/PostController";
 import type { PostDocument } from "~/server/types";
 import fullLogo from "~/assets/Penrodes_logo_Horizintal-16.png";
+import logo from "~/assets/Penrodes_icon_logo-19.png";
 
 export default function Index() {
   const { featured, popularPosts, latest, categories } = useLoaderData<{
@@ -264,8 +265,7 @@ export const meta: MetaFunction = () => {
     },
     {
       name: "og:image",
-      content:
-        "https://media.istockphoto.com/vectors/letter-b-icon-vector-id521527924?k=6&m=521527924&s=612x612&w=0&h=CuLX6X3KP0BxCSI2qMkHu_hS664SH-jUuS3BtCKMCmg=",
+      content: logo,
     },
     { name: "og:url", content: "https://tinyblogger.vercel.app" },
   ];
