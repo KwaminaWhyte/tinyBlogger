@@ -286,7 +286,7 @@ export const meta: MetaFunction = () => {
       name: "description",
       content: "Blog about anything and everything",
     },
-    { name: "og:title", content: "Penrobes" },
+    { property: "og:title", content: "Penrobes" },
     {
       name: "og:description",
       content: "Penrobes Blog about anything and everything",
