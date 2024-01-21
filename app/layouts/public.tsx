@@ -149,7 +149,7 @@ export default function PublicLayout({
               </SheetTrigger>
               <SheetContent side="left" className="md:max-w-[600px] w-screen">
                 <SheetHeader>
-                  <SheetTitle>Blogger.</SheetTitle>
+                  <SheetTitle>Penrobes</SheetTitle>
                 </SheetHeader>
                 <div className="grid gap-4 py-4 pl-5">
                   {[

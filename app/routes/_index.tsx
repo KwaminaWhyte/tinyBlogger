@@ -252,15 +252,15 @@ export const loader = async ({ request }) => {
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Blogger." },
+    { title: "Penrobes" },
     {
       name: "description",
       content: "Blog about anything and everything",
     },
-    { name: "og:title", content: "Blogger." },
+    { name: "og:title", content: "Penrobes" },
     {
       name: "og:description",
-      content: "Blogger. Blog about anything and everything",
+      content: "Penrobes Blog about anything and everything",
     },
     {
       name: "og:image",

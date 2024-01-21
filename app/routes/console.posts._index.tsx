@@ -18,12 +18,12 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const meta: MetaFunction = ({ data }) => {
   return [
-    { title: `Posts | Blogger.` },
+    { title: `Posts | Penrobes` },
     {
       name: "description",
       content: "Lists of all posts",
     },
-    { name: "og:title", content: `Posts | Blogger.` },
+    { name: "og:title", content: `Posts | Penrobes` },
     {
       name: "og:description",
       content: "Lists of all posts",

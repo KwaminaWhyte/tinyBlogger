@@ -74,12 +74,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export const meta: MetaFunction = ({ data }) => {
   const category = data?.category;
   return [
-    { title: `${category?.title} | Blogger.` },
+    { title: `${category?.title} | Penrobes` },
     {
       name: "description",
       content: category?.description,
     },
-    { name: "og:title", content: `${category?.title} | Blogger.` },
+    { name: "og:title", content: `${category?.title} | Penrobes` },
     {
       name: "og:description",
       content: category?.description,

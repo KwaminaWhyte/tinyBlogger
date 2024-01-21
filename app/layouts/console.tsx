@@ -17,7 +17,7 @@ export default function ConsoleLayout({
             to="/console"
             className="font-bold text-purple-700 hover:text-black montage-font text-xl"
           >
-            Blogger.
+            Penrobes
           </Link>
 
           <div className="gap-3 flex">

@@ -53,8 +53,8 @@ export default function Blog() {
   const handleShare = async () => {
     try {
       await navigator.share({
-        title: `${post?.title} | Blogger.`,
-        text: `${post?.description} | Blogger.`,
+        title: `${post?.title} | Penrobes`,
+        text: `${post?.description} | Penrobes`,
         url: window.location.href,
       });
     } catch (error) {
@@ -272,12 +272,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export const meta: MetaFunction = ({ data }) => {
   const post = data?.post;
   return [
-    { title: `${post?.title} | Blogger.` },
+    { title: `${post?.title} | Penrobes` },
     {
       name: "description",
       content: post?.description,
     },
-    { name: "og:title", content: `${post?.title} | Blogger.` },
+    { name: "og:title", content: `${post?.title} | Penrobes` },
     {
       name: "og:description",
       content: post?.description,
