@@ -4,6 +4,7 @@ import moment from "moment";
 import PublicLayout from "~/layouts/public";
 import PostController from "~/server/controllers/PostController";
 import type { PostDocument } from "~/server/types";
+import fullLogo from "~/assets/Penrodes_logo_Horizintal-16.png";
 
 export default function Index() {
   const { featured, popularPosts, latest, categories } = useLoaderData<{
@@ -17,9 +18,7 @@ export default function Index() {
     <PublicLayout className=" min-h-screen gap-11">
       <section className="flex">
         <div className="md:w-[80%] mx-auto h-[35vh] md:my-auto flex flex-col justify-center gap-7">
-          <h1 className="md:text-8xl text-3xl text-center">
-            Welcome to Blogger.
-          </h1>
+          <img src={fullLogo} className="" alt="" />
 
           <p className="text-center md:text-justify">
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias

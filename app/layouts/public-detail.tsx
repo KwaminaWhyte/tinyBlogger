@@ -24,7 +24,7 @@ export default function PublicDetailLayout({
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-8 h-8 p-1 rounded-sm bg-gray-100 cursor-pointer text-gray-800"
+              className="w-8 h-8 p-1 rounded-sm bg-muted cursor-pointer"
             >
               <path
                 strokeLinecap="round"

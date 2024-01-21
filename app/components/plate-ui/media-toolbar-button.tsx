@@ -9,7 +9,6 @@ import {
 import { Icons } from "~/components/icons";
 
 import { ToolbarButton } from "./toolbar";
-import { FilmIcon } from "lucide-react";
 
 export const MediaToolbarButton = withRef<
   typeof ToolbarButton,
@@ -21,7 +20,7 @@ export const MediaToolbarButton = withRef<
 
   return (
     <ToolbarButton ref={ref} {...props} {...rest}>
-      {nodeType === ELEMENT_MEDIA_EMBED ? <FilmIcon /> : <Icons.image />}
+      <Icons.image />
     </ToolbarButton>
   );
 });

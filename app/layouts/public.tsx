@@ -28,6 +28,7 @@ import axios from "axios";
 import type { PostDocument } from "~/server/types";
 import moment from "moment";
 import Footer from "./footer";
+import logo from "~/assets/Penrodes_icon_logo-19.png";
 
 export default function PublicLayout({
   children,
@@ -52,7 +53,7 @@ export default function PublicLayout({
               to="/"
               className="font-bold text-purple-700 dark:text-purple-500 hover:text-black montage-font text-lg md:text-xl"
             >
-              Blogger.
+              <img src={logo} alt="" className=" h-10" />
             </Link>
           </div>
 
@@ -66,7 +67,7 @@ export default function PublicLayout({
                 <SearchIcon />
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[725px]">
+            <DialogContent className="sm:max-w-[725px] top-[16%] translate-y-[-8%]">
               <DialogHeader>
                 <Form
                   onSubmit={(e) => {
@@ -228,7 +229,7 @@ export default function PublicLayout({
       </div>
 
       <main
-        className={`md:w-[85%] w-[93%] flex flex-col mt-14 mb-8 mx-auto bg-red-500" ${className}`}
+        className={`md:w-[85%] min-h-screen w-[93%] flex flex-col mt-14 mb-8 mx-auto bg-red-500" ${className}`}
       >
         {children}
       </main>

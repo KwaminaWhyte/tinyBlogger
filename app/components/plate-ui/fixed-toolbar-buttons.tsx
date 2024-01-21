@@ -8,7 +8,7 @@ import {
 } from "@udecode/plate-basic-marks";
 import { useEditorReadOnly } from "@udecode/plate-common";
 
-import { Icons } from "~/components/icons";
+import { Icons, iconVariants } from "~/components/icons";
 
 import { InsertDropdownMenu } from "./insert-dropdown-menu";
 import { MarkToolbarButton } from "./mark-toolbar-button";
@@ -22,18 +22,15 @@ import { ListStyleType } from "@udecode/plate-indent-list";
 import { OutdentToolbarButton } from "./outdent-toolbar-button";
 import { IndentToolbarButton } from "./indent-toolbar-button";
 import { LinkToolbarButton } from "./link-toolbar-button";
+import { ELEMENT_IMAGE } from "@udecode/plate-media";
 import { MediaToolbarButton } from "./media-toolbar-button";
-import { ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED } from "@udecode/plate-media";
 import { TableDropdownMenu } from "./table-dropdown-menu";
 import { EmojiDropdownMenu } from "./emoji-dropdown-menu";
 import { MoreDropdownMenu } from "./more-dropdown-menu";
-import { Code } from "lucide-react";
+import { MARK_BG_COLOR, MARK_COLOR } from "@udecode/plate-font";
+import { ColorDropdownMenu } from "./color-dropdown-menu";
 
-export function FixedToolbarButtons({
-  forClients = false,
-}: {
-  forClients: boolean;
-}) {
+export function FixedToolbarButtons() {
   const readOnly = useEditorReadOnly();
 
   return (
@@ -77,6 +74,18 @@ export function FixedToolbarButtons({
             </ToolbarGroup>
 
             <ToolbarGroup>
+              <ColorDropdownMenu nodeType={MARK_COLOR} tooltip="Text Color">
+                <Icons.color className={iconVariants({ variant: "toolbar" })} />
+              </ColorDropdownMenu>
+              <ColorDropdownMenu
+                nodeType={MARK_BG_COLOR}
+                tooltip="Highlight Color"
+              >
+                <Icons.bg className={iconVariants({ variant: "toolbar" })} />
+              </ColorDropdownMenu>
+            </ToolbarGroup>
+
+            <ToolbarGroup>
               <AlignDropdownMenu />
 
               <LineHeightDropdownMenu />
@@ -93,10 +102,10 @@ export function FixedToolbarButtons({
 
               <MediaToolbarButton nodeType={ELEMENT_IMAGE} />
 
-              <MediaToolbarButton nodeType={ELEMENT_MEDIA_EMBED} />
-
               <TableDropdownMenu />
+
               <EmojiDropdownMenu />
+
               <MoreDropdownMenu />
             </ToolbarGroup>
           </>
@@ -104,11 +113,9 @@ export function FixedToolbarButtons({
 
         <div className="grow" />
 
-        {!forClients && (
-          <ToolbarGroup noSeparator>
-            <ModeDropdownMenu />
-          </ToolbarGroup>
-        )}
+        <ToolbarGroup noSeparator>
+          <ModeDropdownMenu />
+        </ToolbarGroup>
       </div>
     </div>
   );

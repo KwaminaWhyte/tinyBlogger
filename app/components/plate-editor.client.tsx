@@ -53,10 +53,10 @@ import {
   ELEMENT_TH,
 } from "@udecode/plate-table";
 import { createTodoListPlugin, ELEMENT_TODO_LI } from "@udecode/plate-list";
-import {
-  createExcalidrawPlugin,
-  ELEMENT_EXCALIDRAW,
-} from "@udecode/plate-excalidraw";
+// import {
+// createExcalidrawPlugin,
+// ELEMENT_EXCALIDRAW,
+// } from "@udecode/plate-excalidraw";
 import {
   createBoldPlugin,
   MARK_BOLD,
@@ -95,7 +95,6 @@ import {
   createSoftBreakPlugin,
 } from "@udecode/plate-break";
 import { createNodeIdPlugin } from "@udecode/plate-node-id";
-import { createNormalizeTypesPlugin } from "@udecode/plate-normalizers";
 import { createResetNodePlugin } from "@udecode/plate-reset-node";
 import {
   createSelectOnBackspacePlugin,
@@ -163,13 +162,15 @@ const plugins = createPlugins(
     createMediaEmbedPlugin(),
     createCaptionPlugin({
       options: {
-        pluginKeys: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED],
+        pluginKeys: [
+          // ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED
+        ],
       },
     }),
     createMentionPlugin(),
     createTablePlugin(),
     createTodoListPlugin(),
-    createExcalidrawPlugin(),
+    // createExcalidrawPlugin(),
     createBoldPlugin(),
     createItalicPlugin(),
     createUnderlinePlugin(),
@@ -185,7 +186,10 @@ const plugins = createPlugins(
     createAlignPlugin({
       inject: {
         props: {
-          validTypes: [ELEMENT_PARAGRAPH, ELEMENT_H1, ELEMENT_H2, ELEMENT_H3],
+          validTypes: [
+            ELEMENT_PARAGRAPH,
+            // ELEMENT_H1, ELEMENT_H2, ELEMENT_H3
+          ],
         },
       },
     }),
@@ -194,11 +198,7 @@ const plugins = createPlugins(
         props: {
           validTypes: [
             ELEMENT_PARAGRAPH,
-            ELEMENT_H1,
-            ELEMENT_H2,
-            ELEMENT_H3,
-            ELEMENT_BLOCKQUOTE,
-            ELEMENT_CODE_BLOCK,
+            // ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_BLOCKQUOTE, ELEMENT_CODE_BLOCK
           ],
         },
       },
@@ -208,11 +208,7 @@ const plugins = createPlugins(
         props: {
           validTypes: [
             ELEMENT_PARAGRAPH,
-            ELEMENT_H1,
-            ELEMENT_H2,
-            ELEMENT_H3,
-            ELEMENT_BLOCKQUOTE,
-            ELEMENT_CODE_BLOCK,
+            // ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_BLOCKQUOTE, ELEMENT_CODE_BLOCK
           ],
         },
       },
@@ -222,7 +218,10 @@ const plugins = createPlugins(
         props: {
           defaultNodeValue: 1.5,
           validNodeValues: [1, 1.2, 1.5, 2, 3],
-          validTypes: [ELEMENT_PARAGRAPH, ELEMENT_H1, ELEMENT_H2, ELEMENT_H3],
+          validTypes: [
+            ELEMENT_PARAGRAPH,
+            // ELEMENT_H1, ELEMENT_H2, ELEMENT_H3
+          ],
         },
       },
     }),
@@ -257,7 +256,6 @@ const plugins = createPlugins(
       },
     }),
     createNodeIdPlugin(),
-    createNormalizeTypesPlugin(),
     createResetNodePlugin({
       options: {
         rules: [
@@ -268,7 +266,9 @@ const plugins = createPlugins(
     createSelectOnBackspacePlugin({
       options: {
         query: {
-          allow: [ELEMENT_IMAGE, ELEMENT_HR],
+          allow: [
+            // ELEMENT_IMAGE, ELEMENT_HR
+          ],
         },
       },
     }),
@@ -280,7 +280,9 @@ const plugins = createPlugins(
           {
             hotkey: "enter",
             query: {
-              allow: [ELEMENT_CODE_BLOCK, ELEMENT_BLOCKQUOTE, ELEMENT_TD],
+              allow: [
+                // ELEMENT_CODE_BLOCK, ELEMENT_BLOCKQUOTE, ELEMENT_TD
+              ],
             },
           },
         ],
