@@ -16,11 +16,10 @@ export default function Index() {
     categories: any[];
   }>();
   const [theme, setTheme] = useTheme();
-  console.log(theme);
 
   return (
     <PublicLayout className=" min-h-screen gap-11">
-      <section className="flex">
+      <section className="flex my-5">
         <div className="md:w-[80%] mx-auto h-[35vh] md:my-auto flex flex-col justify-center gap-7">
           {theme == "dark" ? (
             <img src={logoWhite} alt="" className="" />
@@ -28,10 +27,8 @@ export default function Index() {
             <img src={fullLogo} className="" alt="" />
           )}
 
-          <p className="text-center md:text-justify">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias
-            maxime reiciendis quae porro explicabo iste adipisci culpa quos
-            earum doloremque, vitae maiores?
+          <p className="text-center text-xl my-3 font-semibold">
+            Academic Research and Publication Consulting
           </p>
 
           {/* <Link
@@ -94,7 +91,7 @@ export default function Index() {
                   <p className="font-semibold">
                     {featured[0]?.createdBy?.name}
                   </p>
-                  <p className="text-gray-500 ml-auto text-xs">
+                  <p className="text-red-500 ml-auto text-xs">
                     {moment(featured[0]?.createdAt).format("MMM DD, YYYY")}
                   </p>
                 </div>
@@ -126,7 +123,7 @@ export default function Index() {
 
                     <div className="mt-auto flex flex-col">
                       {/* <p className="font-semibold mt-auto">{post?.createdBy?.name}</p> */}
-                      <p className="text-gray-500 ml-auto text-xs">
+                      <p className="text-red-500 ml-auto text-xs">
                         {moment(post?.createdAt).format("MMM DD, YYYY")}
                       </p>
                     </div>
@@ -160,7 +157,7 @@ export default function Index() {
                   </p>
                   <div className="mt-auto flex flex-col">
                     {/* <p className="font-semibold ">{post?.createdBy?.name}</p> */}
-                    <p className="text-gray-500 ml-auto text-xs">
+                    <p className="text-red-500 ml-auto text-xs">
                       {moment(post?.createdAt).format("MMM DD, YYYY")}
                     </p>
                   </div>
@@ -202,7 +199,7 @@ export default function Index() {
 
                   <div className="mt-auto flex flex-col">
                     <p className="font-semibold">{post?.createdBy?.name}</p>
-                    <p className="text-gray-500 ml-auto text-xs">
+                    <p className="text-red-500 ml-auto text-xs">
                       {moment(post?.createdAt).format("MMM DD, YYYY")}
                     </p>
                   </div>
@@ -227,7 +224,7 @@ export default function Index() {
               key={index}
               className="flex gap-6 w-full"
             >
-              <p className="font-semibold text-3xl text-gray-400 w-11">{`0${
+              <p className="font-semibold text-4xl text-gray-400 w-11">{`0${
                 index + 1
               }`}</p>
               <div className="flex-1">
@@ -235,7 +232,7 @@ export default function Index() {
                 <p className="line-clamp-1 text-gray-600">{post.description}</p>
                 <div className="mt-auto flex flex-col">
                   <p className="font-semibold"> {post?.createdBy?.name}</p>
-                  <p className="text-gray-500 text-xs ml-auto">
+                  <p className="text-red-500 ml-auto text-xs">
                     {moment(post?.createdAt).format("MMM DD, YYYY")}
                   </p>
                 </div>

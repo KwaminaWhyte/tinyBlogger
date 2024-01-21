@@ -29,6 +29,8 @@ import type { PostDocument } from "~/server/types";
 import moment from "moment";
 import Footer from "../components/footer";
 import logo from "~/assets/Penrodes_icon_logo-19.png";
+import fullLogo from "~/assets/Penrodes_logo_Horizintal-16.png";
+import logoWhite from "~/assets/Penrodes_logo_Horizintal-17.png";
 
 export default function PublicLayout({
   children,
@@ -40,7 +42,7 @@ export default function PublicLayout({
   query?: string;
 }) {
   const navigate = useNavigate();
-  const [, setTheme] = useTheme();
+  const [theme, setTheme] = useTheme();
   const [queryy, setQuery] = useState(query);
   const [postsResults, setPostsResults] = useState([]);
 
@@ -149,7 +151,13 @@ export default function PublicLayout({
               </SheetTrigger>
               <SheetContent side="left" className="md:max-w-[600px] w-screen">
                 <SheetHeader>
-                  <SheetTitle>Penrobes</SheetTitle>
+                  <SheetTitle className="items-center flex justify-center">
+                    {theme == "dark" ? (
+                      <img src={logoWhite} alt="" className="h-16" />
+                    ) : (
+                      <img src={fullLogo} className="h-16" alt="" />
+                    )}
+                  </SheetTitle>
                 </SheetHeader>
                 <div className="grid gap-4 py-4 pl-5">
                   {[
@@ -191,6 +199,7 @@ export default function PublicLayout({
                           <NavLink
                             key={index}
                             to={child.path}
+                            className="text-gray-600 hover:text-black dark:hover:text-gray-400"
                             // className={({ isActive }) =>
                             //   isActive
                             //     ? "text-black dark:text-primary font-semibold hover:text-gray-500"
