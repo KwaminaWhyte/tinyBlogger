@@ -1,6 +1,7 @@
 import { Link, NavLink } from "@remix-run/react";
 import React, { type ReactNode } from "react";
 import { Toaster } from "~/components/ui/sonner";
+import logo from "~/assets/Penrodes_icon_logo-19.png";
 
 export default function ConsoleLayout({
   children,
@@ -11,13 +12,13 @@ export default function ConsoleLayout({
 }) {
   return (
     <div className="flex flex-col">
-      <div className="h-16 backdrop-blur-md bg-white/50 z-50 flex gap-3 fixed top-0 left-0 right-0 items-center">
+      <div className="h-16 backdrop-blur-md bg-background/50 z-50 flex gap-3 fixed top-0 left-0 right-0 items-center">
         <nav className="flex md:w-[75%] w-[96%] mx-auto justify-between items-center ">
           <Link
             to="/console"
             className="font-bold text-purple-700 hover:text-black montage-font text-xl"
           >
-            Penrobes
+            <img src={logo} alt="" className=" h-10" />
           </Link>
 
           <div className="gap-3 flex">
@@ -31,7 +32,7 @@ export default function ConsoleLayout({
               {
                 end: true,
                 path: "/console/categories",
-                label: "Create Category",
+                label: "Categories",
               },
               { end: false, path: "/console/comments", label: "Comments" },
               // { path: "/about", label: "About" },
@@ -42,8 +43,8 @@ export default function ConsoleLayout({
                 end={item.end}
                 className={({ isActive }) =>
                   isActive
-                    ? "text-black font-semibold hover:text-gray-600"
-                    : "text-gray-800 hover:text-gray-600"
+                    ? "text-white font-semibold hover:text-gray-600"
+                    : "text-gray-200 hover:text-gray-600"
                 }
               >
                 {item.label}

@@ -6,6 +6,7 @@ import Category from "../models/Category";
 import mongoose from "mongoose";
 import Image from "../models/Image";
 import { View } from "../models/View";
+import Section from "../models/Section";
 
 export default class PostController {
   private request: Request;
@@ -345,6 +346,29 @@ export default class PostController {
       .exec();
 
     return posts;
+  };
+
+  public getSections = async () => {
+    const sections = await Section.find();
+    return sections;
+  };
+
+  public createSection = async (data: {
+    title: string;
+    description: string;
+  }) => {
+    const newSection = await Section.create({
+      title: data.title,
+      slug: this.genetateSlug(data.title),
+      description: data.description,
+    });
+
+    return newSection;
+  };
+
+  public deleteSection = async (id: string) => {
+    await Section.findByIdAndDelete(id);
+    return true;
   };
 
   public likePost = async ({

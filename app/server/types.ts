@@ -40,6 +40,15 @@ export type CategoryDocument = {
   updatedAt: Date;
 };
 
+export type SectionDocument = {
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type CommentDocument = {
   _id: string;
   post: PostDocument;
