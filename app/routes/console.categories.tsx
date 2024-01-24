@@ -278,6 +278,11 @@ export default function CreateBlog() {
           ))}
         </section>
       </div>
+
+      <div>
+        <p>Updating category (Work in progress)</p>
+        <p>Categories with no section (Work in progress)</p>
+      </div>
     </ConsoleLayout>
   );
 }
