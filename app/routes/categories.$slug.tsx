@@ -5,13 +5,16 @@ import moment from "moment";
 import PostController from "~/server/controllers/PostController";
 
 export default function CategoryDetails() {
-  const { category, slug, posts } = useLoaderData<{
+  const { category, slug, posts, categories, sections } = useLoaderData<{
     category: any;
     posts: any[];
+    categories: any[];
+    sections: any[];
   }>();
+  console.log(posts);
 
   return (
-    <PublicLayout>
+    <PublicLayout data={{ sections, categories }}>
       <section className="flex gap-5 flex-col my-11">
         <h1 className="md:text-6xl text-3xl text-center md:w-[70%] mx-auto">
           {category?.title}
@@ -36,9 +39,13 @@ export default function CategoryDetails() {
             key={index}
           >
             <img
-              src={post?.coverImage?.url}
+              src={
+                post?.featureImage?.url
+                  ? post?.featureImage?.url
+                  : "https://th.bing.com/th/id/R.20d3e94846b0317ba981e9b4d3ecdabb?rik=wRXoSyZgG3cbIA&pid=ImgRaw&r=0"
+              }
               alt=""
-              className="w-full h-40 object-cover rounded-sm"
+              className="w-full h-40 object-cover bg-gray-100 rounded-sm"
             />
 
             <div className="flex-1">
@@ -47,7 +54,7 @@ export default function CategoryDetails() {
 
               <div className="mt-auto flex flex-col">
                 <p className="font-semibold">{post?.createdBy?.name}</p>
-                <p className="text-gray-500 ml-auto">
+                <p className="text-red-500 ml-auto text-xs">
                   {moment(post?.createdAt).format("MMM DD, YYYY")}
                 </p>
               </div>
@@ -68,7 +75,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const category = await postController.getCategoryBySlug(slug);
   const posts = await postController.getPostByCategory(category.id);
 
-  return { category, slug, posts };
+  const categories = await postController.getCategories();
+  const sections = await postController.getSections();
+
+  return { category, slug, posts, categories, sections };
 };
 
 export const meta: MetaFunction = ({ data }) => {

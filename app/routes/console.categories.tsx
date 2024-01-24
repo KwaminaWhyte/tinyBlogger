@@ -20,6 +20,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
+import { useEffect, useState } from "react";
 
 export default function CreateBlog() {
   const submit = useSubmit();
@@ -27,6 +28,24 @@ export default function CreateBlog() {
     categories: CategoryDocument[];
     sections: SectionDocument[];
   }>();
+  const [newSection, setNewSection] = useState([]);
+
+  useEffect(() => {
+    let newArray = [];
+    sections.forEach((section) => {
+      let secCat = categories.filter((category) => {
+        return category.section?._id == section._id;
+      });
+
+      newArray.push({
+        ...section,
+        categories: secCat,
+      });
+      return true;
+    });
+
+    setNewSection(newArray);
+  }, [categories, sections]);
 
   return (
     <ConsoleLayout className="gap-5 ">
@@ -49,11 +68,6 @@ export default function CreateBlog() {
               <div className="grid w-full items-center gap-1.5">
                 <Label htmlFor="title">Title</Label>
                 <Input id="title" name="title" type="text" />
-              </div>
-
-              <div className="grid w-full items-center gap-1.5">
-                <Label htmlFor="description">Description</Label>
-                <Input id="description" type="text" name="description" />
               </div>
 
               <Button type="submit" className="ml-auto">
@@ -89,6 +103,18 @@ export default function CreateBlog() {
                 <Input id="description" type="text" name="description" />
               </div>
 
+              <div className="grid w-full items-center gap-1.5">
+                <Label htmlFor="section">Section</Label>
+                <select name="section" id="section">
+                  {sections.map((section) => (
+                    <option key={section?._id} value={section?._id}>
+                      {section.title}
+                    </option>
+                  ))}
+                </select>
+                {/* <Input id="section" name="section" type="text" /> */}
+              </div>
+
               <Button type="submit" className="ml-auto">
                 Save
               </Button>
@@ -98,15 +124,13 @@ export default function CreateBlog() {
       </section>
 
       <div className="grid grid-cols-2 gap-3">
-        <section className="flex flex-col gap-3">
-          {sections.map((section, index) => (
+        {newSection.map((section, index) => (
+          <div key={index} className="flex flex-col gap-3">
             <div
               key={index}
               className="flex flex-col bg-muted shadow-lg p-3 rounded-lg"
             >
               <p className="font-semibold">{section.title}</p>
-              <p className="ml-11">{section.description}</p>
-
               <div className="ml-auto flex gap-3">
                 <Button
                 // onClick={() =>
@@ -141,10 +165,56 @@ export default function CreateBlog() {
                 </Button>
               </div>
             </div>
-          ))}
-        </section>
 
-        <section className="flex flex-col gap-3">
+            <div className="ml-11 flex flex-col gap-2">
+              {section.categories.map((category, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col bg-muted shadow-lg p-3 rounded-lg"
+                >
+                  <p className="font-semibold">{category.title}</p>
+                  <p className="ml-11">{category.description}</p>
+
+                  <div className="ml-auto flex gap-3">
+                    <Button
+                    // onClick={() =>
+                    //   submit(
+                    //     {
+                    //       actionType: "unlist",
+                    //       category: comment?._id,
+                    //     },
+                    //     {
+                    //       method: "POST",
+                    //     }
+                    //   )
+                    // }
+                    >
+                      Update
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={() =>
+                        submit(
+                          {
+                            actionType: "delete",
+                            categoryId: category?._id,
+                          },
+                          {
+                            method: "POST",
+                          }
+                        )
+                      }
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        <section className="hidden  flex-col gap-3">
           {categories.map((category, index) => (
             <div
               key={index}
@@ -198,6 +268,7 @@ export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
+  const section = formData.get("section") as string;
   const actionType = formData.get("actionType") as string;
   const categoryId = formData.get("categoryId") as string;
   const sectionId = formData.get("sectionId") as string;
@@ -216,6 +287,7 @@ export const action: ActionFunction = async ({ request }) => {
     return await postController.createCategory({
       title,
       description,
+      section,
     });
   }
 };

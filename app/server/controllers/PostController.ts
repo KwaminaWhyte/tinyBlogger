@@ -73,13 +73,10 @@ export default class PostController {
   };
 
   public getPostByCategory = async (categoryId: string) => {
-    const posts = await Post.find({
-      categories: {
-        $elemMatch: { $eq: new mongoose.Types.ObjectId(categoryId) },
-      },
-    })
+    const posts = await Post.find({ categories: { $in: [categoryId] } })
       .populate("featureImage")
-      .populate("categories");
+      .populate("categories")
+      .select("-content");
 
     return posts;
   };
@@ -205,6 +202,7 @@ export default class PostController {
       description: data.description,
       content: data.content,
       categories: data.categories,
+      stage: "PUBLISHED",
     };
 
     try {
@@ -254,19 +252,20 @@ export default class PostController {
   };
 
   public getCategories = async () => {
-    const categories = await Category.find();
-
+    const categories = await Category.find().populate("section");
     return categories;
   };
 
   public createCategory = async (data: {
     title: string;
     description: string;
+    section: string;
   }) => {
     const newCategory = await Category.create({
       title: data.title,
       slug: this.genetateSlug(data.title),
       description: data.description,
+      section: data.section,
     });
 
     return newCategory;

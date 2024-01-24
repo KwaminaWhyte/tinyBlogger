@@ -35,6 +35,7 @@ export type CategoryDocument = {
   title: string;
   slug: string;
   description: string;
+  section: SectionDocument;
   featured: boolean;
   createdAt: Date;
   updatedAt: Date;

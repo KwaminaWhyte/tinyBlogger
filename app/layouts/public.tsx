@@ -1,5 +1,5 @@
 import { Form, Link, NavLink, useNavigate } from "@remix-run/react";
-import React, { useState, type ReactNode } from "react";
+import React, { useEffect, useState, type ReactNode } from "react";
 import { SearchIcon } from "~/components/icons";
 import { Button } from "~/components/ui/button";
 import {
@@ -36,15 +36,36 @@ export default function PublicLayout({
   children,
   className,
   query,
+  data,
 }: {
   children: ReactNode;
   className?: string;
   query?: string;
+  data?: {};
 }) {
   const navigate = useNavigate();
   const [theme, setTheme] = useTheme();
   const [queryy, setQuery] = useState(query);
   const [postsResults, setPostsResults] = useState([]);
+
+  const [newSection, setNewSection] = useState([]);
+
+  useEffect(() => {
+    let newArray = [];
+    data?.sections.forEach((section) => {
+      let secCat = data?.categories.filter((category) => {
+        return category.section?._id == section._id;
+      });
+
+      newArray.push({
+        ...section,
+        categories: secCat,
+      });
+      return true;
+    });
+
+    setNewSection(newArray);
+  }, [data]);
 
   return (
     <div className="flex flex-col">
@@ -160,64 +181,18 @@ export default function PublicLayout({
                   </SheetTitle>
                 </SheetHeader>
                 <div className="grid gap-4 py-4 pl-5">
-                  {[
-                    {
-                      category: "Blog",
-                      children: [
-                        { label: "Articles", path: "/" },
-                        { label: "Opinions", path: "/" },
-                      ],
-                    },
-                    {
-                      category: "Editing Services",
-                      children: [
-                        {
-                          label: "Copy Editing",
-                          path: "/",
-                        },
-                        { label: "Proofreading", path: "/about" },
-                        { label: "Thesis Editing", path: "/about" },
-                      ],
-                    },
-                    {
-                      category: "Publication Support",
-                      children: [
-                        { label: "Pre-submission Peer Review", path: "/" },
-                        { label: "Literature Review", path: "/about" },
-                        { label: "Rejected Paper Editing", path: "/about" },
-                      ],
-                    },
-                    {
-                      category: "Research Guide",
-                      children: [
-                        { label: "Student Research", path: "/" },
-                        { label: "Academic Writing", path: "/about" },
-                      ],
-                    },
-                    {
-                      category: "Research Digests",
-                      children: [
-                        { label: "Quick Reads", path: "/" },
-                        { label: "Summaries", path: "/about" },
-                        { label: "Key Takeaways", path: "/about" },
-                        { label: "Spotlight", path: "/about" },
-                        { label: "Editor's Picks", path: "/about" },
-                        { label: "Recent Discoveries", path: "/about" },
-                        { label: "Must-Reads", path: "/about" },
-                      ],
-                    },
-                  ].map((item, index) => (
+                  {newSection.map((item, index) => (
                     <div
                       key={index}
                       className="border-b border-muted pb-5 flex flex-col gap-3"
                     >
-                      <p className="font-bold text-lg">{item.category}</p>
+                      <p className="font-bold text-lg">{item.title}</p>
 
                       <div className="flex flex-col gap-0.5">
-                        {item.children.map((child) => (
+                        {item.categories.map((child) => (
                           <NavLink
                             key={index}
-                            to={child.path}
+                            to={`/categories/${child.slug}`}
                             className="text-gray-600 hover:text-black dark:text-gray-300 dark:hover:text-gray-400"
                             // className={({ isActive }) =>
                             //   isActive
@@ -225,7 +200,7 @@ export default function PublicLayout({
                             //     : "text-gray-800 hover:text-gray-600"
                             // }
                           >
-                            {child.label}
+                            {child.title}
                           </NavLink>
                         ))}
                       </div>

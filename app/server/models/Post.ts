@@ -19,11 +19,9 @@ const postSchema = new Schema<PostDocument>(
     },
     description: {
       type: String,
-      // required: true,
     },
     content: {
       type: String,
-      // required: true,
     },
     featureImage: {
       type: Schema.Types.ObjectId,
@@ -43,7 +41,6 @@ const postSchema = new Schema<PostDocument>(
       {
         type: Schema.Types.ObjectId,
         ref: "categories",
-        // required: true,
       },
     ],
     comments: [

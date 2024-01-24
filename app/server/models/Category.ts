@@ -9,6 +9,10 @@ const categorySchema = new Schema<CategoryDocument>(
       required: true,
       unique: true,
     },
+    section: {
+      type: Schema.Types.ObjectId,
+      ref: "sections",
+    },
     slug: {
       type: String,
       required: true,

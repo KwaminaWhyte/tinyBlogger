@@ -9,16 +9,21 @@ import fullLogo from "~/assets/Penrodes_logo_Horizintal-16.png";
 import logoWhite from "~/assets/Penrodes_logo_Horizintal-17.png";
 
 export default function Index() {
-  const { featured, popularPosts, latest, categories } = useLoaderData<{
-    featured: PostDocument[];
-    popularPosts: PostDocument[];
-    latest: PostDocument[];
-    categories: any[];
-  }>();
+  const { featured, popularPosts, latest, categories, sections } =
+    useLoaderData<{
+      featured: PostDocument[];
+      popularPosts: PostDocument[];
+      latest: PostDocument[];
+      categories: any[];
+      sections: any[];
+    }>();
   const [theme, setTheme] = useTheme();
 
   return (
-    <PublicLayout className=" min-h-screen gap-11">
+    <PublicLayout
+      className=" min-h-screen gap-11"
+      data={{ sections, categories }}
+    >
       <section className="flex my-5">
         <div className="md:w-[80%] mx-auto h-[35vh] md:my-auto flex flex-col justify-center gap-7">
           {theme == "dark" ? (
@@ -251,8 +256,9 @@ export const loader = async ({ request }) => {
   const featured = await postController.getFeaturedPosts();
   const latest = await postController.getLatestPosts();
   const categories = await postController.getCategories();
+  const sections = await postController.getSections();
 
-  return { featured, popularPosts, latest, categories };
+  return { featured, popularPosts, latest, categories, sections };
 };
 
 export const meta: MetaFunction = () => {
