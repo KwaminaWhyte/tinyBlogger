@@ -150,7 +150,7 @@ export default function CreateBlog() {
             >
               <p className="font-semibold">{section.title}</p>
               <div className="ml-auto flex gap-3">
-                <Button
+                {/* <Button
                 // onClick={() =>
                 //   submit(
                 //     {
@@ -164,7 +164,7 @@ export default function CreateBlog() {
                 // }
                 >
                   Update
-                </Button>
+                </Button> */}
                 <Button
                   variant="destructive"
                   onClick={() =>
@@ -194,7 +194,7 @@ export default function CreateBlog() {
                   <p className="ml-11">{category.description}</p>
 
                   <div className="ml-auto flex gap-3">
-                    <Button
+                    {/* <Button
                     // onClick={() =>
                     //   submit(
                     //     {
@@ -208,7 +208,7 @@ export default function CreateBlog() {
                     // }
                     >
                       Update
-                    </Button>
+                    </Button> */}
                     <Button
                       variant="destructive"
                       onClick={() =>
