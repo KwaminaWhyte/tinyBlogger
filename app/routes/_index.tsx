@@ -58,7 +58,7 @@ export default function Index() {
           <Link
             to={`/categories/${category.slug}`}
             key={index}
-            className="bg-[#ff0000] rounded-xl capitalize px-2 py-1 text-white border text-nowrap"
+            className="bg-[#ff0000] transition-colors duration-150 rounded-xl capitalize px-2 py-1 text-white border text-nowrap"
           >
             {category.title}
           </Link>
