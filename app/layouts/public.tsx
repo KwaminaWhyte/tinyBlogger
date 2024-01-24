@@ -162,29 +162,48 @@ export default function PublicLayout({
                 <div className="grid gap-4 py-4 pl-5">
                   {[
                     {
-                      category: "Section 1",
+                      category: "Blog",
                       children: [
-                        { label: "item 1", path: "/" },
-                        { label: "About", path: "/about" },
+                        { label: "Articles", path: "/" },
+                        { label: "Opinions", path: "/" },
                       ],
                     },
                     {
-                      category: "Section 2",
+                      category: "Editing Services",
                       children: [
-                        { label: "item 1", path: "/" },
-                        { label: "item 2", path: "/about" },
-                        { label: "item 3", path: "/about" },
-                        { label: "item 4", path: "/about" },
-                        { label: "item 5", path: "/about" },
+                        {
+                          label: "Copy Editing",
+                          path: "/",
+                        },
+                        { label: "Proofreading", path: "/about" },
+                        { label: "Thesis Editing", path: "/about" },
                       ],
                     },
-
                     {
-                      category: "Secction 3",
+                      category: "Publication Support",
                       children: [
-                        { label: "item 1", path: "/" },
-                        { label: "item 2", path: "/about" },
-                        { label: "item 3", path: "/about" },
+                        { label: "Pre-submission Peer Review", path: "/" },
+                        { label: "Literature Review", path: "/about" },
+                        { label: "Rejected Paper Editing", path: "/about" },
+                      ],
+                    },
+                    {
+                      category: "Research Guide",
+                      children: [
+                        { label: "Student Research", path: "/" },
+                        { label: "Academic Writing", path: "/about" },
+                      ],
+                    },
+                    {
+                      category: "Research Digests",
+                      children: [
+                        { label: "Quick Reads", path: "/" },
+                        { label: "Summaries", path: "/about" },
+                        { label: "Key Takeaways", path: "/about" },
+                        { label: "Spotlight", path: "/about" },
+                        { label: "Editor's Picks", path: "/about" },
+                        { label: "Recent Discoveries", path: "/about" },
+                        { label: "Must-Reads", path: "/about" },
                       ],
                     },
                   ].map((item, index) => (
@@ -199,7 +218,7 @@ export default function PublicLayout({
                           <NavLink
                             key={index}
                             to={child.path}
-                            className="text-gray-600 hover:text-black dark:hover:text-gray-400"
+                            className="text-gray-600 hover:text-black dark:text-gray-300 dark:hover:text-gray-400"
                             // className={({ isActive }) =>
                             //   isActive
                             //     ? "text-black dark:text-primary font-semibold hover:text-gray-500"
