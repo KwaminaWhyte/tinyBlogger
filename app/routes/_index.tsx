@@ -52,7 +52,7 @@ export default function Index() {
           />
         </div> */}
       </section>
-
+      {/* 
       <section className="md:flex hidden gap-3 overflow-x-auto">
         {categories.map((category, index) => (
           <Link
@@ -63,7 +63,7 @@ export default function Index() {
             {category.title}
           </Link>
         ))}
-      </section>
+      </section> */}
 
       <section className="">
         <div className="flex border-b-4 border-gray-300">
