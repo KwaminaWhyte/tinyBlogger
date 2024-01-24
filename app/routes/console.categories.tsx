@@ -22,6 +22,16 @@ import {
 } from "~/components/ui/dialog";
 import { useEffect, useState } from "react";
 
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
+
 export default function CreateBlog() {
   const submit = useSubmit();
   const { categories, sections } = useLoaderData<{
@@ -105,14 +115,22 @@ export default function CreateBlog() {
 
               <div className="grid w-full items-center gap-1.5">
                 <Label htmlFor="section">Section</Label>
-                <select name="section" id="section">
-                  {sections.map((section) => (
-                    <option key={section?._id} value={section?._id}>
-                      {section.title}
-                    </option>
-                  ))}
-                </select>
-                {/* <Input id="section" name="section" type="text" /> */}
+
+                <Select name="section">
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a section" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {sections.map((section) => (
+                        <SelectItem key={section?._id} value={section?._id}>
+                          {" "}
+                          {section.title}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
 
               <Button type="submit" className="ml-auto">
