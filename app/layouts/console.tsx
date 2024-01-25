@@ -43,8 +43,8 @@ export default function ConsoleLayout({
                 end={item.end}
                 className={({ isActive }) =>
                   isActive
-                    ? "text-white font-semibold hover:text-gray-600"
-                    : "text-gray-200 hover:text-gray-600"
+                    ? " font-semibold hover:text-gray-600"
+                    : " hover:text-gray-600"
                 }
               >
                 {item.label}

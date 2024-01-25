@@ -73,7 +73,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const postController = new PostController(request);
   const category = await postController.getCategoryBySlug(slug);
-  const posts = await postController.getPostByCategory(category.id);
+  const posts = await postController.getPostByCategory(category?._id);
 
   const categories = await postController.getCategories();
   const sections = await postController.getSections();

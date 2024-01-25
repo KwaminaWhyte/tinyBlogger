@@ -289,5 +289,3 @@ export const meta: MetaFunction = ({ data }) => {
     { name: "og:url", content: "https://tinyblogger.vercel.app" },
   ];
 };
-
-// http://localhost:3000/console/posts/clqwnzh3vbwe80buq8k5if1eh

@@ -265,7 +265,23 @@ export default class PostController {
       title: data.title,
       slug: this.genetateSlug(data.title),
       description: data.description,
-      section: data.section,
+      section: data.section ? data.section : null,
+    });
+
+    return newCategory;
+  };
+
+  public updateCategory = async (data: {
+    _id: string;
+    title: string;
+    description: string;
+    section: string;
+  }) => {
+    const newCategory = await Category.findByIdAndUpdate(data._id, {
+      title: data.title,
+      slug: this.genetateSlug(data.title),
+      description: data.description,
+      section: data.section ? data.section : null,
     });
 
     return newCategory;
@@ -357,6 +373,20 @@ export default class PostController {
     description: string;
   }) => {
     const newSection = await Section.create({
+      title: data.title,
+      slug: this.genetateSlug(data.title),
+      description: data.description,
+    });
+
+    return newSection;
+  };
+
+  public updateSection = async (data: {
+    _id: string;
+    title: string;
+    description: string;
+  }) => {
+    const newSection = await Section.findByIdAndUpdate(data._id, {
       title: data.title,
       slug: this.genetateSlug(data.title),
       description: data.description,

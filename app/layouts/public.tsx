@@ -188,7 +188,7 @@ export default function PublicLayout({
                     >
                       <p className="font-bold text-lg">{item.title}</p>
 
-                      <div className="flex flex-col gap-0.5">
+                      <div className="flex flex-col gap-0.5 ml-3">
                         {item.categories.map((child) => (
                           <NavLink
                             key={index}

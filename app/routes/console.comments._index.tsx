@@ -37,7 +37,6 @@ export default function ConsoleComments() {
             </p>
             <div className="ml-auto flex gap-3">
               <Button
-                size="sm"
                 variant="destructive"
                 onClick={() =>
                   submit(
@@ -54,7 +53,6 @@ export default function ConsoleComments() {
                 Unlist
               </Button>
               <Button
-                size="sm"
                 onClick={() =>
                   submit(
                     {

@@ -14,8 +14,6 @@ import type { CategoryDocument, SectionDocument } from "~/server/types";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -27,7 +25,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
@@ -38,10 +35,25 @@ export default function CreateBlog() {
     categories: CategoryDocument[];
     sections: SectionDocument[];
   }>();
-  const [newSection, setNewSection] = useState([]);
+  const [withSection, setWithSection] = useState([]);
+  const [noSection, setNoSection] = useState([]);
+
+  const [newCatDialog, setNewCatDialog] = useState(false);
+  const [updateCatDialog, setUpdateCatDialog] = useState(false);
+  const [updateCat2Dialog, setUpdateCat2Dialog] = useState(false);
+
+  const [newSecDialog, setNewSecDialog] = useState(false);
+  const [updateSecDialog, setUpdateSecDialog] = useState(false);
 
   useEffect(() => {
     let newArray = [];
+    let withNoSection = [];
+
+    let noSecCat = categories.filter((category) => {
+      return !category.section?._id;
+    });
+    withNoSection.push(...noSecCat);
+
     sections.forEach((section) => {
       let secCat = categories.filter((category) => {
         return category.section?._id == section._id;
@@ -54,13 +66,22 @@ export default function CreateBlog() {
       return true;
     });
 
-    setNewSection(newArray);
+    setWithSection(newArray);
+    setNoSection(withNoSection);
+    setUpdateCatDialog(false);
+    setUpdateCat2Dialog(false);
+    setNewCatDialog(false);
+    setUpdateSecDialog(false);
+    setNewSecDialog(false);
   }, [categories, sections]);
 
   return (
-    <ConsoleLayout className="gap-5 ">
+    <ConsoleLayout className="gap-8">
       <section className="flex gap-3 w-full">
-        <Dialog>
+        <Dialog
+          open={newSecDialog}
+          onOpenChange={() => setNewSecDialog(!newSecDialog)}
+        >
           <DialogTrigger asChild>
             <Button variant="outline" className="w-full">
               Add Section
@@ -69,9 +90,6 @@ export default function CreateBlog() {
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>New Section</DialogTitle>
-              {/* <DialogDescription>
-                Make changes to your profile here. Click save when you're done.
-              </DialogDescription> */}
             </DialogHeader>
             <Form method="POST" className="flex flex-col gap-3">
               <input type="hidden" name="actionType" value="new_section" />
@@ -87,7 +105,10 @@ export default function CreateBlog() {
           </DialogContent>
         </Dialog>
 
-        <Dialog>
+        <Dialog
+          open={newCatDialog}
+          onOpenChange={() => setNewCatDialog(!newCatDialog)}
+        >
           <DialogTrigger asChild>
             <Button variant="outline" className="w-full">
               Add Category
@@ -96,9 +117,6 @@ export default function CreateBlog() {
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>New Category</DialogTitle>
-              {/* <DialogDescription>
-                Make changes to your profile here. Click save when you're done.
-              </DialogDescription> */}
             </DialogHeader>
             <Form method="POST" className="flex flex-col gap-3">
               <input type="hidden" name="actionType" value="new_category" />
@@ -141,99 +159,177 @@ export default function CreateBlog() {
         </Dialog>
       </section>
 
-      <div className="grid grid-cols-2 gap-3">
-        {newSection.map((section, index) => (
-          <div key={index} className="flex flex-col gap-3">
-            <div
-              key={index}
-              className="flex flex-col bg-muted shadow-lg p-3 rounded-lg"
-            >
-              <p className="font-semibold">{section.title}</p>
-              <div className="ml-auto flex gap-3">
-                {/* <Button
-                // onClick={() =>
-                //   submit(
-                //     {
-                //       actionType: "unlist",
-                //       section: comment?._id,
-                //     },
-                //     {
-                //       method: "POST",
-                //     }
-                //   )
-                // }
-                >
-                  Update
-                </Button> */}
-                <Button
-                  variant="destructive"
-                  onClick={() =>
-                    submit(
-                      {
-                        actionType: "delete_section",
-                        sectionId: section?._id,
-                      },
-                      {
-                        method: "POST",
-                      }
-                    )
-                  }
-                >
-                  Delete
-                </Button>
+      <section className="">
+        <p className="text-lg font-semibold">Categories with Section</p>
+        <div className="grid grid-cols-2 gap-3">
+          {withSection.map((section, index) => (
+            <div key={index} className="flex flex-col gap-3">
+              <div
+                key={index}
+                className="flex flex-col bg-muted shadow-lg p-3 rounded-lg"
+              >
+                <p className="font-semibold">{section.title}</p>
+                <div className="ml-auto flex gap-3">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" className="w-full">
+                        Update
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Update Section</DialogTitle>
+                      </DialogHeader>
+                      <Form method="POST" className="flex flex-col gap-3">
+                        <input
+                          type="hidden"
+                          name="actionType"
+                          value="update_section"
+                        />
+                        <input type="hidden" name="_id" value={section?._id} />
+                        <div className="grid w-full items-center gap-1.5">
+                          <Label htmlFor="title">Title</Label>
+                          <Input
+                            id="title"
+                            name="title"
+                            type="text"
+                            defaultValue={section.title}
+                          />
+                        </div>
+
+                        <Button type="submit" className="ml-auto">
+                          Update
+                        </Button>
+                      </Form>
+                    </DialogContent>
+                  </Dialog>
+                  <Button
+                    variant="destructive"
+                    onClick={() =>
+                      submit(
+                        {
+                          actionType: "delete_section",
+                          sectionId: section?._id,
+                        },
+                        {
+                          method: "POST",
+                        }
+                      )
+                    }
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </div>
+
+              <div className="ml-11 flex flex-col gap-2">
+                {section.categories.map((category, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col bg-muted shadow-lg p-3 rounded-lg"
+                  >
+                    <p className="font-semibold">{category.title}</p>
+                    <p className="ml-11">{category.description}</p>
+
+                    <div className="ml-auto flex gap-3">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="outline" className="w-full">
+                            Update
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                          <DialogHeader>
+                            <DialogTitle>Update Category</DialogTitle>
+                          </DialogHeader>
+                          <Form method="POST" className="flex flex-col gap-3">
+                            <input
+                              type="hidden"
+                              name="actionType"
+                              value="update_category"
+                            />
+                            <input
+                              type="hidden"
+                              name="_id"
+                              value={category?._id}
+                            />
+                            <div className="grid w-full items-center gap-1.5">
+                              <Label htmlFor="title">Title</Label>
+                              <Input
+                                id="title"
+                                name="title"
+                                type="text"
+                                defaultValue={category.title}
+                              />
+                            </div>
+                            <div className="grid w-full items-center gap-1.5">
+                              <Label htmlFor="description">Description</Label>
+                              <Input
+                                id="description"
+                                type="text"
+                                name="description"
+                                defaultValue={category.description}
+                              />
+                            </div>
+                            <div className="grid w-full items-center gap-1.5">
+                              <Label htmlFor="section">Section</Label>
+
+                              <Select
+                                name="section"
+                                defaultValue={category.section?._id}
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Select a section" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                    {sections.map((section) => (
+                                      <SelectItem
+                                        key={section?._id}
+                                        value={section?._id}
+                                      >
+                                        {section.title}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <Button type="submit" className="ml-auto">
+                              Save
+                            </Button>
+                          </Form>
+                        </DialogContent>
+                      </Dialog>
+                      <Button
+                        variant="destructive"
+                        onClick={() =>
+                          submit(
+                            {
+                              actionType: "delete",
+                              categoryId: category?._id,
+                            },
+                            {
+                              method: "POST",
+                            }
+                          )
+                        }
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
+          ))}
+        </div>
+      </section>
 
-            <div className="ml-11 flex flex-col gap-2">
-              {section.categories.map((category, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col bg-muted shadow-lg p-3 rounded-lg"
-                >
-                  <p className="font-semibold">{category.title}</p>
-                  <p className="ml-11">{category.description}</p>
-
-                  <div className="ml-auto flex gap-3">
-                    {/* <Button
-                    // onClick={() =>
-                    //   submit(
-                    //     {
-                    //       actionType: "unlist",
-                    //       category: comment?._id,
-                    //     },
-                    //     {
-                    //       method: "POST",
-                    //     }
-                    //   )
-                    // }
-                    >
-                      Update
-                    </Button> */}
-                    <Button
-                      variant="destructive"
-                      onClick={() =>
-                        submit(
-                          {
-                            actionType: "delete",
-                            categoryId: category?._id,
-                          },
-                          {
-                            method: "POST",
-                          }
-                        )
-                      }
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-
-        <section className="hidden  flex-col gap-3">
-          {categories.map((category, index) => (
+      <section className="">
+        <p className="text-lg font-semibold">Categories without Section</p>
+        <div className="grid grid-cols-2 gap-3">
+          {noSection.map((category, index) => (
             <div
               key={index}
               className="flex flex-col bg-muted shadow-lg p-3 rounded-lg"
@@ -242,21 +338,71 @@ export default function CreateBlog() {
               <p className="ml-11">{category.description}</p>
 
               <div className="ml-auto flex gap-3">
-                <Button
-                // onClick={() =>
-                //   submit(
-                //     {
-                //       actionType: "unlist",
-                //       category: comment?._id,
-                //     },
-                //     {
-                //       method: "POST",
-                //     }
-                //   )
-                // }
-                >
-                  Update
-                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" className="w-full">
+                      Update
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Update Category</DialogTitle>
+                    </DialogHeader>
+                    <Form method="POST" className="flex flex-col gap-3">
+                      <input
+                        type="hidden"
+                        name="actionType"
+                        value="update_category"
+                      />
+                      <input type="hidden" name="_id" value={category?._id} />
+                      <div className="grid w-full items-center gap-1.5">
+                        <Label htmlFor="title">Title</Label>
+                        <Input
+                          id="title"
+                          name="title"
+                          type="text"
+                          defaultValue={category.title}
+                        />
+                      </div>
+                      <div className="grid w-full items-center gap-1.5">
+                        <Label htmlFor="description">Description</Label>
+                        <Input
+                          id="description"
+                          type="text"
+                          name="description"
+                          defaultValue={category.description}
+                        />
+                      </div>
+                      <div className="grid w-full items-center gap-1.5">
+                        <Label htmlFor="section">Section</Label>
+
+                        <Select
+                          name="section"
+                          defaultValue={category.section?._id}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select a section" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              {sections.map((section) => (
+                                <SelectItem
+                                  key={section?._id}
+                                  value={section?._id}
+                                >
+                                  {section.title}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <Button type="submit" className="ml-auto">
+                        Save
+                      </Button>
+                    </Form>
+                  </DialogContent>
+                </Dialog>
                 <Button
                   variant="destructive"
                   onClick={() =>
@@ -276,19 +422,15 @@ export default function CreateBlog() {
               </div>
             </div>
           ))}
-        </section>
-      </div>
-
-      <div>
-        <p>Updating category (Work in progress)</p>
-        <p>Categories with no section (Work in progress)</p>
-      </div>
+        </div>
+      </section>
     </ConsoleLayout>
   );
 }
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
+  const _id = formData.get("_id") as string;
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
   const section = formData.get("section") as string;
@@ -306,8 +448,21 @@ export const action: ActionFunction = async ({ request }) => {
       title,
       description,
     });
+  } else if (actionType == "update_section") {
+    return await postController.updateSection({
+      _id,
+      title,
+      description,
+    });
   } else if (actionType == "new_category") {
     return await postController.createCategory({
+      title,
+      description,
+      section,
+    });
+  } else if (actionType == "update_category") {
+    return await postController.updateCategory({
+      _id,
       title,
       description,
       section,
@@ -325,7 +480,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Penrobes - Categories" },
+    { title: "Categories | Penrobes" },
     {
       name: "description",
       content: "Blog about anything and everything",
