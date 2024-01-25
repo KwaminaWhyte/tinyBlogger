@@ -71,7 +71,7 @@ export default function Index() {
           <h2 className="underline underline-offset-8 ">Featured </h2>
         </div>
 
-        <div className="flex mt-11 h-fit gap-3 flex-col md:flex-row ">
+        <div className="flex md:h-[40vh] mt-11 gap-3 flex-col md:flex-row ">
           <div className="md:w-[65%] w-full flex md:flex-row flex-col gap-3">
             <Link
               to={`/posts/${featured[0]?.slug}`}
@@ -104,12 +104,12 @@ export default function Index() {
               </div>
             </Link>
 
-            <div className="flex-1  gap-3 grid grid-rows-2 ">
+            <div className="flex-1 h-full gap-3 grid grid-rows-2 mb-auto">
               {featured.slice(1, 3).map((post, index) => (
                 <Link
                   to={`/posts/${post?.slug}`}
                   key={index}
-                  className="flex gap-3  flex-1"
+                  className="flex h-full gap-3 flex-1"
                 >
                   <img
                     src={
@@ -118,12 +118,12 @@ export default function Index() {
                         : "https://th.bing.com/th/id/R.20d3e94846b0317ba981e9b4d3ecdabb?rik=wRXoSyZgG3cbIA&pid=ImgRaw&r=0"
                     }
                     alt=""
-                    className="w-44 h-32 md:h-full object-cover bg-gray-100 rounded-sm"
+                    className="w-44 h-36 md:h-full object-cover bg-gray-100 rounded-sm"
                   />
 
                   <div className="flex flex-col gap-2 flex-1">
                     <p className="font-semibold">{post.title}</p>
-                    <p className="text-gray-600 line-clamp-2">
+                    <p className="text-gray-600 line-clamp-3">
                       {post.description}
                     </p>
 
@@ -139,12 +139,12 @@ export default function Index() {
             </div>
           </div>
 
-          <div className="md:w-[35%] w-full grid grid-rows-3 flex-col gap-3">
+          <div className="md:w-[35%] h-full w-full grid grid-rows-3 flex-col gap-3">
             {featured.slice(3, 6).map((post, index) => (
               <Link
                 to={`/posts/${post?.slug}`}
                 key={index}
-                className="flex gap-3 flex-1"
+                className="flex h-full gap-3 flex-1"
               >
                 <img
                   src={
@@ -153,7 +153,7 @@ export default function Index() {
                       : "https://th.bing.com/th/id/R.20d3e94846b0317ba981e9b4d3ecdabb?rik=wRXoSyZgG3cbIA&pid=ImgRaw&r=0"
                   }
                   alt=""
-                  className="w-44 h-32 md:h-32 object-cover bg-gray-100 rounded-sm"
+                  className="w-44 h-32 md:h-full object-cover bg-gray-100 rounded-sm"
                 />
 
                 <div className="flex flex-col gap-3 flex-1">

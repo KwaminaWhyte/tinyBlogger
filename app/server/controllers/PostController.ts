@@ -81,8 +81,35 @@ export default class PostController {
   public getPostById = async (id: string) => {
     const post = await Post.findById(id).populate("featureImage");
     // .populate("categories");
-
     return post;
+  };
+
+  public getFeaturedPosts = async () => {
+    try {
+      const posts = await Post.find({ featured: true, stage: "PUBLISHED" })
+        .populate("featureImage")
+        .populate("categories")
+        .select("-content")
+        .sort({ updatedAt: "desc" })
+        .limit(6);
+      return posts;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  public getLatestPosts = async () => {
+    try {
+      const posts = await Post.find({ stage: "PUBLISHED" })
+        .populate("featureImage")
+        .populate("categories")
+        .select("-content")
+        .sort({ createdAt: "desc" })
+        .limit(6);
+      return posts;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   public createPost = async (data: {
@@ -92,6 +119,7 @@ export default class PostController {
     content: string;
     featureImage: string;
     categories: string[];
+    featured: boolean;
   }) => {
     const newImage = await Image.create({
       url: data.featureImage,
@@ -103,7 +131,7 @@ export default class PostController {
       slug: data.slug,
       description: data.description,
       content: data.content,
-      featured: true,
+      featured: data.featured,
       featureImage: newImage._id,
       categories: data.categories
         ? data.categories.map((category) => ({
@@ -156,6 +184,7 @@ export default class PostController {
       content: string;
       featureImage: string;
       categories: string[];
+      featured: boolean;
     }
   ) => {
     let modData = {
@@ -163,6 +192,7 @@ export default class PostController {
       description: data.description,
       content: data.content,
       categories: data.categories,
+      featured: data.featured,
     };
 
     try {
@@ -192,6 +222,7 @@ export default class PostController {
       content: string;
       featureImage: string;
       categories: string[];
+      featured: boolean;
     }
   ) => {
     let modData = {
@@ -200,6 +231,7 @@ export default class PostController {
       content: data.content,
       categories: data.categories,
       stage: "PUBLISHED",
+      featured: data.featured,
     };
 
     try {
@@ -218,33 +250,6 @@ export default class PostController {
     } catch (error) {
       console.log(error);
       throw new Error(JSON.stringify(error));
-    }
-  };
-
-  public getFeaturedPosts = async () => {
-    try {
-      const posts = await Post.find({ featured: true, stage: "PUBLISHED" })
-        .populate("featureImage")
-        .populate("categories")
-        .select("-content")
-        .limit(6);
-      return posts;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  public getLatestPosts = async () => {
-    try {
-      const posts = await Post.find({ featured: true, stage: "PUBLISHED" })
-        .populate("featureImage")
-        .populate("categories")
-        .select("-content")
-        .sort({ createdAt: "desc" })
-        .limit(6);
-      return posts;
-    } catch (error) {
-      console.log(error);
     }
   };
 

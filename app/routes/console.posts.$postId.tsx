@@ -3,12 +3,7 @@ import {
   type LoaderFunction,
   type ActionFunction,
 } from "@remix-run/node";
-import {
-  Link,
-  useActionData,
-  useLoaderData,
-  useSubmit,
-} from "@remix-run/react";
+import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
 import moment from "moment";
 import PostController from "~/server/controllers/PostController";
 import { EyeIcon, ShareIcon, ThumbUpIcon } from "~/components/icons";
@@ -21,6 +16,14 @@ import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 
 export default function Blog() {
   const submit = useSubmit();
@@ -32,6 +35,7 @@ export default function Blog() {
   }>();
   const [content, setContent] = useState(JSON.parse(post.content));
   const [title, setTitle] = useState(post.title);
+  const [featured, setFeatured] = useState(post.featured.toString());
   const [description, setDescription] = useState(post.description);
   const [base64String, setBase64String] = useState("");
   const [selectedCategories, setSelectedCategories] = useState(
@@ -73,6 +77,7 @@ export default function Blog() {
         content: JSON.stringify(content),
         featureImage: base64String,
         categories: JSON.stringify(selectedCategories),
+        featured,
       },
       {
         method: "post",
@@ -167,6 +172,25 @@ export default function Blog() {
             ))}
           </div>
         </div>
+
+        <div className="grid w-full items-center gap-1.5">
+          <Label htmlFor="featured">Featured</Label>
+          <Select
+            defaultValue={featured}
+            name="featured"
+            onValueChange={(e) => setFeatured(e)}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="true">True</SelectItem>
+                <SelectItem value="false">False</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </section>
 
       <section className="rounded-md  relative flex flex-col gap-5 my-8 h-96 items-center justify-center bg-black/70 p-4 ">
@@ -237,6 +261,7 @@ export const action: ActionFunction = async ({ request }) => {
   const actionType = formData.get("actionType") as string;
   const featureImage = formData.get("featureImage") as string;
   const categories = formData.get("categories") as string;
+  const featured = formData.get("featured") as string;
 
   const postController = new PostController(request);
 
@@ -247,6 +272,7 @@ export const action: ActionFunction = async ({ request }) => {
       content: content,
       featureImage,
       categories: JSON.parse(categories),
+      featured: featured == "true" ? true : false,
     });
   } else if (actionType == "update-publish") {
     return await postController.updateAndPublishPost(postId, {
@@ -255,6 +281,7 @@ export const action: ActionFunction = async ({ request }) => {
       content: content,
       featureImage,
       categories: JSON.parse(categories),
+      featured: featured == "true" ? true : false,
     });
   }
 };

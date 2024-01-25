@@ -3,7 +3,7 @@ import {
   type ActionFunction,
   type MetaFunction,
 } from "@remix-run/node";
-import { useLoaderData, useSubmit } from "@remix-run/react";
+import { useSubmit } from "@remix-run/react";
 import React, { useEffect, useState } from "react";
 import { ClientOnly } from "remix-utils/client-only";
 import { PlateEditor } from "~/components/plate-editor.client";
@@ -13,8 +13,15 @@ import { Label } from "~/components/ui/label";
 import PostController from "~/server/controllers/PostController";
 import axios from "axios";
 import ConsoleDetailLayout from "~/layouts/console-detail";
-import type { CategoryDocument } from "~/server/types";
 import { Textarea } from "~/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 
 import MultipleSelector, { type Option } from "~/components/multi-selector";
 // import { InlineCode } from '~/components/ui/inline-code';
@@ -29,6 +36,7 @@ export default function CreateBlog() {
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [base64String, setBase64String] = useState("");
+  const [featured, setFeatured] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [isTriggered, setIsTriggered] = React.useState(false);
   console.log({ selectedCategories });
@@ -123,6 +131,7 @@ export default function CreateBlog() {
                   content: JSON.stringify(content),
                   featureImage: base64String,
                   categories: JSON.stringify(selectedCategories),
+                  featured,
                 },
                 {
                   method: "post",
@@ -191,22 +200,25 @@ export default function CreateBlog() {
             }
           />
         </div>
+      </div>
 
-        {/* <div className="flex gap-3">
-          {categories.map((category) => (
-            <p
-              onClick={() => handleCategoryClick(category?._id)}
-              key={category?._id}
-              className={`px-2 py-1  rounded-xl text-white cursor-pointer capitalize ${
-                selectedCategories.includes(category?._id)
-                  ? "ring-2 ring-primary ring-offset-2 bg-primary"
-                  : "bg-primary/80"
-              }`}
-            >
-              {category.title}
-            </p>
-          ))}
-        </div> */}
+      <div className="grid w-full items-center gap-1.5">
+        <Label htmlFor="featured">Featured</Label>
+        <Select
+          defaultValue={featured}
+          name="featured"
+          onValueChange={(e) => setFeatured(e)}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="true">True</SelectItem>
+              <SelectItem value="false">False</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="flex gap-5 items-center">
@@ -260,6 +272,7 @@ export const action: ActionFunction = async ({ request }) => {
   const content = formData.get("content") as string;
   const featureImage = formData.get("featureImage") as string;
   const categories = formData.get("categories") as string;
+  const featured = formData.get("featured") as string;
 
   const postController = new PostController(request);
   return await postController.createPost({
@@ -269,6 +282,7 @@ export const action: ActionFunction = async ({ request }) => {
     content: content,
     featureImage,
     categories: JSON.parse(categories),
+    featured: featured == "true" ? true : false,
   });
 };
 
