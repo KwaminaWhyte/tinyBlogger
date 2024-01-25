@@ -1,16 +1,13 @@
 import { redirect, json } from "@remix-run/node";
 import Post from "../models/Post";
 import { geolocation, ipAddress } from "@vercel/edge";
-import fs from "fs";
 import Category from "../models/Category";
-import mongoose from "mongoose";
 import Image from "../models/Image";
-import { View } from "../models/View";
+import View from "../models/View";
 import Section from "../models/Section";
 
 export default class PostController {
   private request: Request;
-  private hygraph: any;
 
   constructor(request: Request) {
     this.request = request;
@@ -463,44 +460,3 @@ export default class PostController {
       .replace(/ +/g, "-");
   };
 }
-
-// const { post } = await this.hygraph.request(
-//   gql`
-//     query ($slug: String!) {
-//       post(where: { slug: $slug }) {
-//         id
-//         title
-//         description
-//         slug
-//         categories {
-//           id
-//           title
-//           slug
-//         }
-//         content {
-//           raw
-//         }
-//         coverImage {
-//           id
-//           url
-//         }
-//       }
-//     }
-//   `,
-//   {
-//     slug,
-//   }
-// );
-
-// const jsonData = JSON.stringify(post?.content?.raw.children);
-// // Specify the file path and name
-// const filePath = "example.json";
-
-// // Write the JSON data to the file
-// fs.writeFile(filePath, jsonData, "utf8", (err) => {
-//   if (err) {
-//     console.error("Error writing to file:", err);
-//   } else {
-//     console.log(`Data has been written to ${filePath}`);
-//   }
-// });

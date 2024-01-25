@@ -25,4 +25,4 @@ try {
   View = mongoose.model<ViewDocument>("views", viewSchema);
 }
 
-export { View };
+export default View;

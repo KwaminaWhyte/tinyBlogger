@@ -1,9 +1,7 @@
-import { redirect } from "@remix-run/node";
 import Comment from "../models/Comment";
 
 export default class CommentController {
   private request: Request;
-  private hygraph: any;
 
   constructor(request: Request) {
     this.request = request;
