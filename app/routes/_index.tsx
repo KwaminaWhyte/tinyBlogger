@@ -7,6 +7,7 @@ import type { PostDocument } from "~/server/types";
 import { Theme, useTheme } from "remix-themes";
 import fullLogo from "~/assets/Penrodes_logo_Horizintal-16.png";
 import logoWhite from "~/assets/Penrodes_logo_Horizintal-17.png";
+import PostCard from "~/components/post-card";
 
 export default function Index() {
   const { featured, popularPosts, latest, categories, sections } =
@@ -181,35 +182,7 @@ export default function Index() {
 
           <div className="gap-6 grid grid-rows-1 md:grid-cols-2">
             {latest.map((post, index) => (
-              <Link
-                to={`/posts/${post?.slug}`}
-                className="flex-1 gap-3 flex flex-col"
-                key={index}
-              >
-                <img
-                  src={
-                    post?.featureImage?.url
-                      ? post?.featureImage?.url
-                      : "https://th.bing.com/th/id/R.20d3e94846b0317ba981e9b4d3ecdabb?rik=wRXoSyZgG3cbIA&pid=ImgRaw&r=0"
-                  }
-                  alt=""
-                  className="w-full h-40 object-cover bg-gray-100 rounded-sm"
-                />
-
-                <div className="flex-1">
-                  <p className="font-semibold text-xl">{post.title}</p>
-                  <p className="text-gray-500 line-clamp-2">
-                    {post.description}
-                  </p>
-
-                  <div className="mt-auto flex flex-col">
-                    <p className="font-semibold">{post?.createdBy?.name}</p>
-                    <p className="text-red-500 ml-auto text-xs">
-                      {moment(post?.createdAt).format("MMM DD, YYYY")}
-                    </p>
-                  </div>
-                </div>
-              </Link>
+              <PostCard post={post} key={index} />
             ))}
           </div>
         </div>
